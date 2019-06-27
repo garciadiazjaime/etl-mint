@@ -4,8 +4,8 @@ const debug = require('debug')('century21global')
 
 const config = require('../config');
 
-const MAX_LOAD = 1
-const WAIT_SECS = 1 * 1000
+const MAX_REQUEST = config.get('sites.century21global.max_request')
+const WAIT_SECS = config.get('sites.century21global.wait_secs')
 
 function getCurrency(value) {
   if (!value) {
@@ -92,7 +92,7 @@ function doNext(html) {
 }
 
 async function loadHelper(domain, path, page) {
-  if (page > MAX_LOAD) {
+  if (page > MAX_REQUEST) {
     return
   }
 
@@ -116,8 +116,8 @@ async function loadHelper(domain, path, page) {
 
 
 module.exports = function() {
-  const domain = 'https://www.century21global.com';
-  const path = `/for-sale-residential/Mexico/Baja-California/Tijuana?pageNo=`;
+  const domain = config.get('sites.century21global.domain')
+  const path = config.get('sites.century21global.path')
 
   loadHelper(domain, path, 1)
 }

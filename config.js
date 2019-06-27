@@ -15,6 +15,22 @@ const config = convict({
       default: 'http://127.0.0.1:3030/',
       env: 'API_URL',
     },
+  },
+  sites: {
+    century21global: {
+      domain: {
+        default: 'https://www.century21global.com'
+      },
+      path: {
+        default: '/for-sale-residential/Mexico/Baja-California/Tijuana?pageNo='
+      },
+      max_request: {
+        default: 1
+      },
+      wait_secs: {
+        default: 1000
+      }
+    }
   }
 });
 
