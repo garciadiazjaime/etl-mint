@@ -12,12 +12,16 @@ const config = convict({
     url: {
       doc: 'API URL',
       format: String,
-      default: 'http://127.0.0.1:3030/',
+      default: 'http://127.0.0.1:3030',
       env: 'API_URL',
     },
   },
   sites: {
     century21global: {
+      active: {
+        default: true,
+        env: 'century21global'
+      },
       domain: {
         default: 'https://www.century21global.com'
       },

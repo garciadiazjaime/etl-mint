@@ -1,6 +1,6 @@
 const request = require('request-promise');
 const cheerio = require('cheerio');
-const debug = require('debug')('century21global')
+const debug = require('debug')('app:century21global')
 
 const config = require('../config');
 
@@ -81,6 +81,7 @@ function load(apiUrl, places) {
       },
       json: true
   };
+  debug(`loading to ${options.uri}`)
   
   return request(options)
 }
@@ -97,15 +98,14 @@ async function loadHelper(domain, path, page) {
   }
 
   const url = domain + path + page
-  debug(`loading ${url}`)
+  debug(`extracting from ${url}`)
 
   const html = await extract(url)
   const places = transform(html, domain)
 
-  debug(`saving ${places.length} places`)
+  debug(`${places.length} places extracted`)
 
-  const response = await load(config.get('api.url'), places)
-  debug(response)
+  await load(config.get('api.url'), places)
 
   const next = doNext(html)
 
@@ -118,8 +118,13 @@ async function loadHelper(domain, path, page) {
 module.exports = function() {
   const domain = config.get('sites.century21global.domain')
   const path = config.get('sites.century21global.path')
+  const active = config.get('sites.century21global.active')
 
-  loadHelper(domain, path, 1)
+  if (active) {
+    loadHelper(domain, path, 1)
+  } else {
+    debug('etl disabled')
+  }
 }
 
 

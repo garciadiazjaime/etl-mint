@@ -1,4 +1,4 @@
-const debug = require('debug')('etl-real-state')
+const debug = require('debug')('app:main')
 const queue = require('async/queue')
 
 const century21global = require('./sites/century21global')
