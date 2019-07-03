@@ -1,11 +1,11 @@
 const request = require('request-promise');
 const cheerio = require('cheerio');
-const debug = require('debug')('app:century21global')
+const debug = require('debug')('app:point2homes')
 
 const config = require('../config');
 
-const MAX_REQUEST = config.get('sites.century21global.max_request')
-const WAIT_SECS = config.get('sites.century21global.wait_secs')
+const MAX_REQUEST = config.get('sites.point2homes.max_request')
+const WAIT_SECS = config.get('sites.point2homes.wait_secs')
 
 function getCurrency(value) {
   if (!value) {
@@ -32,29 +32,40 @@ function getPrice(value) {
 }
 
 function extract(url) {
-  return request(url)
+  const options = {
+    url,
+    headers: {
+      cookie: 'incap_ses_115_1719354=0NzuNR93yQU4efNJpZCYAR8yHV0AAAAA9/zcCzg9Mjrk0HkvBl4dmw=='
+    }
+  };
+
+  return request(options)
+}
+
+function cleanString(value)
+{
+  return value ? value.replace(/\r?\n|\r/g, '').replace(/  +/g, ' ') : ''
 }
 
 function transform(html, domain) {
   const $ = cheerio.load(html);
 
-  return $('.search-result').toArray().map((element) => {
-    const value = $(element).find('.price-native').text()
+  return $('.listings .items .item-cnt').toArray().map(element => {
+    const value = $(element).find('.price').text()
     const price = getPrice(value)
     const currency = getCurrency(value)
-    const size = $(element).find('.size').text().trim()
-    const description = $(element).find('.search-result-label').last().text()
-    const latitude = $(element).find('.map-coordinates').data('lat')
-    const longitude = $(element).find('.map-coordinates').data('lng')
-    const image = $(element).find('.search-result-img').css('background-image').replace('url(\'','').replace('\')','').replace(/\"/gi, "")
-    const url = domain + $(element).find('.search-result-photo').attr('href')
-    const address = $(element).find('.property-address').text()
-    const city = 'tijuana'
+    const description = cleanString($(element).find('.item-info-cnt .characteristics-cnt').text().trim())
+    const latitude = $(element).find('.inner-left input[name^="Latitude"]').val()
+    const longitude = $(element).find('.inner-left input[name^="Longitude"]').val()
+    const image = $(element).find('.photo-inner img').data('original')
+    const url = domain + $(element).find('.photo-inner a').attr('href')
+    const address = $(element).find('.inner-left input[name^="ShortAddress"]').val()
+    const city = "tijuana"
 
     const place = {
       price,
       currency,
-      description: size ? `${description}. ${size}` : description,
+      description,
       latitude,
       longitude,
       image,
@@ -87,8 +98,8 @@ function load(apiUrl, places) {
 
 function doNext(html) {
   const $ = cheerio.load(html);
-  const next = $('.pagination li.disabled a[aria-label=Next]').length
-  return !next
+  const next = $('.pager li.next').length
+  return !!next
 }
 
 async function loadHelper(domain, path, page) {
@@ -115,9 +126,9 @@ async function loadHelper(domain, path, page) {
 
 
 module.exports = function() {
-  const domain = config.get('sites.century21global.domain')
-  const path = config.get('sites.century21global.path')
-  const active = config.get('sites.century21global.active')
+  const domain = config.get('sites.point2homes.domain')
+  const path = config.get('sites.point2homes.path')
+  const active = config.get('sites.point2homes.active')
 
   if (active) {
     loadHelper(domain, path, 1)

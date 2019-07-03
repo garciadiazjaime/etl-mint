@@ -34,6 +34,24 @@ const config = convict({
       wait_secs: {
         default: 1000
       }
+    },
+    point2homes: {
+      active: {
+        default: true,
+        env: 'point2homes'
+      },
+      domain: {
+        default: 'https://www.point2homes.com'
+      },
+      path: {
+        default: '/MX/Real-Estate-Listings/Baja-California/Tijuana.html?page='
+      },
+      max_request: {
+        default: 1
+      },
+      wait_secs: {
+        default: 1000
+      }
     }
   }
 });
