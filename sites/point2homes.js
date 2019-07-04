@@ -35,7 +35,7 @@ function extract(url) {
   const options = {
     url,
     headers: {
-      cookie: 'incap_ses_115_1719354=0NzuNR93yQU4efNJpZCYAR8yHV0AAAAA9/zcCzg9Mjrk0HkvBl4dmw=='
+      cookie: 'visid_incap_1719354=eE8PrBkCQUG8bCyXqNnKOpctHl0AAAAAQUIPAAAAAAA80p3nGHJelC4ux2mn0oau; incap_ses_115_1719354=0hmYA++UwQtrITVLpZCYAZctHl0AAAAAOz+IDxy6gDVdrF6J1vaWWw==;'
     }
   };
 

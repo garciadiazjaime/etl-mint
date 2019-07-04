@@ -52,6 +52,24 @@ const config = convict({
       wait_secs: {
         default: 1000
       }
+    },
+    baja123: {
+      active: {
+        default: true,
+        env: 'baja123'
+      },
+      domain: {
+        default: 'https://www.baja123.com'
+      },
+      path: {
+        default: '/TIJUANA_REAL_ESTATE_LISTINGS/page_1754238.html'
+      },
+      max_request: {
+        default: 1
+      },
+      wait_secs: {
+        default: 1000
+      }
     }
   }
 });
