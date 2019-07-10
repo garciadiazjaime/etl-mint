@@ -50,6 +50,7 @@ function transform(html, domain) {
     const url = domain + $(element).find('.search-result-photo').attr('href')
     const address = $(element).find('.property-address').text()
     const city = 'tijuana'
+    const source = 'century21global'
 
     const place = {
       price,
@@ -60,7 +61,8 @@ function transform(html, domain) {
       image,
       url,
       address,
-      city
+      city,
+      source
     }
 
     return place

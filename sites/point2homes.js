@@ -60,7 +60,8 @@ function transform(html, domain) {
     const image = $(element).find('.photo-inner img').data('original')
     const url = domain + $(element).find('.photo-inner a').attr('href')
     const address = $(element).find('.inner-left input[name^="ShortAddress"]').val()
-    const city = "tijuana"
+    const city = 'tijuana'
+    const source = 'point2homes'
 
     const place = {
       price,
@@ -71,7 +72,8 @@ function transform(html, domain) {
       image,
       url,
       address,
-      city
+      city,
+      source
     }
 
     return place

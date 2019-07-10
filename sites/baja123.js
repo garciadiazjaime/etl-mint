@@ -72,7 +72,8 @@ function transform(html) {
     const image = $(element).find('.item-photo img').attr('src')
     const url = $(element).find('.item-photo a').attr('href')
     const address = cleanStart($(element).find('.item-address h2 a').text())
-    const city = "tijuana"
+    const city = 'tijuana'
+    const source = 'century21global'
 
     const place = {
       price,
@@ -81,7 +82,8 @@ function transform(html) {
       image,
       url,
       address,
-      city
+      city,
+      source
     }
 
     return place
