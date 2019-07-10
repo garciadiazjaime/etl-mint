@@ -70,6 +70,24 @@ const config = convict({
       wait_secs: {
         default: 1000
       }
+    },
+    propiedades: {
+      active: {
+        default: true,
+        env: 'propiedades'
+      },
+      domain: {
+        default: 'https://propiedades.com'
+      },
+      path: {
+        default: '/tijuana/residencial-venta?pagina='
+      },
+      max_request: {
+        default: 1
+      },
+      wait_secs: {
+        default: 5000
+      }
     }
   }
 });

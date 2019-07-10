@@ -4,6 +4,7 @@ const queue = require('async/queue')
 const century21global = require('./sites/century21global')
 const point2homes = require('./sites/point2homes')
 const baja123 = require('./sites/baja123')
+const propiedades = require('./sites/propiedades')
 
 function main() {
   const q = queue(async(etl) => {
@@ -11,7 +12,7 @@ function main() {
   });
 
   q.error((err, task) => {
-    debug('task experienced an error', err, task);
+    debug('ERROR', err, task);
   });
 
   q.push(century21global);
@@ -19,6 +20,8 @@ function main() {
   q.push(point2homes)
 
   q.push(baja123)
+
+  q.push(propiedades)
 }
 
 main()
