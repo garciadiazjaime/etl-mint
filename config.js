@@ -20,76 +20,76 @@ const config = convict({
     century21global: {
       active: {
         default: true,
-        env: 'century21global'
+        env: 'century21global',
       },
       domain: {
-        default: 'https://www.century21global.com'
+        default: 'https://www.century21global.com',
       },
       path: {
-        default: '/for-sale-residential/Mexico/Baja-California/Tijuana?pageNo='
+        default: '/for-sale-residential/Mexico/Baja-California/Tijuana?pageNo=',
       },
       max_request: {
-        default: 1
+        default: 1,
       },
       wait_secs: {
-        default: 1000
-      }
+        default: 1000,
+      },
     },
     point2homes: {
       active: {
         default: true,
-        env: 'point2homes'
+        env: 'point2homes',
       },
       domain: {
-        default: 'https://www.point2homes.com'
+        default: 'https://www.point2homes.com',
       },
       path: {
-        default: '/MX/Real-Estate-Listings/Baja-California/Tijuana.html?page='
+        default: '/MX/Real-Estate-Listings/Baja-California/Tijuana.html?page=',
       },
       max_request: {
-        default: 1
+        default: 1,
       },
       wait_secs: {
-        default: 1000
-      }
+        default: 1000,
+      },
     },
     baja123: {
       active: {
         default: true,
-        env: 'baja123'
+        env: 'baja123',
       },
       domain: {
-        default: 'https://www.baja123.com'
+        default: 'https://www.baja123.com',
       },
       path: {
-        default: '/TIJUANA_REAL_ESTATE_LISTINGS/page_1754238.html'
+        default: '/TIJUANA_REAL_ESTATE_LISTINGS/page_1754238.html',
       },
       max_request: {
-        default: 1
+        default: 1,
       },
       wait_secs: {
-        default: 1000
-      }
+        default: 1000,
+      },
     },
     propiedades: {
       active: {
         default: true,
-        env: 'propiedades'
+        env: 'propiedades',
       },
       domain: {
-        default: 'https://propiedades.com'
+        default: 'https://propiedades.com',
       },
       path: {
-        default: '/tijuana/residencial-venta?pagina='
+        default: '/tijuana/residencial-venta?pagina=',
       },
       max_request: {
-        default: 1
+        default: 1,
       },
       wait_secs: {
-        default: 5000
-      }
-    }
-  }
+        default: 5000,
+      },
+    },
+  },
 });
 
 // Perform validation
