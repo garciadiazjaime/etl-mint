@@ -128,7 +128,7 @@ async function loadHelper(domain, path, pageNumber) {
   }
 
   const url = domain + path + pageNumber;
-  debug(`extracting from ${url}, pageNumber: ${pageNumber}`);
+  debug(`extracting from ${url}`);
 
   const html = await extract(url);
 
@@ -147,6 +147,7 @@ async function main() {
   const domain = config.get('sites.propiedades.domain');
   const path = config.get('sites.propiedades.path');
   const active = config.get('sites.propiedades.active');
+  await extract(domain);
 
   if (active) {
     loadHelper(domain, path, 1);
