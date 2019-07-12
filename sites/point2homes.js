@@ -2,6 +2,8 @@ const request = require('request-promise');
 const cheerio = require('cheerio');
 const debug = require('debug')('app:point2homes');
 
+const puppeteer = require('puppeteer');
+
 const config = require('../config');
 
 const MAX_REQUEST = config.get('sites.point2homes.max_request');
@@ -31,15 +33,15 @@ function getPrice(value) {
   return value.replace(/\D/g, '');
 }
 
-function extract(url) {
-  const options = {
-    url,
-    headers: {
-      cookie: 'visid_incap_1719354=eE8PrBkCQUG8bCyXqNnKOpctHl0AAAAAQUIPAAAAAAA80p3nGHJelC4ux2mn0oau; incap_ses_115_1719354=0hmYA++UwQtrITVLpZCYAZctHl0AAAAAOz+IDxy6gDVdrF6J1vaWWw==;',
-    },
-  };
+async function extract(url, page) {
+  await page.goto(url);
 
-  return request(options);
+  const bodyHandle = await page.$('body');
+  const html = await page.evaluate(body => body.innerHTML, bodyHandle);
+
+  await bodyHandle.dispose();
+
+  return html;
 }
 
 function cleanString(value) {
@@ -103,15 +105,17 @@ function doNext(html) {
   return !!next;
 }
 
-async function loadHelper(domain, path, page) {
-  if (page > MAX_REQUEST) {
+async function loadHelper(domain, path, pageNumber, page, browser) {
+  if (pageNumber > MAX_REQUEST) {
+    browser.close();
     return;
   }
 
-  const url = domain + path + page;
+  const url = domain + path + pageNumber;
   debug(`extracting from ${url}`);
 
-  const html = await extract(url);
+  const html = await extract(url, page);
+
   const places = transform(html, domain);
 
   debug(`${places.length} places extracted`);
@@ -121,17 +125,26 @@ async function loadHelper(domain, path, page) {
   const next = doNext(html);
 
   if (next) {
-    setTimeout(() => loadHelper(domain, path, page + 1), WAIT_SECS);
+    setTimeout(() => loadHelper(domain, path, pageNumber + 1, page, browser), WAIT_SECS);
+  } else {
+    browser.close();
   }
 }
 
-function main() {
+async function main() {
   const domain = config.get('sites.point2homes.domain');
   const path = config.get('sites.point2homes.path');
   const active = config.get('sites.point2homes.active');
+  const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3847.0 Safari/537.36';
+
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+
+  await page.setUserAgent(userAgent);
+  await page.goto(domain);
 
   if (active) {
-    loadHelper(domain, path, 1);
+    loadHelper(domain, path, 1, page, browser);
   } else {
     debug('etl disabled');
   }
