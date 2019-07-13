@@ -3,7 +3,7 @@ const queue = require('async/queue');
 
 const Century21Global = require('./sites/century21global');
 const Point2Homes = require('./sites/point2homes');
-const baja123 = require('./sites/baja123');
+const Baja123 = require('./sites/baja123');
 const propiedades = require('./sites/propiedades');
 
 function main() {
@@ -20,7 +20,7 @@ function main() {
 
   q.push(Point2Homes);
 
-  q.push(baja123);
+  q.push(Baja123);
 
   q.push(propiedades);
 }

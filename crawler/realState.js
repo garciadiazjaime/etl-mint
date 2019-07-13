@@ -119,10 +119,15 @@ function getPrice(value) {
 }
 
 function cleanString(value) {
-  return value ? value.replace(/\r?\n|\r/g, '').replace(/  +/g, ' ') : '';
+  return value ? value.replace(/\r?\n|\r|\t|"|!|”/g, '').replace(/  +/g, ' ').trim() : '';
+}
+
+function cleanStart(value) {
+  return value ? value.replace(/^, /, '') : value;
 }
 
 module.exports = RealState;
 module.exports.getPrice = getPrice;
 module.exports.getCurrency = getCurrency;
 module.exports.cleanString = cleanString;
+module.exports.cleanStart = cleanStart;
