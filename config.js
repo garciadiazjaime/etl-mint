@@ -26,7 +26,7 @@ const config = convict({
         default: 'https://www.century21global.com',
       },
       path: {
-        default: '/for-sale-residential/Mexico/Baja-California/Tijuana?pageNo=',
+        default: '/for-sale-residential/Mexico/Baja-California/Tijuana',
       },
       maxRequest: {
         default: 1,
@@ -44,7 +44,7 @@ const config = convict({
         default: 'https://www.point2homes.com',
       },
       path: {
-        default: '/MX/Real-Estate-Listings/Baja-California/Tijuana.html?page=',
+        default: '/MX/Real-Estate-Listings/Baja-California/Tijuana.html',
       },
       maxRequest: {
         default: 1,

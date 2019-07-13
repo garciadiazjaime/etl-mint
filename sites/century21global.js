@@ -1,7 +1,7 @@
 /* eslint class-methods-use-this: 0 */
 
-const request = require('request-promise');
 const cheerio = require('cheerio');
+const puppeteer = require('puppeteer');
 
 const RealState = require('../crawler/realState');
 const { getPrice, getCurrency } = require('../crawler/realState');
@@ -10,10 +10,41 @@ class Century21Global extends RealState {
   constructor() {
     super();
     this.site = 'century21global';
+    this.browser = null;
+    this.page = null;
   }
 
-  extract(url) {
-    return request(url);
+  async preHook() {
+    const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3847.0 Safari/537.36';
+    this.browser = await puppeteer.launch();
+    this.page = await this.browser.newPage();
+    await this.page.setUserAgent(userAgent);
+  }
+
+  async afterHook() {
+    await this.browser.close();
+  }
+
+  doNext(html) {
+    const $ = cheerio.load(html);
+    const next = $('.pagination li.disabled a[aria-label=Next]').length;
+    return !next;
+  }
+
+  async extract(url, pageNumber) {
+    if (pageNumber > 1) {
+      const selector = '.pagination a[aria-label="Next"]';
+      await Promise.all([
+        this.page.waitForNavigation(),
+        this.page.click(selector),
+      ]);
+    } else {
+      await this.page.goto(url);
+    }
+
+    const html = await this.page.content();
+
+    return html;
   }
 
   transform(html, domain) {
@@ -48,12 +79,6 @@ class Century21Global extends RealState {
         source,
       };
     });
-  }
-
-  doNext(html) {
-    const $ = cheerio.load(html);
-    const next = $('.pagination li.disabled a[aria-label=Next]').length;
-    return !next;
   }
 }
 

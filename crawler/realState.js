@@ -1,5 +1,5 @@
 const request = require('request-promise');
-const debug = require('debug');
+const debug = require('debug')('app:realstate');
 
 const config = require('../config');
 
@@ -21,46 +21,49 @@ function load(apiUrl, places) {
 }
 
 class RealState {
-  log(message) {
-    debug(`app:${this.site}`)(message);
-  }
-
   async loadHelper({
     maxRequest, waitSecs, domain, path, pageNumber,
   }) {
     if (pageNumber > maxRequest) {
+      if (this.afterHook) {
+        await this.afterHook();
+      }
       return;
     }
 
-    const url = domain + path + pageNumber;
-    this.log(`extracting from ${url}`);
+    const url = domain + path;
+    debug(`extracting:${this.site} ${url}, ${pageNumber}`);
+    const html = await this.extract(url, pageNumber);
 
-    const html = await this.extract(url);
     const places = this.transform(html, domain);
-
-    this.log(`loading ${places.length} places`);
-
+    debug(`loading:${this.site} ${places.length} places`);
     await load(config.get('api.url'), places);
 
     if (this.doNext(html)) {
       setTimeout(() => this.loadHelper({
         maxRequest, waitSecs, domain, path, pageNumber: pageNumber + 1,
       }), waitSecs);
+    } else if (this.afterHook) {
+      await this.afterHook();
     }
   }
 
-  main() {
+
+  async main() {
     const siteConfigs = config.get(`sites.${this.site}`);
     const {
       domain, path, active, maxRequest, waitSecs,
     } = siteConfigs;
 
     if (active) {
+      if (this.preHook) {
+        await this.preHook();
+      }
       this.loadHelper({
         maxRequest, waitSecs, domain, path, pageNumber: 1,
       });
     } else {
-      this.log('etl disabled');
+      debug('etl disabled');
     }
   }
 }
@@ -102,7 +105,7 @@ function getPrice(value) {
     return '';
   }
 
-  const results = value.match(/[\d]+\.?[\d]+/);
+  const results = value.replace(/,/g, '').match(/[\d]+\.?[\d]+/);
 
   if (results && results.length) {
     const price = parseFloat(results[0]);
@@ -115,6 +118,11 @@ function getPrice(value) {
   return '';
 }
 
+function cleanString(value) {
+  return value ? value.replace(/\r?\n|\r/g, '').replace(/  +/g, ' ') : '';
+}
+
 module.exports = RealState;
 module.exports.getPrice = getPrice;
 module.exports.getCurrency = getCurrency;
+module.exports.cleanString = cleanString;
