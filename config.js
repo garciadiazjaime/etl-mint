@@ -28,10 +28,10 @@ const config = convict({
       path: {
         default: '/for-sale-residential/Mexico/Baja-California/Tijuana?pageNo=',
       },
-      max_request: {
+      maxRequest: {
         default: 1,
       },
-      wait_secs: {
+      waitSecs: {
         default: 1000,
       },
     },
@@ -46,10 +46,10 @@ const config = convict({
       path: {
         default: '/MX/Real-Estate-Listings/Baja-California/Tijuana.html?page=',
       },
-      max_request: {
+      maxRequest: {
         default: 1,
       },
-      wait_secs: {
+      waitSecs: {
         default: 1000,
       },
     },
@@ -64,10 +64,10 @@ const config = convict({
       path: {
         default: '/TIJUANA_REAL_ESTATE_LISTINGS/page_1754238.html',
       },
-      max_request: {
+      maxRequest: {
         default: 1,
       },
-      wait_secs: {
+      waitSecs: {
         default: 1000,
       },
     },
@@ -82,10 +82,10 @@ const config = convict({
       path: {
         default: '/tijuana/residencial-venta?pagina=',
       },
-      max_request: {
+      maxRequest: {
         default: 1,
       },
-      wait_secs: {
+      waitSecs: {
         default: 5000,
       },
     },

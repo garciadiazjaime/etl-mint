@@ -1,132 +1,60 @@
+/* eslint class-methods-use-this: 0 */
+
 const request = require('request-promise');
 const cheerio = require('cheerio');
-const debug = require('debug')('app:century21global');
 
-const config = require('../config');
+const RealState = require('../crawler/realState');
+const { getPrice, getCurrency } = require('../crawler/realState');
 
-const MAX_REQUEST = config.get('sites.century21global.max_request');
-const WAIT_SECS = config.get('sites.century21global.wait_secs');
-
-function getCurrency(value) {
-  if (!value) {
-    return '';
+class Century21Global extends RealState {
+  constructor() {
+    super();
+    this.site = 'century21global';
   }
 
-  if (value.toUpperCase().includes('USD')) {
-    return 'USD';
+  extract(url) {
+    return request(url);
   }
 
-  if (value.toUpperCase().includes('MXN')) {
-    return 'MXN';
+  transform(html, domain) {
+    const $ = cheerio.load(html);
+
+    return $('.search-result').toArray().map((element) => {
+      const value = $(element).find('.price-native').text();
+      const price = getPrice(value);
+      const currency = getCurrency(value);
+      const size = $(element).find('.size').text().trim();
+      const description = $(element).find('.search-result-label').last().text();
+      const latitude = $(element).find('.map-coordinates').data('lat');
+      const longitude = $(element).find('.map-coordinates').data('lng');
+      const image = $(element).find('.search-result-img').css('background-image').replace('url(\'', '')
+        .replace('\')', '')
+        .replace(/"/gi, '');
+      const url = domain + $(element).find('.search-result-photo').attr('href');
+      const address = $(element).find('.property-address').text();
+      const city = 'tijuana';
+      const source = 'century21global';
+
+      return {
+        price,
+        currency,
+        description: size ? `${description}. ${size}` : description,
+        latitude,
+        longitude,
+        image,
+        url,
+        address,
+        city,
+        source,
+      };
+    });
   }
 
-  return '';
-}
-
-function getPrice(value) {
-  if (!value) {
-    return '';
-  }
-
-  return value.replace(/\D/g, '');
-}
-
-function extract(url) {
-  return request(url);
-}
-
-function transform(html, domain) {
-  const $ = cheerio.load(html);
-
-  return $('.search-result').toArray().map((element) => {
-    const value = $(element).find('.price-native').text();
-    const price = getPrice(value);
-    const currency = getCurrency(value);
-    const size = $(element).find('.size').text().trim();
-    const description = $(element).find('.search-result-label').last().text();
-    const latitude = $(element).find('.map-coordinates').data('lat');
-    const longitude = $(element).find('.map-coordinates').data('lng');
-    const image = $(element).find('.search-result-img').css('background-image').replace('url(\'', '')
-      .replace('\')', '')
-      .replace(/"/gi, '');
-    const url = domain + $(element).find('.search-result-photo').attr('href');
-    const address = $(element).find('.property-address').text();
-    const city = 'tijuana';
-    const source = 'century21global';
-
-    const place = {
-      price,
-      currency,
-      description: size ? `${description}. ${size}` : description,
-      latitude,
-      longitude,
-      image,
-      url,
-      address,
-      city,
-      source,
-    };
-
-    return place;
-  });
-}
-
-function load(apiUrl, places) {
-  if (!places || !places.length) {
-    return null;
-  }
-
-  const options = {
-    method: 'POST',
-    uri: `${apiUrl}/real-state/place`,
-    body: {
-      places,
-    },
-    json: true,
-  };
-  debug(`loading to ${options.uri}`);
-
-  return request(options);
-}
-
-function doNext(html) {
-  const $ = cheerio.load(html);
-  const next = $('.pagination li.disabled a[aria-label=Next]').length;
-  return !next;
-}
-
-async function loadHelper(domain, path, page) {
-  if (page > MAX_REQUEST) {
-    return;
-  }
-
-  const url = domain + path + page;
-  debug(`extracting from ${url}`);
-
-  const html = await extract(url);
-  const places = transform(html, domain);
-
-  debug(`${places.length} places extracted`);
-
-  await load(config.get('api.url'), places);
-
-  const next = doNext(html);
-
-  if (next) {
-    setTimeout(() => loadHelper(domain, path, page + 1), WAIT_SECS);
+  doNext(html) {
+    const $ = cheerio.load(html);
+    const next = $('.pagination li.disabled a[aria-label=Next]').length;
+    return !next;
   }
 }
 
-function main() {
-  const domain = config.get('sites.century21global.domain');
-  const path = config.get('sites.century21global.path');
-  const active = config.get('sites.century21global.active');
-
-  if (active) {
-    loadHelper(domain, path, 1);
-  } else {
-    debug('etl disabled');
-  }
-}
-
-module.exports = main;
+module.exports = Century21Global;
