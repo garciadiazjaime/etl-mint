@@ -92,13 +92,31 @@ const config = convict({
     lamudi: {
       active: {
         default: true,
-        env: 'propiedades',
+        env: 'lamudi',
       },
       domain: {
         default: 'https://www.lamudi.com.mx',
       },
       path: {
         default: '/baja-california/tijuana/for-sale/',
+      },
+      maxRequest: {
+        default: 1,
+      },
+      waitSecs: {
+        default: 1000,
+      },
+    },
+    vivanuncios: {
+      active: {
+        default: true,
+        env: 'vivanuncios',
+      },
+      domain: {
+        default: 'https://www.vivanuncios.com.mx',
+      },
+      path: {
+        default: '/s-venta-inmuebles/tijuana/v1c1097l10015p1',
       },
       maxRequest: {
         default: 1,
