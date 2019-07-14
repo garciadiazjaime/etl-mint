@@ -73,7 +73,7 @@ function getCurrency(value) {
     return '';
   }
 
-  if (value.toUpperCase().includes('USD')) {
+  if (value.search(/USD|MDD/i) !== -1) {
     return 'USD';
   }
 
@@ -89,11 +89,11 @@ function getMultiplier(value) {
     return 1;
   }
 
-  if (value.toLowerCase().includes('mil')) {
+  if (value.search(/mil/i) !== -1) {
     return 1000;
   }
 
-  if (value.toLowerCase().includes('mdp')) {
+  if (value.search(/mdp|mdd/i) !== -1) {
     return 1000000;
   }
 
@@ -105,7 +105,7 @@ function getPrice(value) {
     return '';
   }
 
-  const results = value.replace(/,/g, '').match(/[\d]+\.?[\d]+/);
+  const results = value.replace(/,/g, '').match(/\d+\.?\d*/);
 
   if (results && results.length) {
     const price = parseFloat(results[0]);
@@ -119,7 +119,7 @@ function getPrice(value) {
 }
 
 function cleanString(value) {
-  return value ? value.replace(/\r?\n|\r|\t|"|!|”/g, '').replace(/  +/g, ' ').trim() : '';
+  return value ? value.replace(/\r?\n|\r|\t|"|!|“|”/g, '').replace(/  +/g, ' ').trim() : '';
 }
 
 function cleanStart(value) {

@@ -86,7 +86,7 @@ const config = convict({
         default: 1,
       },
       waitSecs: {
-        default: 5000,
+        default: 3000,
       },
     },
   },

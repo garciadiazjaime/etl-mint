@@ -4,7 +4,7 @@ const queue = require('async/queue');
 const Century21Global = require('./sites/century21global');
 const Point2Homes = require('./sites/point2homes');
 const Baja123 = require('./sites/baja123');
-const propiedades = require('./sites/propiedades');
+const Propiedades = require('./sites/propiedades');
 
 function main() {
   const q = queue(async (Etl) => {
@@ -22,7 +22,7 @@ function main() {
 
   q.push(Baja123);
 
-  q.push(propiedades);
+  q.push(Propiedades);
 }
 
 main();
