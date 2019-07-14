@@ -9,7 +9,7 @@ const { getPrice, getCurrency } = require('../../utils/currency');
 class Century21Global extends RealState {
   constructor() {
     super();
-    this.site = 'century21global';
+    this.source = 'century21global';
     this.browser = null;
     this.page = null;
   }
@@ -64,7 +64,7 @@ class Century21Global extends RealState {
       const url = domain + $(element).find('.search-result-photo').attr('href');
       const address = $(element).find('.property-address').text();
       const city = 'tijuana';
-      const source = this.site;
+      const { source } = this;
 
       return {
         price,

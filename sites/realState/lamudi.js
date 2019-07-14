@@ -10,7 +10,7 @@ const { cleanString } = require('../../utils/string');
 class Lamudi extends RealState {
   constructor() {
     super();
-    this.site = 'lamudi';
+    this.source = 'lamudi';
     this.browser = null;
     this.page = null;
   }
@@ -62,7 +62,7 @@ class Lamudi extends RealState {
       const url = $(element).find('.js-listing-link').attr('href');
       const address = cleanString($(element).find('.ListingCell-KeyInfo-address .js-listing-link').text());
       const city = 'tijuana';
-      const source = this.site;
+      const { source } = this;
 
       const place = {
         price,

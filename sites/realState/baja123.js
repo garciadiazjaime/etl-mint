@@ -10,7 +10,7 @@ const { cleanStart, cleanString } = require('../../utils/string');
 class Baja123 extends RealState {
   constructor() {
     super();
-    this.site = 'baja123';
+    this.source = 'baja123';
     this.browser = null;
     this.page = null;
   }
@@ -62,7 +62,7 @@ class Baja123 extends RealState {
       const url = $(element).find('.item-photo a').attr('href');
       const address = cleanStart($(element).find('.item-address h2 a').text());
       const city = 'tijuana';
-      const source = this.site;
+      const { source } = this;
 
       const place = {
         price,

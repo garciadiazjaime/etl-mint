@@ -32,11 +32,11 @@ class RealState {
     }
 
     const url = domain + path;
-    debug(`extracting:${this.site} ${url}, ${pageNumber}`);
+    debug(`extracting:${this.source} ${url}, ${pageNumber}`);
     const html = await this.extract(url, pageNumber);
 
     const places = this.transform(html, domain);
-    debug(`loading:${this.site} ${places.length} places`);
+    debug(`loading:${this.source} ${places.length} places`);
     await load(config.get('api.url'), places);
 
     if (this.doNext(html)) {
@@ -50,7 +50,7 @@ class RealState {
 
 
   async main() {
-    const siteConfigs = config.get(`sites.${this.site}`);
+    const siteConfigs = config.get(`sites.${this.source}`);
     const {
       domain, path, active, maxRequest, waitSecs,
     } = siteConfigs;

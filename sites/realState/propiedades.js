@@ -10,7 +10,7 @@ const { cleanString } = require('../../utils/string');
 class Propiedades extends RealState {
   constructor() {
     super();
-    this.site = 'propiedades';
+    this.source = 'propiedades';
     this.browser = null;
     this.page = null;
   }
@@ -38,7 +38,7 @@ class Propiedades extends RealState {
       const latitude = $(element).find('meta[itemprop="latitude"]').attr('content');
       const longitude = $(element).find('meta[itemprop="longitude"]').attr('content');
       const city = 'tijuana';
-      const source = this.site;
+      const { source } = this;
 
       const place = {
         price,
