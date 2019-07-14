@@ -5,21 +5,22 @@ const puppeteer = require('puppeteer');
 
 const RealState = require('../../crawler/realState');
 const { getPrice, getCurrency } = require('../../utils/currency');
-const { cleanStart, cleanString } = require('../../utils/string');
+const { cleanString } = require('../../utils/string');
 
-class Baja123 extends RealState {
+class Lamudi extends RealState {
   constructor() {
     super();
-    this.site = 'baja123';
+    this.site = 'lamudi';
     this.browser = null;
     this.page = null;
   }
 
-  async preHook() {
+  async preHook(domain) {
     const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3847.0 Safari/537.36';
     this.browser = await puppeteer.launch();
     this.page = await this.browser.newPage();
     await this.page.setUserAgent(userAgent);
+    await this.page.goto(domain);
   }
 
   async afterHook() {
@@ -28,13 +29,13 @@ class Baja123 extends RealState {
 
   doNext(html) {
     const $ = cheerio.load(html);
-    const next = $('.Pager a[disabled="disabled"]').text().toLowerCase().includes('next');
-    return !next;
+    const next = !!$('.Pagination .next a').length;
+    return next;
   }
 
   async extract(url, pageNumber) {
     if (pageNumber > 1) {
-      const selector = `.Pager a:nth-of-type(${pageNumber})`;
+      const selector = '.Pagination .next a';
       await Promise.all([
         this.page.waitForNavigation(),
         this.page.click(selector),
@@ -50,17 +51,16 @@ class Baja123 extends RealState {
 
   transform(html) {
     const $ = cheerio.load(html);
+    const defaultCurrency = 'MXN';
 
-    return $('.listview-item-cnt .item-cnt').toArray().map((element) => {
-      const value = $(element).find('.item-price span').text();
+    return $('.js-listingContainer .ListingCell-row .ListingCell-content').toArray().map((element) => {
+      const value = $(element).find('.ListingCell-KeyInfo-price a').text().trim();
       const price = getPrice(value);
-      const currency = getCurrency(value);
-      const highlight = $(element).find('.label-highlight').text();
-      const details = $(element).find('.item-details').text();
-      const description = cleanString(`${highlight}. ${details}`);
-      const image = $(element).find('.item-photo img').attr('src');
-      const url = $(element).find('.item-photo a').attr('href');
-      const address = cleanStart($(element).find('.item-address h2 a').text());
+      const currency = getCurrency(value) || defaultCurrency;
+      const description = cleanString($(element).find('.ListingCell-shortDescription a').text());
+      const image = $(element).find('.ListingCell-image img').data('src');
+      const url = $(element).find('.js-listing-link').attr('href');
+      const address = cleanString($(element).find('.ListingCell-KeyInfo-address .js-listing-link').text());
       const city = 'tijuana';
       const source = this.site;
 
@@ -80,4 +80,4 @@ class Baja123 extends RealState {
   }
 }
 
-module.exports = Baja123;
+module.exports = Lamudi;

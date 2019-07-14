@@ -5,6 +5,7 @@ const Century21Global = require('./sites/realState/century21global');
 const Point2Homes = require('./sites/realState/point2homes');
 const Baja123 = require('./sites/realState/baja123');
 const Propiedades = require('./sites/realState/propiedades');
+const Lamudi = require('./sites/realState/lamudi');
 
 function main() {
   const q = queue(async (Etl) => {
@@ -23,6 +24,8 @@ function main() {
   q.push(Baja123);
 
   q.push(Propiedades);
+
+  q.push(Lamudi);
 }
 
 main();

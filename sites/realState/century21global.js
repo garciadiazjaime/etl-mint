@@ -64,7 +64,7 @@ class Century21Global extends RealState {
       const url = domain + $(element).find('.search-result-photo').attr('href');
       const address = $(element).find('.property-address').text();
       const city = 'tijuana';
-      const source = 'century21global';
+      const source = this.site;
 
       return {
         price,

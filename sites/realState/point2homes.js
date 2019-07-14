@@ -7,7 +7,6 @@ const RealState = require('../../crawler/realState');
 const { getPrice, getCurrency } = require('../../utils/currency');
 const { cleanString } = require('../../utils/string');
 
-
 class Point2Homes extends RealState {
   constructor() {
     super();
@@ -63,7 +62,7 @@ class Point2Homes extends RealState {
       const url = domain + $(element).find('.photo-inner a').attr('href');
       const address = $(element).find('.inner-left input[name^="ShortAddress"]').val();
       const city = 'tijuana';
-      const source = 'point2homes';
+      const source = this.site;
 
       const place = {
         price,

@@ -3,7 +3,7 @@ function getCurrency(value) {
     return '';
   }
 
-  if (value.search(/USD|MDD/i) !== -1) {
+  if (value.search(/USD|MDD|US/i) !== -1) {
     return 'USD';
   }
 

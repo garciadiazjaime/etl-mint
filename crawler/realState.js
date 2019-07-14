@@ -57,7 +57,7 @@ class RealState {
 
     if (active) {
       if (this.preHook) {
-        await this.preHook();
+        await this.preHook(domain);
       }
       this.loadHelper({
         maxRequest, waitSecs, domain, path, pageNumber: 1,

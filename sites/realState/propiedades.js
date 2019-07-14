@@ -38,7 +38,7 @@ class Propiedades extends RealState {
       const latitude = $(element).find('meta[itemprop="latitude"]').attr('content');
       const longitude = $(element).find('meta[itemprop="longitude"]').attr('content');
       const city = 'tijuana';
-      const source = 'propiedades';
+      const source = this.site;
 
       const place = {
         price,

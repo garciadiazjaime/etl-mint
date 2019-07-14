@@ -89,6 +89,24 @@ const config = convict({
         default: 3000,
       },
     },
+    lamudi: {
+      active: {
+        default: true,
+        env: 'propiedades',
+      },
+      domain: {
+        default: 'https://www.lamudi.com.mx',
+      },
+      path: {
+        default: '/baja-california/tijuana/for-sale/',
+      },
+      maxRequest: {
+        default: 1,
+      },
+      waitSecs: {
+        default: 1000,
+      },
+    },
   },
 });
 
