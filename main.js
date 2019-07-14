@@ -1,10 +1,10 @@
 const debug = require('debug')('app:main');
 const queue = require('async/queue');
 
-const Century21Global = require('./sites/century21global');
-const Point2Homes = require('./sites/point2homes');
-const Baja123 = require('./sites/baja123');
-const Propiedades = require('./sites/propiedades');
+const Century21Global = require('./sites/realState/century21global');
+const Point2Homes = require('./sites/realState/point2homes');
+const Baja123 = require('./sites/realState/baja123');
+const Propiedades = require('./sites/realState/propiedades');
 
 function main() {
   const q = queue(async (Etl) => {

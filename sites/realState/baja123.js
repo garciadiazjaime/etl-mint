@@ -3,14 +3,14 @@
 const cheerio = require('cheerio');
 const puppeteer = require('puppeteer');
 
-const RealState = require('../crawler/realState');
-const { getPrice, getCurrency, cleanString } = require('../crawler/realState');
+const RealState = require('../../crawler/realState');
+const { getPrice, getCurrency } = require('../../utils/currency');
+const { cleanStart, cleanString } = require('../../utils/string');
 
-
-class Point2Homes extends RealState {
+class Baja123 extends RealState {
   constructor() {
     super();
-    this.site = 'point2homes';
+    this.site = 'baja123';
     this.browser = null;
     this.page = null;
   }
@@ -28,13 +28,13 @@ class Point2Homes extends RealState {
 
   doNext(html) {
     const $ = cheerio.load(html);
-    const next = $('.pager li.next').length;
-    return !!next;
+    const next = $('.Pager a[disabled="disabled"]').text().toLowerCase().includes('next');
+    return !next;
   }
 
   async extract(url, pageNumber) {
     if (pageNumber > 1) {
-      const selector = '.pager li.next a';
+      const selector = `.Pager a:nth-of-type(${pageNumber})`;
       await Promise.all([
         this.page.waitForNavigation(),
         this.page.click(selector),
@@ -48,28 +48,26 @@ class Point2Homes extends RealState {
     return html;
   }
 
-  transform(html, domain) {
+  transform(html) {
     const $ = cheerio.load(html);
 
-    return $('.listings .items .item-cnt').toArray().map((element) => {
-      const value = $(element).find('.price').text();
+    return $('.listview-item-cnt .item-cnt').toArray().map((element) => {
+      const value = $(element).find('.item-price span').text();
       const price = getPrice(value);
       const currency = getCurrency(value);
-      const description = cleanString($(element).find('.item-info-cnt .characteristics-cnt').text().trim());
-      const latitude = $(element).find('.inner-left input[name^="Latitude"]').val();
-      const longitude = $(element).find('.inner-left input[name^="Longitude"]').val();
-      const image = $(element).find('.photo-inner img').data('original');
-      const url = domain + $(element).find('.photo-inner a').attr('href');
-      const address = $(element).find('.inner-left input[name^="ShortAddress"]').val();
+      const highlight = $(element).find('.label-highlight').text();
+      const details = $(element).find('.item-details').text();
+      const description = cleanString(`${highlight}. ${details}`);
+      const image = $(element).find('.item-photo img').attr('src');
+      const url = $(element).find('.item-photo a').attr('href');
+      const address = cleanStart($(element).find('.item-address h2 a').text());
       const city = 'tijuana';
-      const source = 'point2homes';
+      const source = 'century21global';
 
       const place = {
         price,
         currency,
         description,
-        latitude,
-        longitude,
         image,
         url,
         address,
@@ -82,5 +80,4 @@ class Point2Homes extends RealState {
   }
 }
 
-
-module.exports = Point2Homes;
+module.exports = Baja123;

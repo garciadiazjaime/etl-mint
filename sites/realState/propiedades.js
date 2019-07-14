@@ -3,10 +3,9 @@
 const cheerio = require('cheerio');
 const cloudscraper = require('cloudscraper');
 
-const RealState = require('../crawler/realState');
-const {
-  getPrice, getCurrency, cleanString,
-} = require('../crawler/realState');
+const RealState = require('../../crawler/realState');
+const { getPrice, getCurrency } = require('../../utils/currency');
+const { cleanString } = require('../../utils/string');
 
 class Propiedades extends RealState {
   constructor() {

@@ -3,15 +3,13 @@
 const cheerio = require('cheerio');
 const puppeteer = require('puppeteer');
 
-const RealState = require('../crawler/realState');
-const {
-  getPrice, getCurrency, cleanStart, cleanString,
-} = require('../crawler/realState');
+const RealState = require('../../crawler/realState');
+const { getPrice, getCurrency } = require('../../utils/currency');
 
-class Baja123 extends RealState {
+class Century21Global extends RealState {
   constructor() {
     super();
-    this.site = 'baja123';
+    this.site = 'century21global';
     this.browser = null;
     this.page = null;
   }
@@ -29,13 +27,13 @@ class Baja123 extends RealState {
 
   doNext(html) {
     const $ = cheerio.load(html);
-    const next = $('.Pager a[disabled="disabled"]').text().toLowerCase().includes('next');
+    const next = $('.pagination li.disabled a[aria-label=Next]').length;
     return !next;
   }
 
   async extract(url, pageNumber) {
     if (pageNumber > 1) {
-      const selector = `.Pager a:nth-of-type(${pageNumber})`;
+      const selector = '.pagination a[aria-label="Next"]';
       await Promise.all([
         this.page.waitForNavigation(),
         this.page.click(selector),
@@ -49,36 +47,39 @@ class Baja123 extends RealState {
     return html;
   }
 
-  transform(html) {
+  transform(html, domain) {
     const $ = cheerio.load(html);
 
-    return $('.listview-item-cnt .item-cnt').toArray().map((element) => {
-      const value = $(element).find('.item-price span').text();
+    return $('.search-result').toArray().map((element) => {
+      const value = $(element).find('.price-native').text();
       const price = getPrice(value);
       const currency = getCurrency(value);
-      const highlight = $(element).find('.label-highlight').text();
-      const details = $(element).find('.item-details').text();
-      const description = cleanString(`${highlight}. ${details}`);
-      const image = $(element).find('.item-photo img').attr('src');
-      const url = $(element).find('.item-photo a').attr('href');
-      const address = cleanStart($(element).find('.item-address h2 a').text());
+      const size = $(element).find('.size').text().trim();
+      const description = $(element).find('.search-result-label').last().text();
+      const latitude = $(element).find('.map-coordinates').data('lat');
+      const longitude = $(element).find('.map-coordinates').data('lng');
+      const image = $(element).find('.search-result-img').css('background-image').replace('url(\'', '')
+        .replace('\')', '')
+        .replace(/"/gi, '');
+      const url = domain + $(element).find('.search-result-photo').attr('href');
+      const address = $(element).find('.property-address').text();
       const city = 'tijuana';
       const source = 'century21global';
 
-      const place = {
+      return {
         price,
         currency,
-        description,
+        description: size ? `${description}. ${size}` : description,
+        latitude,
+        longitude,
         image,
         url,
         address,
         city,
         source,
       };
-
-      return place;
     });
   }
 }
 
-module.exports = Baja123;
+module.exports = Century21Global;

@@ -3,13 +3,15 @@
 const cheerio = require('cheerio');
 const puppeteer = require('puppeteer');
 
-const RealState = require('../crawler/realState');
-const { getPrice, getCurrency } = require('../crawler/realState');
+const RealState = require('../../crawler/realState');
+const { getPrice, getCurrency } = require('../../utils/currency');
+const { cleanString } = require('../../utils/string');
 
-class Century21Global extends RealState {
+
+class Point2Homes extends RealState {
   constructor() {
     super();
-    this.site = 'century21global';
+    this.site = 'point2homes';
     this.browser = null;
     this.page = null;
   }
@@ -27,13 +29,13 @@ class Century21Global extends RealState {
 
   doNext(html) {
     const $ = cheerio.load(html);
-    const next = $('.pagination li.disabled a[aria-label=Next]').length;
-    return !next;
+    const next = $('.pager li.next').length;
+    return !!next;
   }
 
   async extract(url, pageNumber) {
     if (pageNumber > 1) {
-      const selector = '.pagination a[aria-label="Next"]';
+      const selector = '.pager li.next a';
       await Promise.all([
         this.page.waitForNavigation(),
         this.page.click(selector),
@@ -50,26 +52,23 @@ class Century21Global extends RealState {
   transform(html, domain) {
     const $ = cheerio.load(html);
 
-    return $('.search-result').toArray().map((element) => {
-      const value = $(element).find('.price-native').text();
+    return $('.listings .items .item-cnt').toArray().map((element) => {
+      const value = $(element).find('.price').text();
       const price = getPrice(value);
       const currency = getCurrency(value);
-      const size = $(element).find('.size').text().trim();
-      const description = $(element).find('.search-result-label').last().text();
-      const latitude = $(element).find('.map-coordinates').data('lat');
-      const longitude = $(element).find('.map-coordinates').data('lng');
-      const image = $(element).find('.search-result-img').css('background-image').replace('url(\'', '')
-        .replace('\')', '')
-        .replace(/"/gi, '');
-      const url = domain + $(element).find('.search-result-photo').attr('href');
-      const address = $(element).find('.property-address').text();
+      const description = cleanString($(element).find('.item-info-cnt .characteristics-cnt').text().trim());
+      const latitude = $(element).find('.inner-left input[name^="Latitude"]').val();
+      const longitude = $(element).find('.inner-left input[name^="Longitude"]').val();
+      const image = $(element).find('.photo-inner img').data('original');
+      const url = domain + $(element).find('.photo-inner a').attr('href');
+      const address = $(element).find('.inner-left input[name^="ShortAddress"]').val();
       const city = 'tijuana';
-      const source = 'century21global';
+      const source = 'point2homes';
 
-      return {
+      const place = {
         price,
         currency,
-        description: size ? `${description}. ${size}` : description,
+        description,
         latitude,
         longitude,
         image,
@@ -78,8 +77,11 @@ class Century21Global extends RealState {
         city,
         source,
       };
+
+      return place;
     });
   }
 }
 
-module.exports = Century21Global;
+
+module.exports = Point2Homes;
