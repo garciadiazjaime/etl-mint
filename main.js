@@ -7,6 +7,7 @@ const Baja123 = require('./sites/realState/baja123');
 const Propiedades = require('./sites/realState/propiedades');
 const Lamudi = require('./sites/realState/lamudi');
 const Vivanuncios = require('./sites/realState/vivanuncios');
+const Inmuebles24 = require('./sites/realState/inmuebles24');
 
 function main() {
   const q = queue(async (Etl) => {
@@ -29,6 +30,8 @@ function main() {
   q.push(Lamudi);
 
   q.push(Vivanuncios);
+
+  q.push(Inmuebles24);
 }
 
 main();

@@ -7,10 +7,22 @@ const RealState = require('../../crawler/realState');
 const { getPrice, getCurrency } = require('../../utils/currency');
 const { cleanString } = require('../../utils/string');
 
+function getImage($, element) {
+  const image = $(element).find('.posting-gallery-slider .flickity-slider .is-selected img').attr('src');
+  if (image) {
+    return image;
+  }
+
+  const galleryHTML = $(element).find('.posting-gallery-slider').html();
+  const images = galleryHTML.match(/https:\/\/[\w\.\/]*/gi);
+
+  return Array.isArray(images) ? images[0] : '';
+}
+
 class Lamudi extends RealState {
   constructor() {
     super();
-    this.source = 'lamudi';
+    this.source = 'inmuebles24';
     this.browser = null;
     this.page = null;
   }
@@ -29,13 +41,13 @@ class Lamudi extends RealState {
 
   doNext(html) {
     const $ = cheerio.load(html);
-    const next = !!$('.Pagination .next a').length;
+    const next = !!$('.paging .pag-go-next').length;
     return next;
   }
 
   async extract(url, pageNumber) {
     if (pageNumber > 1) {
-      const selector = '.Pagination .next a';
+      const selector = '.paging .pag-go-next';
       await Promise.all([
         this.page.waitForNavigation(),
         this.page.click(selector),
@@ -49,17 +61,17 @@ class Lamudi extends RealState {
     return html;
   }
 
-  transform(html) {
+  transform(html, domain) {
     const $ = cheerio.load(html);
 
-    return $('.js-listingContainer .ListingCell-row .ListingCell-content').toArray().map((element) => {
-      const value = $(element).find('.ListingCell-KeyInfo-price a').text().trim();
+    const places = $('.list-card-container > div .general-content').toArray().map((element) => {
+      const value = $(element).find('.posting-price .first-price').text().trim();
       const price = getPrice(value);
       const currency = getCurrency(value);
-      const description = cleanString($(element).find('.ListingCell-shortDescription a').text());
-      const image = $(element).find('.ListingCell-image img').data('src');
-      const url = $(element).find('.js-listing-link').attr('href');
-      const address = cleanString($(element).find('.ListingCell-KeyInfo-address .js-listing-link').text());
+      const description = cleanString($(element).find('.posting-description').text());
+      const image = getImage($, element);
+      const url = domain + $(element).find('.posting-title a').attr('href');
+      const address = cleanString($(element).find('.posting-location').text());
       const city = 'tijuana';
       const { source } = this;
 
@@ -76,6 +88,8 @@ class Lamudi extends RealState {
 
       return place;
     });
+
+    return places;
   }
 }
 

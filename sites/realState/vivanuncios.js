@@ -51,12 +51,11 @@ class Vivanuncios extends RealState {
 
   transform(html, domain) {
     const $ = cheerio.load(html);
-    const defaultCurrency = 'MXN';
 
     return $('.viewport-contents .tileV2.promoted, .viewport-contents .tileV2.regular').toArray().map((element) => {
       const value = $(element).find('.ad-price').text().trim();
       const price = getPrice(value);
-      const currency = getCurrency(value) || defaultCurrency;
+      const currency = getCurrency(value);
       const description = cleanString($(element).find('.expanded-description').text());
       const image = $(element).find('.pictureLoading img').data('src');
       const url = domain + $(element).find('.tile-title-text').attr('href');

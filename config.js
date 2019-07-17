@@ -125,6 +125,24 @@ const config = convict({
         default: 1000,
       },
     },
+    inmuebles24: {
+      active: {
+        default: true,
+        env: 'inmuebles24',
+      },
+      domain: {
+        default: 'https://www.inmuebles24.com',
+      },
+      path: {
+        default: '/inmuebles-en-venta-en-tijuana.html',
+      },
+      maxRequest: {
+        default: 1,
+      },
+      waitSecs: {
+        default: 1000,
+      },
+    },
   },
 });
 
