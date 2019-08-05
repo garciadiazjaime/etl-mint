@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "DEBUG=app* node ./main",
-    "lint": "npx eslint ."
+    "lint": "npx eslint .",
+    "docker:build": "docker build -t garciadiazjaime/etl-mint .",
+    "docker:push": "docker push garciadiazjaime/etl-mint && echo 'docker pull garciadiazjaime/etl-mint'"
   },
   "keywords": [],
   "author": "",
