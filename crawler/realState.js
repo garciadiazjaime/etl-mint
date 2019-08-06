@@ -10,7 +10,7 @@ function load(apiUrl, places) {
 
   const options = {
     method: 'POST',
-    uri: `${apiUrl}/real-state/place`,
+    uri: `${apiUrl}/real-state`,
     body: {
       places,
     },
