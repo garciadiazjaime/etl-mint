@@ -32,7 +32,7 @@ class Propiedades extends RealState {
       const price = getPrice(value);
       const currency = getCurrency(value);
       const description = cleanString($(element).find('.description-list h4').text());
-      const image = $(element).find('.thumbnail-slider img').data('src');
+      const images = [$(element).find('.thumbnail-slider img').data('src')];
       const url = $(element).data('href');
       const address = cleanString($(element).find('.address .title-property a').text());
       const latitude = $(element).find('meta[itemprop="latitude"]').attr('content');
@@ -44,7 +44,7 @@ class Propiedades extends RealState {
         price,
         currency,
         description,
-        image,
+        images,
         url,
         address,
         city,

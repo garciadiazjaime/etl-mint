@@ -69,7 +69,7 @@ class Lamudi extends RealState {
       const price = getPrice(value);
       const currency = getCurrency(value);
       const description = cleanString($(element).find('.posting-description').text());
-      const image = getImage($, element);
+      const images = [getImage($, element)];
       const url = domain + $(element).find('.posting-title a').attr('href');
       const address = cleanString($(element).find('.posting-location').text());
       const city = 'tijuana';
@@ -79,7 +79,7 @@ class Lamudi extends RealState {
         price,
         currency,
         description,
-        image,
+        images,
         url,
         address,
         city,

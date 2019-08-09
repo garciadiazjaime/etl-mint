@@ -57,7 +57,7 @@ class Lamudi extends RealState {
       const price = getPrice(value);
       const currency = getCurrency(value);
       const description = cleanString($(element).find('.ListingCell-shortDescription a').text());
-      const image = $(element).find('.ListingCell-image img').data('src');
+      const images = [$(element).find('.ListingCell-image img').data('src')];
       const url = $(element).find('.js-listing-link').attr('href');
       const address = cleanString($(element).find('.ListingCell-KeyInfo-address .js-listing-link').text());
       const city = 'tijuana';
@@ -67,7 +67,7 @@ class Lamudi extends RealState {
         price,
         currency,
         description,
-        image,
+        images,
         url,
         address,
         city,

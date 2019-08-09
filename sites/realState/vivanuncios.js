@@ -57,7 +57,7 @@ class Vivanuncios extends RealState {
       const price = getPrice(value);
       const currency = getCurrency(value);
       const description = cleanString($(element).find('.expanded-description').text());
-      const image = $(element).find('.pictureLoading img').data('src');
+      const images = [$(element).find('.pictureLoading img').data('src')];
       const url = domain + $(element).find('.tile-title-text').attr('href');
       const address = cleanString($(element).find('.tile-location').text());
       const city = 'tijuana';
@@ -67,7 +67,7 @@ class Vivanuncios extends RealState {
         price,
         currency,
         description,
-        image,
+        images,
         url,
         address,
         city,

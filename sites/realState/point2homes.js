@@ -58,7 +58,7 @@ class Point2Homes extends RealState {
       const description = cleanString($(element).find('.item-info-cnt .characteristics-cnt').text().trim());
       const latitude = $(element).find('.inner-left input[name^="Latitude"]').val();
       const longitude = $(element).find('.inner-left input[name^="Longitude"]').val();
-      const image = $(element).find('.photo-inner img').data('original');
+      const images = [$(element).find('.photo-inner img').data('original')];
       const url = domain + $(element).find('.photo-inner a').attr('href');
       const address = $(element).find('.inner-left input[name^="ShortAddress"]').val();
       const city = 'tijuana';
@@ -70,7 +70,7 @@ class Point2Homes extends RealState {
         description,
         latitude,
         longitude,
-        image,
+        images,
         url,
         address,
         city,

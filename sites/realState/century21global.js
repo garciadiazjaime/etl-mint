@@ -58,9 +58,9 @@ class Century21Global extends RealState {
       const description = $(element).find('.search-result-label').last().text();
       const latitude = $(element).find('.map-coordinates').data('lat');
       const longitude = $(element).find('.map-coordinates').data('lng');
-      const image = $(element).find('.search-result-img').css('background-image').replace('url(\'', '')
+      const images = [$(element).find('.search-result-img').css('background-image').replace('url(\'', '')
         .replace('\')', '')
-        .replace(/"/gi, '');
+        .replace(/"/gi, '')];
       const url = domain + $(element).find('.search-result-photo').attr('href');
       const address = $(element).find('.property-address').text();
       const city = 'tijuana';
@@ -72,7 +72,7 @@ class Century21Global extends RealState {
         description: size ? `${description}. ${size}` : description,
         latitude,
         longitude,
-        image,
+        images,
         url,
         address,
         city,

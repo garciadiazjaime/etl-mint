@@ -58,7 +58,7 @@ class Baja123 extends RealState {
       const highlight = $(element).find('.label-highlight').text();
       const details = $(element).find('.item-details').text();
       const description = cleanString(`${highlight}. ${details}`);
-      const image = $(element).find('.item-photo img').attr('src');
+      const images = [$(element).find('.item-photo img').attr('src')];
       const url = $(element).find('.item-photo a').attr('href');
       const address = cleanStart($(element).find('.item-address h2 a').text());
       const city = 'tijuana';
@@ -68,7 +68,7 @@ class Baja123 extends RealState {
         price,
         currency,
         description,
-        image,
+        images,
         url,
         address,
         city,
