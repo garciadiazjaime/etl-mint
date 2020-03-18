@@ -71,7 +71,7 @@ function load(apiUrl, posts) {
 
   const options = {
     method: 'POST',
-    uri: `${apiUrl}/instagram`,
+    uri: `${apiUrl}/instagram/post`,
     body: {
       data: posts,
     },
