@@ -144,6 +144,20 @@ const config = convict({
       },
     },
   },
+  instagram: {
+    token: {
+      env: 'INSTAGRAM_TOKEN',
+      default: '',
+    },
+    hashtag: {
+      env: 'INSTAGRAM_HASHTAG_ID',
+      default: '',
+    },
+    userId: {
+      env: 'INSTAGRAM_USER_ID',
+      default: '',
+    },
+  },
 });
 
 // Perform validation
