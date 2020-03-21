@@ -1,4 +1,4 @@
-// todo: extend token length
+const debug = require('debug')('app:instagram');
 
 const request = require('request-promise');
 const fs = require('fs');
@@ -91,13 +91,15 @@ async function main() {
   const apiUrl = config.get('api.url');
   const city = 'tijuana';
 
+  debug(`instagram:start:${city}`);
+
   const rawData = await extract(env, instagramConfig);
-  // console.log(rawData);
 
   const posts = transform(rawData, instagramConfig.hashtag, city);
 
   const response = await load(apiUrl, posts);
-  console.log(response);
+
+  debug(`instagram:end:${city}:${response.length}`);
 }
 
-main();
+module.exports = main;

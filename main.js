@@ -1,5 +1,6 @@
 const debug = require('debug')('app:main');
 const queue = require('async/queue');
+const cron = require('node-cron');
 
 const Century21Global = require('./sites/realState/century21global');
 const Point2Homes = require('./sites/realState/point2homes');
@@ -8,11 +9,12 @@ const Propiedades = require('./sites/realState/propiedades');
 const Lamudi = require('./sites/realState/lamudi');
 const Vivanuncios = require('./sites/realState/vivanuncios');
 const Inmuebles24 = require('./sites/realState/inmuebles24');
+const InstagramTijuana = require('./sites/instagram/tijuana');
 
-function main() {
+function realState() {
   const q = queue(async (Etl) => {
     const crawler = new Etl();
-    await crawler.main();
+    await crawler.realState();
   });
 
   q.error((err, task) => {
@@ -34,4 +36,9 @@ function main() {
   q.push(Inmuebles24);
 }
 
-main();
+// realState();
+
+cron.schedule('*/10 * * * *', async () => {
+  debug('running instagram', new Date());
+  await InstagramTijuana();
+});
