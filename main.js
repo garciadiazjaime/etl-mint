@@ -9,12 +9,12 @@ const Propiedades = require('./sites/realState/propiedades');
 const Lamudi = require('./sites/realState/lamudi');
 const Vivanuncios = require('./sites/realState/vivanuncios');
 const Inmuebles24 = require('./sites/realState/inmuebles24');
-const InstagramTijuana = require('./sites/instagram/tijuana');
+const instagramTijuana = require('./sites/instagram/tijuana');
 
 function realState() {
   const q = queue(async (Etl) => {
     const crawler = new Etl();
-    await crawler.realState();
+    await crawler.main();
   });
 
   q.error((err, task) => {
@@ -36,9 +36,12 @@ function realState() {
   q.push(Inmuebles24);
 }
 
-// realState();
+cron.schedule('*/30 * * * *', async () => {
+  debug('instagram:', new Date());
+  await instagramTijuana();
+});
 
-cron.schedule('*/10 * * * *', async () => {
-  debug('running instagram', new Date());
-  await InstagramTijuana();
+cron.schedule('42 * * * *', async () => {
+  debug('realstate:', new Date());
+  await realState();
 });

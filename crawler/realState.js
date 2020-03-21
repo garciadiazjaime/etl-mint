@@ -4,7 +4,7 @@ const debug = require('debug')('app:realstate');
 const config = require('../config');
 
 function load(apiUrl, places) {
-  if (!places || !places.length) {
+  if (!Array.isArray(places) || !places.length) {
     return null;
   }
 
@@ -12,7 +12,7 @@ function load(apiUrl, places) {
     method: 'POST',
     uri: `${apiUrl}/real-state`,
     body: {
-      places,
+      data: places,
     },
     json: true,
   };
@@ -32,12 +32,13 @@ class RealState {
     }
 
     const url = domain + path;
-    debug(`extracting:${this.source} ${url}, ${pageNumber}`);
+    debug(`${this.source}:extract:${url}:${pageNumber}`);
     const html = await this.extract(url, pageNumber);
 
     const places = this.transform(html, domain);
-    debug(`loading:${this.source} ${places.length} places`);
-    await load(config.get('api.url'), places);
+    debug(`${this.source}:transform:${places.length}`);
+    const response = await load(config.get('api.url'), places);
+    debug(`${this.source}:load:${response && response.length}`);
 
     if (this.doNext(html)) {
       setTimeout(() => this.loadHelper({
@@ -63,7 +64,7 @@ class RealState {
         maxRequest, waitSecs, domain, path, pageNumber: 1,
       });
     } else {
-      debug('etl disabled');
+      debug(`${this.source}:disabled`);
     }
   }
 }
