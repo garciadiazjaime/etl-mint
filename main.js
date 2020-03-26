@@ -21,27 +21,27 @@ function realState() {
     debug('ERROR', err, task);
   });
 
-  q.push(Century21Global);
+  // q.push(Century21Global);
 
-  q.push(Point2Homes);
+  // q.push(Point2Homes);
 
-  q.push(Baja123);
+  // q.push(Baja123);
 
   q.push(Propiedades);
 
-  q.push(Lamudi);
+  // q.push(Lamudi);
 
-  q.push(Vivanuncios);
+  // q.push(Vivanuncios);
 
-  q.push(Inmuebles24);
+  // q.push(Inmuebles24);
 }
 
-cron.schedule('*/30 * * * *', async () => {
-  debug('instagram:', new Date());
+cron.schedule('6 * * * *', async () => {
+  debug('instagram');
   await instagramTijuana();
 });
 
 cron.schedule('42 * * * *', async () => {
-  debug('realstate:', new Date());
+  debug('realstate');
   await realState();
 });

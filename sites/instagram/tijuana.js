@@ -102,4 +102,8 @@ async function main() {
   debug(`instagram:end:${city}:${response.length}`);
 }
 
+if (require.main === module) {
+  main();
+}
+
 module.exports = main;
