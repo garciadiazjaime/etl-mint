@@ -16,7 +16,15 @@ class Century21Global extends RealState {
 
   async preHook() {
     const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3847.0 Safari/537.36';
-    this.browser = await puppeteer.launch();
+    this.browser = await puppeteer.launch({
+      headless: true,
+      executablePath: '/usr/bin/chromium-browser',
+      args: [
+        '--no-sandbox',
+        '--disable-gpu',
+        '--headless',
+      ],
+    });
     this.page = await this.browser.newPage();
     await this.page.setUserAgent(userAgent);
   }
@@ -80,6 +88,15 @@ class Century21Global extends RealState {
       };
     });
   }
+}
+
+async function main() {
+  const task = new Century21Global();
+  await task.main();
+}
+
+if (require.main === module) {
+  main();
 }
 
 module.exports = Century21Global;
