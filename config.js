@@ -53,6 +53,18 @@ const config = convict({
         default: '/inmuebles-en-venta-en-tijuana.html',
       },
     },
+    lamudi: {
+      active: {
+        default: true,
+        env: 'lamudi',
+      },
+      domain: {
+        default: 'https://www.lamudi.com.mx',
+      },
+      path: {
+        default: '/baja-california/tijuana/for-sale/',
+      },
+    },
     point2homes: {
       active: {
         default: true,
@@ -81,24 +93,6 @@ const config = convict({
       },
       waitSecs: {
         default: 3000,
-      },
-    },
-    lamudi: {
-      active: {
-        default: true,
-        env: 'lamudi',
-      },
-      domain: {
-        default: 'https://www.lamudi.com.mx',
-      },
-      path: {
-        default: '/baja-california/tijuana/for-sale/',
-      },
-      maxRequest: {
-        default: 1,
-      },
-      waitSecs: {
-        default: 1000,
       },
     },
     vivanuncios: {

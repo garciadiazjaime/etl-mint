@@ -26,8 +26,6 @@ function transform(html, domain) {
     const images = [getImage($, element)];
     const url = domain + $(element).find('.posting-title a').attr('href');
     const address = cleanString($(element).find('.posting-location').text());
-    const city = 'tijuana';
-    const { source } = this;
 
     const place = {
       price,
@@ -36,8 +34,6 @@ function transform(html, domain) {
       images,
       url,
       address,
-      city,
-      source,
     };
 
     return place;
