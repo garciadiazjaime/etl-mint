@@ -19,14 +19,14 @@ function transform(html, domain) {
     const address = $(element).find('.inner-left input[name^="ShortAddress"]').val();
 
     const place = {
-      price,
+      address,
       currency,
       description,
+      images,
       latitude,
       longitude,
-      images,
+      price,
       url,
-      address,
     };
 
     return place;

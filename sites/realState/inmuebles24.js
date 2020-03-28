@@ -28,12 +28,12 @@ function transform(html, domain) {
     const address = cleanString($(element).find('.posting-location').text());
 
     const place = {
-      price,
+      address,
       currency,
       description,
       images,
+      price,
       url,
-      address,
     };
 
     return place;

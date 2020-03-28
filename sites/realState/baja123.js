@@ -18,12 +18,12 @@ function transform(html) {
     const address = cleanStart($(element).find('.item-address h2 a').text());
 
     const place = {
-      price,
+      address,
       currency,
       description,
       images,
+      price,
       url,
-      address,
     };
 
     return place;

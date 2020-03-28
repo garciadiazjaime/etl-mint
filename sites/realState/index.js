@@ -9,6 +9,7 @@ const inmuebles24 = require('./inmuebles24');
 const lamudi = require('./lamudi');
 const point2Homes = require('./point2homes');
 const propiedades = require('./propiedades');
+const vivanuncios = require('./vivanuncios');
 const config = require('../../config');
 
 function getTransformer(source) {
@@ -30,6 +31,9 @@ function getTransformer(source) {
 
     case 'propiedades':
       return propiedades;
+
+    case 'vivanuncios':
+      return vivanuncios;
 
     default:
       return null;

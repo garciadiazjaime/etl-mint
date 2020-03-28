@@ -86,7 +86,7 @@ const config = convict({
         default: 'https://propiedades.com',
       },
       path: {
-        default: '/tijuana/residencial-venta?pagina=',
+        default: '/tijuana/residencial-venta',
       },
     },
     vivanuncios: {
@@ -99,12 +99,6 @@ const config = convict({
       },
       path: {
         default: '/s-venta-inmuebles/tijuana/v1c1097l10015p1',
-      },
-      maxRequest: {
-        default: 1,
-      },
-      waitSecs: {
-        default: 1000,
       },
     },
   },

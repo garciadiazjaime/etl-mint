@@ -20,14 +20,14 @@ function transform(html, domain) {
     const address = $(element).find('.property-address').text();
 
     return {
-      price,
+      address,
       currency,
       description: size ? `${description}. ${size}` : description,
+      images,
       latitude,
       longitude,
-      images,
+      price,
       url,
-      address,
     };
   });
 }

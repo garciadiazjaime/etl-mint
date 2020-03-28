@@ -16,20 +16,16 @@ function transform(html) {
     const address = cleanString($(element).find('.address .title-property a').text());
     const latitude = $(element).find('meta[itemprop="latitude"]').attr('content');
     const longitude = $(element).find('meta[itemprop="longitude"]').attr('content');
-    const city = 'tijuana';
-    const { source } = this;
 
     const place = {
-      price,
+      address,
       currency,
       description,
       images,
-      url,
-      address,
-      city,
-      source,
       latitude,
       longitude,
+      price,
+      url,
     };
 
     return place;

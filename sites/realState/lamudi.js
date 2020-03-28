@@ -16,12 +16,12 @@ function transform(html) {
     const address = cleanString($(element).find('.ListingCell-KeyInfo-address .js-listing-link').text());
 
     const place = {
-      price,
+      address,
       currency,
       description,
       images,
+      price,
       url,
-      address,
     };
 
     return place;
