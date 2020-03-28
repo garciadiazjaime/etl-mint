@@ -36,6 +36,7 @@ async function extract() {
   await page.goto(url);
 
   const html = await page.content();
+  await browser.close();
 
   return html;
 }
