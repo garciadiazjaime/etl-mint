@@ -40,12 +40,6 @@ const config = convict({
       path: {
         default: '/MX/Real-Estate-Listings/Baja-California/Tijuana.html',
       },
-      maxRequest: {
-        default: 1,
-      },
-      waitSecs: {
-        default: 1000,
-      },
     },
     baja123: {
       active: {
