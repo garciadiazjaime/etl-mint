@@ -1,31 +1,26 @@
 const debug = require('debug')('app:main');
-const queue = require('async/queue');
+const mapSeries = require('async/mapSeries');
 const cron = require('node-cron');
 
 const realState = require('./sites/realState');
 const instagramTijuana = require('./sites/instagram/tijuana');
+const config = require('./config');
 
-function setQueue(etl, items) {
-  const q = queue(async () => {
-    items.map(async (item) => {
-      await etl(item);
-    });
+
+function main() {
+  const sites = config.get('sites');
+  const enableSites = Object.keys(sites).filter(key => sites[key].active);
+
+
+  cron.schedule('6 * * * *', async () => {
+    debug('instagram');
+    await instagramTijuana();
   });
 
-  q.error((err, task) => {
-    debug('ERROR', err, task);
+  cron.schedule('42 * * * *', async () => {
+    debug('realstate');
+    mapSeries(enableSites, realState);
   });
-
-  q.push(etl);
 }
 
-cron.schedule('6 * * * *', async () => {
-  debug('instagram');
-  await instagramTijuana();
-});
-
-cron.schedule('42 * * * *', async () => {
-  debug('realstate');
-  const sites = ['baja123', 'century21global', 'inmuebles24', 'lamudi', 'point2homes', 'propiedades', 'vivanuncios'];
-  setQueue(realState, sites);
-});
+main();
