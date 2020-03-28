@@ -41,6 +41,18 @@ const config = convict({
         default: '/for-sale-residential/Mexico/Baja-California/Tijuana',
       },
     },
+    inmuebles24: {
+      active: {
+        default: true,
+        env: 'inmuebles24',
+      },
+      domain: {
+        default: 'https://www.inmuebles24.com',
+      },
+      path: {
+        default: '/inmuebles-en-venta-en-tijuana.html',
+      },
+    },
     point2homes: {
       active: {
         default: true,
@@ -99,24 +111,6 @@ const config = convict({
       },
       path: {
         default: '/s-venta-inmuebles/tijuana/v1c1097l10015p1',
-      },
-      maxRequest: {
-        default: 1,
-      },
-      waitSecs: {
-        default: 1000,
-      },
-    },
-    inmuebles24: {
-      active: {
-        default: true,
-        env: 'inmuebles24',
-      },
-      domain: {
-        default: 'https://www.inmuebles24.com',
-      },
-      path: {
-        default: '/inmuebles-en-venta-en-tijuana.html',
       },
       maxRequest: {
         default: 1,
