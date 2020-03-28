@@ -88,12 +88,6 @@ const config = convict({
       path: {
         default: '/tijuana/residencial-venta?pagina=',
       },
-      maxRequest: {
-        default: 1,
-      },
-      waitSecs: {
-        default: 3000,
-      },
     },
     vivanuncios: {
       active: {

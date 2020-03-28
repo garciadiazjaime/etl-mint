@@ -8,6 +8,7 @@ const century21global = require('./century21global');
 const inmuebles24 = require('./inmuebles24');
 const lamudi = require('./lamudi');
 const point2Homes = require('./point2homes');
+const propiedades = require('./propiedades');
 const config = require('../../config');
 
 function getTransformer(source) {
@@ -26,6 +27,9 @@ function getTransformer(source) {
 
     case 'point2homes':
       return point2Homes;
+
+    case 'propiedades':
+      return propiedades;
 
     default:
       return null;
@@ -63,7 +67,7 @@ async function main(source, city = 'tijuana') {
 }
 
 if (require.main === module) {
-  main(process.argv[2]);
+  main(process.argv[2], process.argv[3]);
 }
 
 module.exports = main;
