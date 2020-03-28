@@ -1,10 +1,8 @@
 const cheerio = require('cheerio');
 
-const config = require('../../config');
 const { getPrice, getCurrency } = require('../../utils/currency');
 
-function transform(html, source) {
-  const { domain } = config.get(`sites.${source}`);
+function transform(html, domain) {
   const $ = cheerio.load(html);
 
   return $('.search-result').toArray().map((element) => {
@@ -20,7 +18,6 @@ function transform(html, source) {
       .replace(/"/gi, '')];
     const url = domain + $(element).find('.search-result-photo').attr('href');
     const address = $(element).find('.property-address').text();
-    const city = 'tijuana';
 
     return {
       price,
@@ -31,8 +28,6 @@ function transform(html, source) {
       images,
       url,
       address,
-      city,
-      source,
     };
   });
 }

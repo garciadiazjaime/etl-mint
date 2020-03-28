@@ -4,10 +4,17 @@ const config = require('../config');
 
 const apiUrl = config.get('api.url');
 
-function load(data) {
-  if (!Array.isArray(data) || !data.length) {
+function load(rawData, city, source) {
+  if (!Array.isArray(rawData) || !rawData.length) {
     return null;
   }
+
+  const data = rawData.map(item => ({
+    ...item,
+    city,
+    source,
+  }));
+
 
   const options = {
     method: 'POST',

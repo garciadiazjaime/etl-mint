@@ -3,12 +3,16 @@ const debug = require('debug')('app:realstate');
 const extract = require('../../utils/extract');
 const load = require('../../utils/load');
 
-const point2Homes = require('./point2homes');
+const baja123 = require('./baja123');
 const century21global = require('./century21global');
+const point2Homes = require('./point2homes');
 const config = require('../../config');
 
 function getTransformer(source) {
   switch (source) {
+    case 'baja123':
+      return baja123;
+
     case 'point2homes':
       return point2Homes;
 
@@ -20,7 +24,7 @@ function getTransformer(source) {
   }
 }
 
-async function main(source) {
+async function main(source, city = 'tijuana') {
   if (!source) {
     return new Error('invalid source');
   }
@@ -37,11 +41,10 @@ async function main(source) {
   if (!transformer) {
     return new Error('invalid transformer');
   }
-  const data = transformer(html, source);
+  const data = transformer(html, domain);
   debug(`${source}:transform:${data.length}`);
 
-
-  const response = await load(data);
+  const response = await load(data, city, source);
   if (!response) {
     return new Error('invalid response');
   }

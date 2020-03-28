@@ -17,6 +17,18 @@ const config = convict({
     },
   },
   sites: {
+    baja123: {
+      active: {
+        default: true,
+        env: 'baja123',
+      },
+      domain: {
+        default: 'https://www.baja123.com',
+      },
+      path: {
+        default: '/TIJUANA_REAL_ESTATE_LISTINGS/page_1754238.html',
+      },
+    },
     century21global: {
       active: {
         default: true,
@@ -39,24 +51,6 @@ const config = convict({
       },
       path: {
         default: '/MX/Real-Estate-Listings/Baja-California/Tijuana.html',
-      },
-    },
-    baja123: {
-      active: {
-        default: true,
-        env: 'baja123',
-      },
-      domain: {
-        default: 'https://www.baja123.com',
-      },
-      path: {
-        default: '/TIJUANA_REAL_ESTATE_LISTINGS/page_1754238.html',
-      },
-      maxRequest: {
-        default: 1,
-      },
-      waitSecs: {
-        default: 1000,
       },
     },
     propiedades: {
