@@ -1,19 +1,21 @@
-FROM alpine:3.6
+FROM alpine:edge
 
-RUN apk update && apk add --no-cache nmap && \
-    echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
-    echo @edge http://nl.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories && \
-    apk update && \
-    apk add --no-cache \
-      chromium
+RUN apk add --no-cache \
+      chromium \
+      nss \
+      freetype \
+      freetype-dev \
+      harfbuzz \
+      ca-certificates \
+      ttf-freefont \
+      nodejs \
+      yarn
 
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-
-FROM node:carbon
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 
 ADD package.json /tmp/package.json
 
-RUN cd /tmp && npm install
+RUN cd /tmp && yarn
 
 RUN mkdir -p /usr/src/app && cp -a /tmp/node_modules /usr/src/app
 
@@ -21,4 +23,4 @@ WORKDIR /usr/src/app
 
 ADD . /usr/src/app
 
-CMD [ "npm", "start" ]
+CMD [ "yarn", "start" ]

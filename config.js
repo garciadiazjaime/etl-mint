@@ -28,12 +28,6 @@ const config = convict({
       path: {
         default: '/for-sale-residential/Mexico/Baja-California/Tijuana',
       },
-      maxRequest: {
-        default: 1,
-      },
-      waitSecs: {
-        default: 1000,
-      },
     },
     point2homes: {
       active: {
