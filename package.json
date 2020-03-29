@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "DEBUG=app* node ./main",
     "lint": "npx eslint .",
+    "deploy": "npm run docker:build && npm run docker:push",
     "docker:build": "docker build -t garciadiazjaime/etl-mint .",
     "docker:run": "docker run -i --init --rm -e \"API_URL=http://api.mintitmedia.com\" --cap-add=SYS_ADMIN --name puppeteer-chrome garciadiazjaime/etl-mint node -e \"`cat main.js`\"",
     "docker:push": "docker push garciadiazjaime/etl-mint && echo 'docker pull garciadiazjaime/etl-mint'"
@@ -17,7 +18,6 @@
   "dependencies": {
     "async": "^3.1.0",
     "cheerio": "^1.0.0-rc.3",
-    "cloudscraper": "^4.1.2",
     "convict": "^5.0.0",
     "debug": "^4.1.1",
     "lodash": "^4.17.14",
