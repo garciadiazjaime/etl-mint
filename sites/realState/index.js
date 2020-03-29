@@ -40,22 +40,23 @@ function getTransformer(source) {
   }
 }
 
-async function main(source, city = 'tijuana') {
-  if (!source) {
-    return new Error('invalid source');
+async function main({ city, source }) {
+  if (!source || !city) {
+    return debug('error:invalid source');
   }
 
   const { domain, path } = config.get(`sites.${source}`);
-  const url = `${domain}${path}`;
+  const url = `${domain}${path[city]}`;
   if (!url) {
-    return new Error('invalid url');
+    return debug('error:invalid url');
   }
+  debug(`${source}:extract:${url}`);
   const html = await extract(url, source);
 
 
   const transformer = getTransformer(source);
   if (!transformer) {
-    return new Error('invalid transformer');
+    return debug('error:invalid transformer');
   }
   const data = transformer(html, domain);
   debug(`${source}:transform:${data.length}`);
@@ -63,7 +64,7 @@ async function main(source, city = 'tijuana') {
 
   const response = await load(data, city, source);
   if (!response) {
-    return new Error('invalid response');
+    return debug('error:invalid response');
   }
   debug(`${source}:load:${response.length}`);
 
@@ -71,7 +72,10 @@ async function main(source, city = 'tijuana') {
 }
 
 if (require.main === module) {
-  main(process.argv[2], process.argv[3]);
+  const city = process.argv[2];
+  const source = process.argv[3];
+
+  main({ city, source });
 }
 
 module.exports = main;

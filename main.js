@@ -6,11 +6,23 @@ const realState = require('./sites/realState');
 const instagramTijuana = require('./sites/instagram/tijuana');
 const config = require('./config');
 
+function getRealStateSites() {
+  const sites = config.get('sites');
+
+  return Object.keys(sites).reduce((accu, source) => {
+    if (sites[source].active) {
+      Object.keys(sites[source].path).forEach((city) => {
+        accu.push({ city, source });
+      });
+    }
+
+    return accu;
+  }, []);
+}
 
 function main() {
-  const sites = config.get('sites');
-  const enableSites = Object.keys(sites).filter(key => sites[key].active);
-
+  const sites = getRealStateSites();
+  mapSeries(sites, realState);
 
   cron.schedule('6 * * * *', async () => {
     debug('instagram');
@@ -19,7 +31,7 @@ function main() {
 
   cron.schedule('42 * * * *', async () => {
     debug('realstate');
-    mapSeries(enableSites, realState);
+    mapSeries(sites, realState);
   });
 }
 

@@ -26,7 +26,9 @@ const config = convict({
         default: 'https://www.baja123.com',
       },
       path: {
-        default: '/TIJUANA_REAL_ESTATE_LISTINGS/page_1754238.html',
+        tijuana: {
+          default: '/TIJUANA_REAL_ESTATE_LISTINGS/page_1754238.html',
+        },
       },
     },
     century21global: {
@@ -38,7 +40,9 @@ const config = convict({
         default: 'https://www.century21global.com',
       },
       path: {
-        default: '/for-sale-residential/Mexico/Baja-California/Tijuana',
+        tijuana: {
+          default: '/for-sale-residential/Mexico/Baja-California/Tijuana',
+        },
       },
     },
     inmuebles24: {
@@ -50,7 +54,12 @@ const config = convict({
         default: 'https://www.inmuebles24.com',
       },
       path: {
-        default: '/inmuebles-en-venta-en-tijuana.html',
+        tijuana: {
+          default: '/inmuebles-en-venta-en-tijuana.html',
+        },
+        cancun: {
+          default: '/departamentos-en-venta-en-cancun.html',
+        },
       },
     },
     lamudi: {
@@ -62,7 +71,9 @@ const config = convict({
         default: 'https://www.lamudi.com.mx',
       },
       path: {
-        default: '/baja-california/tijuana/for-sale/',
+        tijuana: {
+          default: '/baja-california/tijuana/for-sale/',
+        },
       },
     },
     point2homes: {
@@ -74,7 +85,9 @@ const config = convict({
         default: 'https://www.point2homes.com',
       },
       path: {
-        default: '/MX/Real-Estate-Listings/Baja-California/Tijuana.html',
+        tijuana: {
+          default: '/MX/Real-Estate-Listings/Baja-California/Tijuana.html',
+        },
       },
     },
     propiedades: {
@@ -86,7 +99,9 @@ const config = convict({
         default: 'https://propiedades.com',
       },
       path: {
-        default: '/tijuana/residencial-venta',
+        tijuana: {
+          default: '/tijuana/residencial-venta',
+        },
       },
     },
     vivanuncios: {
@@ -98,7 +113,9 @@ const config = convict({
         default: 'https://www.vivanuncios.com.mx',
       },
       path: {
-        default: '/s-venta-inmuebles/tijuana/v1c1097l10015p1',
+        tijuana: {
+          default: '/s-venta-inmuebles/tijuana/v1c1097l10015p1',
+        },
       },
     },
   },
