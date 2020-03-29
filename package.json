@@ -10,7 +10,8 @@
     "deploy": "npm run docker:build && npm run docker:push",
     "docker:build": "docker build -t garciadiazjaime/etl-mint .",
     "docker:run": "docker run -i --init --rm -e \"API_URL=http://api.mintitmedia.com\" --cap-add=SYS_ADMIN --name puppeteer-chrome garciadiazjaime/etl-mint node -e \"`cat main.js`\"",
-    "docker:push": "docker push garciadiazjaime/etl-mint && echo 'docker pull garciadiazjaime/etl-mint'"
+    "docker:push": "docker push garciadiazjaime/etl-mint && echo 'docker pull garciadiazjaime/etl-mint'",
+    "task:realstate": "DEBUG=app* node ./sites/realState/index.js"
   },
   "keywords": [],
   "author": "",

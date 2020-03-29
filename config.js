@@ -107,6 +107,20 @@ const config = convict({
         },
       },
     },
+    trovit: {
+      active: {
+        default: true,
+        env: 'trovit',
+      },
+      domain: {
+        default: 'https://casas.trovit.com.mx',
+      },
+      path: {
+        cancun: {
+          default: '/departamento-cancun-casa',
+        },
+      },
+    },
     vivanuncios: {
       active: {
         default: true,

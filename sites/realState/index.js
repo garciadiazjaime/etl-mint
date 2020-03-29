@@ -9,8 +9,24 @@ const inmuebles24 = require('./inmuebles24');
 const lamudi = require('./lamudi');
 const point2Homes = require('./point2homes');
 const propiedades = require('./propiedades');
+const trovit = require('./trovit');
 const vivanuncios = require('./vivanuncios');
 const config = require('../../config');
+
+
+function getRealStateSites() {
+  const sites = config.get('sites');
+
+  return Object.keys(sites).reduce((accu, source) => {
+    if (sites[source].active) {
+      Object.keys(sites[source].path).forEach((city) => {
+        accu.push({ city, source });
+      });
+    }
+
+    return accu;
+  }, []);
+}
 
 function getTransformer(source) {
   switch (source) {
@@ -32,6 +48,9 @@ function getTransformer(source) {
     case 'propiedades':
       return propiedades;
 
+    case 'trovit':
+      return trovit;
+
     case 'vivanuncios':
       return vivanuncios;
 
@@ -42,7 +61,8 @@ function getTransformer(source) {
 
 async function main({ city, source }) {
   if (!source || !city) {
-    debug('valid sources:', Object.keys(config.get('sites')).join(', '));
+    const sites = getRealStateSites();
+    debug('valid sources:', sites);
     return debug('error:invalid source');
   }
 
@@ -80,3 +100,4 @@ if (require.main === module) {
 }
 
 module.exports = main;
+module.exports.getRealStateSites = getRealStateSites;

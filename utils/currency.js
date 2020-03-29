@@ -7,7 +7,7 @@ function getCurrency(value) {
     return 'USD';
   }
 
-  if (value.search(/MXN|MDP|MN/i) !== -1) {
+  if (value.search(/MXN|MDP|MN|M\.N\./i) !== -1) {
     return 'MXN';
   }
 
