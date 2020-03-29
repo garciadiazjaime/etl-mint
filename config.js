@@ -54,11 +54,11 @@ const config = convict({
         default: 'https://www.inmuebles24.com',
       },
       path: {
+        cancun: {
+          default: '/inmuebles-en-venta-en-cancun.html',
+        },
         tijuana: {
           default: '/inmuebles-en-venta-en-tijuana.html',
-        },
-        cancun: {
-          default: '/departamentos-en-venta-en-cancun.html',
         },
       },
     },
@@ -71,6 +71,9 @@ const config = convict({
         default: 'https://www.lamudi.com.mx',
       },
       path: {
+        cancun: {
+          default: '/quintana-roo/benito-juarez-2/cancun-centro/for-sale/',
+        },
         tijuana: {
           default: '/baja-california/tijuana/for-sale/',
         },
@@ -113,6 +116,9 @@ const config = convict({
         default: 'https://www.vivanuncios.com.mx',
       },
       path: {
+        cancun: {
+          default: '/s-venta-inmuebles/cancun/v1c1097l105753p1',
+        },
         tijuana: {
           default: '/s-venta-inmuebles/tijuana/v1c1097l10015p1',
         },
