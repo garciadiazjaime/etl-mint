@@ -42,6 +42,7 @@ function getTransformer(source) {
 
 async function main({ city, source }) {
   if (!source || !city) {
+    debug('valid sources:', Object.keys(config.get('sites')).join(', '));
     return debug('error:invalid source');
   }
 

@@ -22,7 +22,6 @@ function getRealStateSites() {
 
 function main() {
   const sites = getRealStateSites();
-  mapSeries(sites, realState);
 
   cron.schedule('6 * * * *', async () => {
     debug('instagram');
