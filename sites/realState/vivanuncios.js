@@ -1,34 +1,67 @@
-const cheerio = require('cheerio');
+function getCurrency(item) {
+  if (item.minimumPrice && item.minimumPrice.currency) {
+    return item.minimumPrice.currency;
+  }
 
-const { cleanString } = require('../../utils/string');
+  if (item.price && item.price.currency) {
+    return item.price.currency;
+  }
 
-function getJSONdata(data, url) {
-  return data.filter(item => item.url === url)[0] || {};
+  return null;
+}
+
+function getPrice(item) {
+  if (item.minimumPrice && item.minimumPrice.amount) {
+    return item.minimumPrice.amount;
+  }
+
+  if (item.price && item.price.amount) {
+    return item.price.amount;
+  }
+
+  return null;
+}
+
+function getLatitude(item) {
+  if (item.geo && item.geo.latitude) {
+    return item.geo.latitude;
+  }
+
+  if (item.geo && item.geo.map && item.geo.map.latitude) {
+    return item.geo.map.latitude;
+  }
+
+  return null;
+}
+
+function getLongitude(item) {
+  if (item.geo && item.geo.longitude) {
+    return item.geo.latitude;
+  }
+
+  if (item.geo && item.geo.map && item.geo.map.longitude) {
+    return item.geo.map.longitude;
+  }
+
+  return null;
 }
 
 function transform(html, domain) {
-  const $ = cheerio.load(html);
+  const matches = html.match(/adsToPlot":(.*),"ads":/);
+  const data = JSON.parse(matches[1]);
 
-  const ldJSON = JSON.parse($("script[type='application/ld+json']").get()[0].children[0].data);
+  const places = data.map(item => ({
+    address: item.geo.address,
+    currency: getCurrency(item),
+    description: item.description,
+    images: [item.pictures[0].url],
+    latitude: getLatitude(item),
+    longitude: getLongitude(item),
+    price: getPrice(item),
+    url: domain + (item.viewSeoUrl || item.seoUrl),
+  }));
 
-  return $('.viewport-contents .tileV2.promoted, .viewport-contents .tileV2.REAdTileV2[data-tileadid]').toArray().map((element) => {
-    const description = cleanString($(element).find('.expanded-description').text());
-    const images = [$(element).find('img.lazyload').data('src')];
-    const url = domain + $(element).find('.tile-title-text').attr('href');
-    const address = cleanString($(element).find('.tile-location').text());
-    const { price, priceCurrency: currency } = getJSONdata(ldJSON, url);
-
-    const place = {
-      address,
-      currency,
-      description,
-      images,
-      price,
-      url,
-    };
-
-    return place;
-  });
+  return places;
 }
 
 module.exports = transform;
