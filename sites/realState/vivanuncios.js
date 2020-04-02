@@ -46,6 +46,23 @@ function getLongitude(item) {
   return null;
 }
 
+function getImages(item) {
+  const response = [];
+  if (Array.isArray(item.pictures) && item.pictures.length) {
+    response.push(item.pictures[0].url);
+  }
+
+  if (Array.isArray(item.backgroundImagesMobile) && item.backgroundImagesMobile.length) {
+    response.push(item.backgroundImagesMobile[0]);
+  }
+
+  if (Array.isArray(item.backgroundImagesDesktop) && item.backgroundImagesDesktop.length) {
+    response.push(item.backgroundImagesDesktop[0]);
+  }
+
+  return response;
+}
+
 function transform(html, domain) {
   const matches = html.match(/adsToPlot":(.*),"ads":/);
   const data = JSON.parse(matches[1]);
@@ -54,7 +71,7 @@ function transform(html, domain) {
     address: item.geo.address,
     currency: getCurrency(item),
     description: item.description,
-    images: [item.pictures[0].url],
+    images: getImages(item),
     latitude: getLatitude(item),
     longitude: getLongitude(item),
     price: getPrice(item),
