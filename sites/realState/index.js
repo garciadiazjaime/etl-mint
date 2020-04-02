@@ -5,6 +5,7 @@ const load = require('../../utils/load');
 
 const baja123 = require('./baja123');
 const century21global = require('./century21global');
+const icasas = require('./icasas');
 const inmuebles24 = require('./inmuebles24');
 const lamudi = require('./lamudi');
 const point2Homes = require('./point2homes');
@@ -35,6 +36,9 @@ function getTransformer(source) {
 
     case 'century21global':
       return century21global;
+
+    case 'icasas':
+      return icasas;
 
     case 'inmuebles24':
       return inmuebles24;

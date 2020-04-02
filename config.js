@@ -45,6 +45,20 @@ const config = convict({
         },
       },
     },
+    icasas: {
+      active: {
+        default: true,
+        env: 'icasas',
+      },
+      domain: {
+        default: 'https://www.icasas.mx',
+      },
+      path: {
+        cancun: {
+          default: '/venta/habitacionales-departamentos-economicos-quintana-roo-cancun-2_3_23_0_2473_0',
+        },
+      },
+    },
     inmuebles24: {
       active: {
         default: true,
