@@ -1,3 +1,5 @@
+const debug = require('debug')('app:realstate');
+
 const fs = require('fs');
 const { promisify } = require('util');
 
@@ -24,7 +26,11 @@ async function extract(url, source) {
   const page = await browser.newPage();
   await page.setUserAgent(userAgent);
 
-  await page.goto(url);
+  try {
+    await page.goto(url);
+  } catch (error) {
+    debug(error);
+  }
 
   const html = await page.content();
   await browser.close();
