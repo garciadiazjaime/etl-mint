@@ -4,6 +4,7 @@ const request = require('request-promise');
 const fs = require('fs');
 const { promisify } = require('util');
 
+const { revertMathematicalBold } = require('../../utils/string');
 const config = require('../../config');
 
 const readFileAsync = promisify(fs.readFile);
@@ -51,7 +52,7 @@ function transform(string, igHashtagId, city) {
         likeCount: item.like_count,
         commentsCount: item.comments_count,
         permalink: item.permalink,
-        caption: item.caption,
+        caption: revertMathematicalBold(item.caption),
         mediaUrl: item.media_url,
         mediaType: item.media_type,
         children: item.children && item.children.data,
