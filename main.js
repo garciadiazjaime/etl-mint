@@ -1,4 +1,3 @@
-const debug = require('debug')('app:main');
 const mapSeries = require('async/mapSeries');
 const cron = require('node-cron');
 
@@ -12,17 +11,14 @@ function main() {
   const sites = getRealStateSites();
 
   cron.schedule('6 */2 * * *', async () => {
-    debug('instagram:instagramTijuana');
     await instagramTijuana();
   });
-  cron.schedule('*/10 * * * *', async () => {
-    debug('instagram:etlPost');
+  cron.schedule('*/15 * * * *', async () => {
     await etlPost();
   });
 
   cron.schedule('42 */4 * * *', async () => {
-    debug('realstate');
-    mapSeries(sites, realState);
+    await mapSeries(sites, realState);
   });
 }
 
