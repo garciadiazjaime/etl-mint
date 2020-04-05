@@ -3,6 +3,7 @@ const mapSeries = require('async/mapSeries');
 
 const debug = require('debug')('app:instagram:etlPost');
 
+const { revertMathematicalBold } = require('../../utils/string');
 const extract = require('../../utils/extract');
 const config = require('../../config');
 
@@ -44,7 +45,7 @@ function transform(html) {
     user: {
       id: owner.id,
       username: owner.username,
-      fullMame: owner.full_name,
+      fullName: revertMathematicalBold(owner.full_name),
       profilePicture: owner.profile_pic_url,
     },
     location: getLocation(location),
