@@ -11,16 +11,16 @@ const etlPost = require('./sites/instagram/etlPost');
 function main() {
   const sites = getRealStateSites();
 
-  cron.schedule('6 * * * *', async () => {
+  cron.schedule('6 */2 * * *', async () => {
     debug('instagram:instagramTijuana');
     await instagramTijuana();
   });
-  cron.schedule('* */2 * * *', async () => {
+  cron.schedule('*/10 * * * *', async () => {
     debug('instagram:etlPost');
     await etlPost();
   });
 
-  cron.schedule('42 * * * *', async () => {
+  cron.schedule('42 */4 * * *', async () => {
     debug('realstate');
     mapSeries(sites, realState);
   });

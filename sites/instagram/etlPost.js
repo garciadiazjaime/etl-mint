@@ -32,6 +32,10 @@ function getLocation(location) {
 function transform(html) {
   const matches = html.match(/graphql":(.*)}]},"hostname"/);
 
+  if (!Array.isArray(matches) && !matches.length) {
+    return null;
+  }
+
   const data = JSON.parse(matches[1]);
 
   const { location, owner } = data.shortcode_media;
@@ -52,7 +56,7 @@ function transform(html) {
 async function getPosts() {
   const payload = {
     query: `query Post {
-      posts(first:10) {
+      posts(first:1) {
         _id
         permalink
       }
@@ -75,6 +79,10 @@ async function getPosts() {
 }
 
 async function load(postId, body) {
+  if (!body) {
+    return null;
+  }
+
   const result = await fetch(`${apiUrl}/instagram/post/${postId}/place`, {
     method: 'POST',
     headers: {
