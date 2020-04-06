@@ -80,16 +80,12 @@ async function getPosts() {
 }
 
 async function load(postId, body) {
-  if (!body) {
-    return null;
-  }
-
   const result = await fetch(`${apiUrl}/instagram/post/${postId}/place`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(body || '{}'),
   });
 
   const response = await result.json();
