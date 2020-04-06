@@ -80,14 +80,18 @@ async function getPosts() {
 }
 
 async function load(postId, body) {
-  const result = await fetch(`${apiUrl}/instagram/post/${postId}/place`, {
+  const postConfig = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(body || '{}'),
-  });
+  };
 
+  if (body) {
+    postConfig.body = JSON.stringify(body);
+  }
+
+  const result = await fetch(`${apiUrl}/instagram/post/${postId}/place`, postConfig);
   const response = await result.json();
 
   return response;
@@ -98,7 +102,7 @@ async function etl(post) {
   const html = await extract(post.permalink, source);
 
   const place = transform(html);
-  debug(`transform:${Object.keys(place)}`);
+  debug(`transform:${!!place}`);
 
   const response = await load(post._id, place); //eslint-disable-line
   debug(`load:${post._id}:${Object.keys(response)}`); //eslint-disable-line
