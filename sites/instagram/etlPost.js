@@ -33,7 +33,7 @@ function getLocation(location) {
 function transform(html) {
   const matches = html.match(/graphql":(.*)}]},"hostname"/);
 
-  if (!Array.isArray(matches) && !matches.length) {
+  if (!Array.isArray(matches) || !matches.length) {
     return null;
   }
 
