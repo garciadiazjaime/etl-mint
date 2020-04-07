@@ -8,7 +8,6 @@ const extract = require('../../utils/extract');
 const config = require('../../config');
 
 const apiUrl = config.get('api.url');
-const source = 'etlPost';
 
 function getLocation(location) {
   if (!location || !location.address_json) {
@@ -28,6 +27,24 @@ function getLocation(location) {
       country: address.country_code,
     },
   };
+}
+
+async function getGEOData(location) {
+  if (!location || !location.id || !location.slug) {
+    return null;
+  }
+
+  const source = 'instagram-location';
+  const geoLocation = location;
+
+  const url = `https://www.instagram.com/explore/locations/${location.id}/${location.slug}/`;
+  debug(`extract:${url}`);
+  const html = await extract(url, source);
+
+  geoLocation.latitude = html.match(/lat":([-+]?\d*\.\d*)/)[1]; // eslint-disable-line
+  geoLocation.longitude = html.match(/lng":([-+]?\d*\.\d*)/)[1]; // eslint-disable-line
+
+  return geoLocation;
 }
 
 function transform(html) {
@@ -98,11 +115,15 @@ async function load(postId, body) {
 }
 
 async function etl(post) {
+  const source = 'etlPost';
+
   debug(`extract:${post.permalink}`);
   const html = await extract(post.permalink, source);
 
   const place = transform(html);
   debug(`transform:${!!place}`);
+
+  place.location = await getGEOData(place.location);
 
   const response = await load(post._id, place); //eslint-disable-line
   debug(`load:${post._id}:${Object.keys(response)}`); //eslint-disable-line
