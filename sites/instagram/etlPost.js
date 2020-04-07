@@ -51,7 +51,7 @@ function transform(html) {
   const matches = html.match(/graphql":(.*)}]},"hostname"/);
 
   if (!Array.isArray(matches) || !matches.length) {
-    return null;
+    return {};
   }
 
   const data = JSON.parse(matches[1]);
@@ -96,6 +96,10 @@ async function getPosts() {
   return posts;
 }
 
+function isPostDeleted(html) {
+  return html.includes('Page Not Found');
+}
+
 async function load(postId, body) {
   const postConfig = {
     method: 'POST',
@@ -123,7 +127,11 @@ async function etl(post) {
   const place = transform(html);
   debug(`transform:${!!place}`);
 
-  place.location = await getGEOData(place.location);
+  if (place.location) {
+    place.location = await getGEOData(place.location);
+  } else if (isPostDeleted(html)) {
+    place.state = 'DELETED';
+  }
 
   const response = await load(post._id, place); //eslint-disable-line
   debug(`load:${post._id}:${Object.keys(response)}`); //eslint-disable-line
