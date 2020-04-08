@@ -41,8 +41,16 @@ async function getGEOData(location) {
   debug(`extract:${url}`);
   const html = await extract(url, source);
 
-  geoLocation.latitude = html.match(/lat":([-+]?\d*\.\d*)/)[1]; // eslint-disable-line
-  geoLocation.longitude = html.match(/lng":([-+]?\d*\.\d*)/)[1]; // eslint-disable-line
+  const matches = html.match(/_sharedData = (.*);<\/script/);
+  if (Array.isArray(matches) && matches.length) {
+    const data = JSON.parse(matches[1]);
+    const { LocationsPage } = data.entry_data;
+
+    if (Array.isArray(LocationsPage) && LocationsPage.length) {
+      geoLocation.latitude = LocationsPage[0].graphql.location.lat;
+      geoLocation.longitude = LocationsPage[0].graphql.location.lng;
+    }
+  }
 
   return geoLocation;
 }
