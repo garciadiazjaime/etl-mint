@@ -39,7 +39,7 @@ async function extract(env, instagramConfig) {
 }
 
 function getOptions(caption) {
-  const categories = [];
+  const options = [];
   const mapper = [
     ['cafe', 'café|cafe|coffee|latte'],
     ['postre', 'crepa|cupcake|brownie|chocolate|dessert|rebanada|pastel|panaderia|reposteria|galleta|cookie'],
@@ -68,12 +68,13 @@ function getOptions(caption) {
   ];
 
   mapper.forEach(([category, regex]) => {
-    if (caption.search(`/${regex}/i`) !== -1) {
-      categories.push(category);
+    const regexExpresion = new RegExp(regex, 'i');
+    if (regexExpresion.exec(caption)) {
+      options.push(category);
     }
   });
 
-  return categories;
+  return options;
 }
 
 function transform(string, igHashtagId, city) {
