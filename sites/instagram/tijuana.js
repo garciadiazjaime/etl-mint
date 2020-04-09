@@ -38,6 +38,44 @@ async function extract(env, instagramConfig) {
   return request(url);
 }
 
+function getOptions(caption) {
+  const categories = [];
+  const mapper = [
+    ['cafe', 'café|cafe|coffee|latte'],
+    ['postre', 'crepa|cupcake|brownie|chocolate|dessert|rebanada|pastel|panaderia|reposteria|galleta|cookie'],
+    ['desayuno', 'desayuno|breakfast'],
+    ['omelette', 'omelette'],
+    ['poke', 'poke'],
+    ['tostada', 'tostada'],
+    ['sushi', 'sushi'],
+    ['teriyaki', 'teriyaki'],
+    ['ramen', 'ramen'],
+    ['hamburguesa', 'burguer|hamburguesa'],
+    ['mariscos', 'mariscos|marlin|jaiba|aguachile|camaron|camarón|atún|atun'],
+    ['burro', 'burro|burrito'],
+    ['tacos', 'taco|taqueria|taquería'],
+    ['bebidas', 'limonada|aguas frescas|agua fresca'],
+    ['smoothies', 'smoothies'],
+    ['chilaquiles', 'chilaquiles'],
+    ['pasta', 'pasta|lasagna'],
+    ['pizza', 'pizza'],
+    ['torta', 'torta'],
+    ['ensalada', 'ensalada'],
+    ['vegiee', 'setas|vegan|plantbased|vegiee'],
+    ['menudo', 'menudito|menudo|menuderia'],
+    ['carne asada', 'carne asada'],
+    ['wings', 'wings'],
+  ];
+
+  mapper.forEach(([category, regex]) => {
+    if (caption.search(`/${regex}/i`) !== -1) {
+      categories.push(category);
+    }
+  });
+
+  return categories;
+}
+
 function transform(string, igHashtagId, city) {
   const data = JSON.parse(string);
 
@@ -56,6 +94,7 @@ function transform(string, igHashtagId, city) {
         mediaUrl: item.media_url,
         mediaType: item.media_type,
         children: item.children && item.children.data,
+        options: getOptions(item.caption),
         city,
         source: igHashtagId,
       });
