@@ -5,7 +5,7 @@ const fs = require('fs');
 const { promisify } = require('util');
 
 const { revertMathematicalBold } = require('../../utils/string');
-const { getOptions } = require('../../utils/entities');
+const { getOptions, getPhones } = require('../../utils/entities');
 const config = require('../../config');
 
 const readFileAsync = promisify(fs.readFile);
@@ -58,6 +58,7 @@ function transform(string, igHashtagId, city) {
         mediaType: item.media_type,
         children: item.children && item.children.data,
         options: getOptions(item.caption),
+        phones: getPhones(item.caption),
         city,
         source: igHashtagId,
       });
