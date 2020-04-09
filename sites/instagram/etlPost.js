@@ -4,7 +4,7 @@ const mapSeries = require('async/mapSeries');
 const debug = require('debug')('app:instagram:etlPost');
 
 const { revertMathematicalBold } = require('../../utils/string');
-const { getOptions } = require('../../utils/entities');
+const { getOptions, getPhones } = require('../../utils/entities');
 const extract = require('../../utils/extract');
 
 const config = require('../../config');
@@ -146,6 +146,7 @@ async function etl(post) {
 
   if (place.user) {
     place.user.options = getOptions(post.caption);
+    place.phones = getPhones(post.caption);
   }
 
   const response = await load(post._id, place); //eslint-disable-line
