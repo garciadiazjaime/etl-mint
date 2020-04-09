@@ -13,7 +13,7 @@ function getOptions(caption) {
     ['hamburguesa', 'burguer|hamburguesa'],
     ['mariscos', 'mariscos|marlin|jaiba|aguachile|camaron|camarón|atún|atun'],
     ['burro', 'burro|burrito'],
-    ['tacos', 'taco|taqueria|taquería'],
+    ['tacos', 'taco|taqueria|taquería|suadero|taquero'],
     ['bebidas', 'limonada|aguas frescas|agua fresca'],
     ['smoothies', 'smoothies'],
     ['chilaquiles', 'chilaquiles'],
@@ -25,6 +25,9 @@ function getOptions(caption) {
     ['menudo', 'menudito|menudo|menuderia'],
     ['carne asada', 'carne asada'],
     ['wings', 'wings'],
+    ['costillas', 'rib'],
+    ['carnitas', 'carnitas'],
+    ['birria', 'birria'],
   ];
 
   mapper.forEach(([category, regex]) => {
