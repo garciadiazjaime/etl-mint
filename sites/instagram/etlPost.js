@@ -87,6 +87,7 @@ async function getPosts() {
       posts(first:1) {
         _id
         permalink
+        caption
       }
     }`,
   };
@@ -143,7 +144,9 @@ async function etl(post) {
     place.state = 'DELETED';
   }
 
-  place.options = getOptions(place.caption);
+  if (place.user) {
+    place.user.options = getOptions(post.caption);
+  }
 
   const response = await load(post._id, place); //eslint-disable-line
   debug(`load:${post._id}:${Object.keys(response)}`); //eslint-disable-line
