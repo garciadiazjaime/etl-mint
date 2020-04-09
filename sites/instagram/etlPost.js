@@ -4,7 +4,9 @@ const mapSeries = require('async/mapSeries');
 const debug = require('debug')('app:instagram:etlPost');
 
 const { revertMathematicalBold } = require('../../utils/string');
+const { getOptions } = require('../../utils/entities');
 const extract = require('../../utils/extract');
+
 const config = require('../../config');
 
 const apiUrl = config.get('api.url');
@@ -140,6 +142,8 @@ async function etl(post) {
   } else if (isPostDeleted(html)) {
     place.state = 'DELETED';
   }
+
+  place.options = getOptions(place.caption);
 
   const response = await load(post._id, place); //eslint-disable-line
   debug(`load:${post._id}:${Object.keys(response)}`); //eslint-disable-line
