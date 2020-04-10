@@ -9,8 +9,12 @@ async function getPosts(limit = 1) {
     query: `query Post {
       posts(first:${limit}) {
         _id
-        permalink
+        mediaType
+        mediaUrl
         caption
+        children {
+          media_url
+        }
       }
     }`,
   };
@@ -36,7 +40,12 @@ async function getBrands(limit = 1) {
       brands(first:${limit}) {
         _id
         post {
+          mediaType
+          mediaUrl
           caption
+          children {
+            media_url
+          }
         }
         phones
         options
