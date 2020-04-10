@@ -1,35 +1,15 @@
 const fetch = require('node-fetch');
 const mapSeries = require('async/mapSeries');
 
-const debug = require('debug')('app:instagram:etlPost');
+const debug = require('debug')('app:instagram:brand');
 
 const { revertMathematicalBold } = require('../../utils/string');
-const { getOptions, getPhones } = require('../../utils/entities');
 const extract = require('../../utils/extract');
+const { getPosts } = require('../../utils/mintApiUtil');
 
 const config = require('../../config');
 
 const apiUrl = config.get('api.url');
-
-function getLocation(location) {
-  if (!location || !location.address_json) {
-    return null;
-  }
-
-  const address = JSON.parse(location.address_json);
-
-  return {
-    id: location.id,
-    name: location.name,
-    slug: location.slug,
-    address: {
-      street: address.street_address,
-      zipCode: address.zip_code,
-      city: address.city_name,
-      country: address.country_code,
-    },
-  };
-}
 
 async function getGEOData(location) {
   if (!location || !location.id || !location.slug) {
@@ -57,6 +37,26 @@ async function getGEOData(location) {
   return geoLocation;
 }
 
+function getLocation(location) {
+  if (!location || !location.address_json) {
+    return null;
+  }
+
+  const address = JSON.parse(location.address_json);
+
+  return {
+    id: location.id,
+    name: location.name,
+    slug: location.slug,
+    address: {
+      street: address.street_address,
+      zipCode: address.zip_code,
+      city: address.city_name,
+      country: address.country_code,
+    },
+  };
+}
+
 function transform(html) {
   const matches = html.match(/graphql":(.*)}]},"hostname"/);
 
@@ -68,47 +68,15 @@ function transform(html) {
 
   const { location, owner } = data.shortcode_media;
 
-  const place = {
-    user: {
-      id: owner.id,
-      username: owner.username,
-      fullName: revertMathematicalBold(owner.full_name),
-      profilePicture: owner.profile_pic_url,
-    },
+  const brand = {
+    id: owner.id,
+    username: owner.username,
+    fullName: revertMathematicalBold(owner.full_name),
+    profilePicture: owner.profile_pic_url,
     location: getLocation(location),
   };
 
-  return place;
-}
-
-async function getPosts() {
-  const payload = {
-    query: `query Post {
-      posts(first:1) {
-        _id
-        permalink
-        caption
-      }
-    }`,
-  };
-
-  const result = await fetch(`${apiUrl}/instagram/graphiql`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
-  });
-
-  const {
-    data: { posts },
-  } = await result.json();
-
-  return posts;
-}
-
-function isPostDeleted(html) {
-  return html.includes('Page Not Found');
+  return brand;
 }
 
 async function load(postId, body) {
@@ -123,33 +91,45 @@ async function load(postId, body) {
     postConfig.body = JSON.stringify(body);
   }
 
-  const result = await fetch(`${apiUrl}/instagram/post/${postId}/place`, postConfig);
+  const result = await fetch(`${apiUrl}/instagram/post/${postId}/brand`, postConfig);
   const response = await result.json();
 
   return response;
 }
 
+async function getLoadData(html, post) {
+  if (html.includes('Page Not Found')) {
+    return {
+      postState: 'DELETED',
+    };
+  }
+
+  const brand = transform(html);
+  brand.post = post;
+
+  if (brand.location) {
+    brand.location = await getGEOData(brand.location);
+  }
+
+  if (brand.post.caption) {
+    brand.post.caption = revertMathematicalBold(brand.post.caption);
+  }
+
+  return {
+    brand,
+  };
+}
+
 async function etl(post) {
-  const source = 'etlPost';
+  const source = 'instagram-brand';
 
   debug(`extract:${post.permalink}`);
   const html = await extract(post.permalink, source);
 
-  const place = transform(html);
-  debug(`transform:${!!place}`);
+  const data = await getLoadData(html, post);
+  debug(`transform:${Object.keys(data)}`);
 
-  if (place.location) {
-    place.location = await getGEOData(place.location);
-  } else if (isPostDeleted(html)) {
-    place.state = 'DELETED';
-  }
-
-  if (place.user) {
-    place.user.options = getOptions(post.caption);
-    place.phones = getPhones(post.caption);
-  }
-
-  const response = await load(post._id, place); //eslint-disable-line
+  const response = await load(post._id, data); //eslint-disable-line
   debug(`load:${post._id}:${Object.keys(response)}`); //eslint-disable-line
 
   return response;

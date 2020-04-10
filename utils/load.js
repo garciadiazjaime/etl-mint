@@ -1,10 +1,11 @@
+const fetch = require('node-fetch');
 const request = require('request-promise');
 
 const config = require('../config');
 
-const apiUrl = config.get('api.url');
 
 function load(rawData, city, source) {
+  const apiUrl = config.get('api.url');
   if (!Array.isArray(rawData) || !rawData.length) {
     return null;
   }
@@ -28,4 +29,23 @@ function load(rawData, city, source) {
   return request(options);
 }
 
+async function loadAsync(apiUrl, body) {
+  const postConfig = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  if (body) {
+    postConfig.body = JSON.stringify(body);
+  }
+
+  const result = await fetch(apiUrl, postConfig);
+  const response = await result.json();
+
+  return response;
+}
+
 module.exports = load;
+module.exports.loadAsync = loadAsync;

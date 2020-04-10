@@ -1,11 +1,9 @@
-const debug = require('debug')('app:instagram');
+const debug = require('debug')('app:instagram:posts');
 
 const request = require('request-promise');
 const fs = require('fs');
 const { promisify } = require('util');
 
-const { revertMathematicalBold } = require('../../utils/string');
-const { getOptions, getPhones } = require('../../utils/entities');
 const config = require('../../config');
 
 const readFileAsync = promisify(fs.readFile);
@@ -53,12 +51,10 @@ function transform(string, igHashtagId, city) {
         likeCount: item.like_count,
         commentsCount: item.comments_count,
         permalink: item.permalink,
-        caption: revertMathematicalBold(item.caption),
+        caption: item.caption,
         mediaUrl: item.media_url,
         mediaType: item.media_type,
         children: item.children && item.children.data,
-        options: getOptions(item.caption),
-        phones: getPhones(item.caption),
         city,
         source: igHashtagId,
       });
@@ -95,15 +91,14 @@ async function main() {
   const apiUrl = config.get('api.url');
   const city = 'tijuana';
 
-  debug(`instagram:start:${city}`);
-
   const rawData = await extract(env, instagramConfig);
+  debug(`extract:${instagramConfig.hashtag}`);
 
   const posts = transform(rawData, instagramConfig.hashtag, city);
+  debug(`transform:${posts && posts.length}`);
 
   const response = await load(apiUrl, posts);
-
-  debug(`instagram:end:${city}:${response.length}`);
+  debug(`load:${response && response.length}`);
 }
 
 if (require.main === module) {
