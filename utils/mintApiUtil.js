@@ -9,6 +9,7 @@ async function getPosts(limit = 1) {
     query: `query Post {
       posts(first:${limit}) {
         _id
+        permalink
         mediaType
         mediaUrl
         caption
