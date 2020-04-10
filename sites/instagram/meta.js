@@ -48,7 +48,7 @@ function transform(brands) {
 }
 
 async function main() {
-  const brands = await getBrands(1);
+  const brands = await getBrands(50);
 
   if (!Array.isArray(brands) || !brands.length) {
     return debug('no-brands');
