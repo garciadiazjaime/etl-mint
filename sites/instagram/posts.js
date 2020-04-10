@@ -99,6 +99,7 @@ async function main() {
 
   const response = await load(apiUrl, posts);
   debug(`load:${response && response.length}`);
+  debug('------------');
 }
 
 if (require.main === module) {

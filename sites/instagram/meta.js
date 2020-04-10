@@ -59,7 +59,8 @@ async function main() {
 
   const response = await loadAsync(`${apiUrl}/instagram/brands/meta`, { data: brandsExtended });
 
-  return debug(`load:${response && response.length}`);
+  debug(`load:${response && response.length}`);
+  return debug('------------');
 }
 
 if (require.main === module) {

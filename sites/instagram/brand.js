@@ -140,6 +140,7 @@ async function main() {
   debug(`posts:${posts.length}`);
 
   await mapSeries(posts, etl);
+  debug('------------');
 }
 
 if (require.main === module) {
