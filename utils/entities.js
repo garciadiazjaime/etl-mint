@@ -15,7 +15,7 @@ const optionsMapper = [
   ['bebidas', 'limonada|aguas frescas|agua fresca'],
   ['smoothies', 'smoothies'],
   ['chilaquiles', 'chilaquiles'],
-  ['pasta', 'pasta|lasagna'],
+  ['pasta', 'pasta|lasagna|fettuccine'],
   ['pizza', 'pizza'],
   ['torta', 'torta'],
   ['ensalada', 'ensalada'],
@@ -27,6 +27,11 @@ const optionsMapper = [
   ['carnitas', 'carnitas'],
   ['birria', 'birria'],
   ['antojitos', 'gorditas|champurrado|elote'],
+  ['salsas', 'salsas'],
+  ['papas fritas', 'papas fritas'],
+  ['papas fritas', 'papas fritas'],
+  ['queso', 'queso'],
+  ['cortes', 'filete'],
 ];
 
 function getOptions(caption) {
