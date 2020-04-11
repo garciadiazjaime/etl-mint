@@ -14,10 +14,10 @@ function main() {
   cron.schedule('6 * * * *', async () => {
     await instagramPosts();
   });
-  cron.schedule('*/5 * * * *', async () => {
+  cron.schedule('*/3 * * * *', async () => {
     await instagramBrand();
   });
-  cron.schedule('0 */2 * * *', async () => {
+  cron.schedule('0 */3 * * *', async () => {
     await instagramMeta();
   });
 
