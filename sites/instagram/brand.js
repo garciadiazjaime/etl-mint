@@ -71,7 +71,7 @@ function transform(html) {
   const brand = {
     id: owner.id,
     username: owner.username,
-    fullName: revertMathematicalBold(owner.full_name),
+    fullName: owner.full_name,
     profilePicture: owner.profile_pic_url,
     location: getLocation(location),
   };
@@ -105,7 +105,11 @@ async function getLoadData(html, post) {
   }
 
   const brand = transform(html);
-  brand.post = post;
+
+  brand.post = {
+    ...post,
+    brandId: brand.id,
+  };
 
   if (brand.location) {
     brand.location = await getGEOData(brand.location);

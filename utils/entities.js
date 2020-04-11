@@ -26,6 +26,7 @@ const optionsMapper = [
   ['costillas', 'rib'],
   ['carnitas', 'carnitas'],
   ['birria', 'birria'],
+  ['antojitos', 'gorditas|champurrado|elote'],
 ];
 
 function getOptions(caption) {

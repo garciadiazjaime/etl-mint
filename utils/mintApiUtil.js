@@ -4,19 +4,27 @@ const config = require('../config');
 
 const apiUrl = config.get('api.url');
 
-async function getPosts(limit = 1) {
+async function getPosts(limit = 1, state = 'CREATED') {
   const payload = {
-    query: `query Post {
-      posts(first:${limit}) {
+    query: `{
+      posts(first:${limit}, state:"${state}") {
         _id
-        id
+        commentsCount
         permalink
         mediaType
         mediaUrl
         caption
+        id
+        likeCount
         children {
+          media_type
           media_url
+          caption
         }
+        city
+        source
+        state
+        brandId
       }
     }`,
   };
@@ -36,23 +44,51 @@ async function getPosts(limit = 1) {
   return posts;
 }
 
-async function getBrands(limit = 1) {
+async function getBrands(limit = 1, state = 'CREATED') {
   const payload = {
     query: `{
-      brands(first:${limit}) {
+      brands(first:${limit}, state:"${state}") {
         _id
+        id
+        username
+        fullName
+        profilePicture
         post {
           _id
-          id
+          commentsCount
+          permalink
           mediaType
           mediaUrl
           caption
+          id
+          likeCount
           children {
+            media_type
             media_url
+            caption
+          }
+          city
+          source
+          state
+          brandId
+        }
+        location {
+          id
+          name
+          slug
+          latitude
+          longitude
+          address {
+            street
+            zipCode
+            city
+            country
           }
         }
-        phones
         options
+        phones
+        rank
+        state
       }
     }`,
   };
