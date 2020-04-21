@@ -3,7 +3,6 @@ const mapSeries = require('async/mapSeries');
 
 const debug = require('debug')('app:instagram:brand');
 
-const { revertMathematicalBold } = require('../../utils/string');
 const extract = require('../../utils/extract');
 const { getPosts } = require('../../utils/mintApiUtil');
 
@@ -113,10 +112,6 @@ async function getLoadData(html, post) {
 
   if (brand.location) {
     brand.location = await getGEOData(brand.location);
-  }
-
-  if (brand.post.caption) {
-    brand.post.caption = revertMathematicalBold(brand.post.caption);
   }
 
   return {

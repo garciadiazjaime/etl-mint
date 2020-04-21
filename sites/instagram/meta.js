@@ -10,6 +10,13 @@ const apiUrl = config.get('api.url');
 
 function transform(brands) {
   return brands.map((brand) => {
+    if (brand.location && brand.location.address && brand.location.address.country !== 'MX') {
+      return {
+        ...brand,
+        state: 'DELETED',
+      };
+    }
+
     const { phones = [], options = [] } = brand;
     const { caption } = brand.post;
     let rank = 0;
@@ -40,6 +47,7 @@ function transform(brands) {
 
     return {
       ...brand,
+      state: 'MAPPED',
       options,
       phones,
       rank,
