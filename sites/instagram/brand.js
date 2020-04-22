@@ -57,10 +57,14 @@ function getLocation(location) {
 }
 
 function transform(html) {
-  const matches = html.match(/graphql":(.*)}]},"hostname"/);
+  let matches = html.match(/graphql":(.*)}]},"hostname"/);
 
   if (!Array.isArray(matches) || !matches.length) {
-    return {};
+    matches = html.match(/{"graphql":(.*)}\);/);
+
+    if (!Array.isArray(matches) || !matches.length) {
+      return {};
+    }
   }
 
   const data = JSON.parse(matches[1]);
