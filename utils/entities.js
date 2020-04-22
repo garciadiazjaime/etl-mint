@@ -1,14 +1,14 @@
 const optionsMapper = [
   ['cafe', 'café|cafe|coffee|latte'],
   ['postre', 'crepa|cupcake|brownie|chocolate|dessert|rebanada|pastel|panaderia|reposteria|galleta|cookie'],
-  ['desayuno', 'desayuno|breakfast'],
+  ['desayuno', 'desayuno|breakfast|yogurt|granola'],
   ['omelette', 'omelette'],
   ['poke', 'poke'],
   ['tostada', 'tostada'],
   ['sushi', 'sushi'],
   ['teriyaki', 'teriyaki'],
   ['ramen', 'ramen'],
-  ['hamburguesa', 'burguer|hamburguesa'],
+  ['hamburguesa', 'burguer|hamburguesa|burger'],
   ['mariscos', 'mariscos|marlin|jaiba|aguachile|camaron|camarón|atún|atun'],
   ['burro', 'burro|burrito'],
   ['tacos', 'taco|taqueria|taquería|suadero|taquero'],
@@ -32,6 +32,7 @@ const optionsMapper = [
   ['papas fritas', 'papas fritas'],
   ['queso', 'queso'],
   ['cortes', 'filete'],
+  ['pollo asado', 'pollo asado'],
 ];
 
 function getOptions(caption) {
