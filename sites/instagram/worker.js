@@ -13,35 +13,39 @@ const taskConfig = {
   redisUr: config.get('redis.url'),
 };
 
-const instagramQueue = new Queue('instagram', taskConfig.redisUr);
-const postQueue = new Queue('instagram:post', taskConfig.redisUr);
+function main() {
+  const instagramQueue = new Queue('instagram', taskConfig.redisUr);
+  const postQueue = new Queue('instagram:post', taskConfig.redisUr);
 
-instagramQueue.process(async () => {
-  const posts = await getPosts(taskConfig);
+  instagramQueue.process(async () => {
+    const posts = await getPosts(taskConfig);
 
-  posts.forEach(item => postQueue.add(item));
+    posts.forEach(item => postQueue.add(item));
 
-  return Promise.resolve();
-});
-instagramQueue.on('completed', () => {
-  debug('instagramQueue:completed');
-});
-instagramQueue.on('error', (error) => {
-  debug('postQueue:error', error);
-});
-instagramQueue.on('failed', (job, error) => {
-  debug('postQueue:failed', error);
-});
+    return Promise.resolve();
+  });
+  instagramQueue.on('completed', () => {
+    debug('instagramQueue:completed');
+  });
+  instagramQueue.on('error', (error) => {
+    debug('postQueue:error', error);
+  });
+  instagramQueue.on('failed', (job, error) => {
+    debug('postQueue:failed', error);
+  });
 
-instagramQueue.add({}, { repeat: { cron: '*/2 * * * *' } });
+  instagramQueue.add({}, { repeat: { cron: '*/20 * * * *' } });
 
-postQueue.process(`${__dirname}/post-processor`);
-postQueue.on('completed', (job, result) => {
-  debug('saved', result.id);
-});
-postQueue.on('error', (error) => {
-  debug('postQueue:error', error);
-});
-postQueue.on('failed', (job, error) => {
-  debug('postQueue:failed', error);
-});
+  postQueue.process(`${__dirname}/post-processor`);
+  postQueue.on('completed', (job, result) => {
+    debug('saved', result.id);
+  });
+  postQueue.on('error', (error) => {
+    debug('postQueue:error', error);
+  });
+  postQueue.on('failed', (job, error) => {
+    debug('postQueue:failed', error);
+  });
+}
+
+module.exports = main;

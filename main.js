@@ -3,6 +3,7 @@ const cron = require('node-cron');
 
 const realState = require('./sites/realState');
 const { getRealStateSites } = require('./sites/realState');
+const instagramWorker = require('./sites/instagram/worker');
 
 
 function main() {
@@ -11,6 +12,8 @@ function main() {
   cron.schedule('42 */4 * * *', async () => {
     await mapSeries(sites, realState);
   });
+
+  instagramWorker();
 }
 
 main();
