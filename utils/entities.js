@@ -19,7 +19,7 @@ const optionsMapper = [
   ['pizza', 'pizza'],
   ['torta', 'torta'],
   ['ensalada', 'ensalada'],
-  ['vegiee', 'setas|vegan|plantbased|vegiee'],
+  ['vegiee', 'setas|vegan|plantbased|veggie'],
   ['menudo', 'menudito|menudo|menuderia'],
   ['carne asada', 'carne asada'],
   ['wings', 'wings'],
@@ -33,6 +33,7 @@ const optionsMapper = [
   ['queso', 'queso'],
   ['cortes', 'filete'],
   ['pollo asado', 'pollo asado'],
+  ['lomo de puerco', 'pollo asado'],
 ];
 
 function getOptions(caption) {

@@ -1,78 +1,34 @@
-const debug = require('debug')('app:instagram:meta');
-
-const { getBrands } = require('../../utils/mintApiUtil');
 const { getOptions, getPhones } = require('../../utils/entities');
-const { loadAsync } = require('../../utils/load');
 
-const config = require('../../config');
+function getMeta(post, location) {
+  const { caption } = post;
+  let rank = 0;
 
-const apiUrl = config.get('api.url');
+  const phones = getPhones(caption);
+  const options = getOptions(caption);
 
-function transform(brands) {
-  return brands.map((brand) => {
-    if (brand.location && brand.location.address && brand.location.address.country !== 'MX') {
-      return {
-        ...brand,
-        state: 'DELETED',
-      };
-    }
-
-    const { phones = [], options = [] } = brand;
-    const { caption } = brand.post;
-    let rank = 0;
-
-    const newPhones = getPhones(caption);
-    const newOptions = getOptions(caption);
-
-
-    newPhones.forEach((item) => {
-      if (!phones.includes(item)) {
-        phones.push(item);
-      }
-    });
-
-    newOptions.forEach((item) => {
-      if (!options.includes(item)) {
-        options.push(item);
-      }
-    });
-
-    if (phones.length) {
-      rank += 20;
-    }
-
-    if (options.length) {
-      rank += 10;
-    }
-
-    return {
-      ...brand,
-      state: 'MAPPED',
-      options,
-      phones,
-      rank,
-    };
-  });
-}
-
-async function main() {
-  const brands = await getBrands(50);
-
-  if (!Array.isArray(brands) || !brands.length) {
-    return debug('no-brands');
+  if (phones.length) {
+    rank += 30;
   }
 
-  const brandsExtended = transform(brands);
-  debug(`transform:${brandsExtended && brandsExtended.length}`);
+  if (location && location.id) {
+    rank += 15;
 
-  const response = await loadAsync(`${apiUrl}/instagram/brands/meta`, { data: brandsExtended });
+    if (location.latitude) {
+      rank += 5;
+    }
+  }
 
-  debug(`load:${response && response.length}`);
-  return debug('------------');
+  if (options.length) {
+    rank += 10;
+  }
+
+  return {
+    phones,
+    options,
+    rank,
+  };
 }
 
-if (require.main === module) {
-  main();
-}
 
-module.exports = main;
+module.exports.getMeta = getMeta;

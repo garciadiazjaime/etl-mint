@@ -16,6 +16,14 @@ const config = convict({
       env: 'API_URL',
     },
   },
+  redis: {
+    url: {
+      doc: 'REDIS URL',
+      format: String,
+      default: 'redis://127.0.0.1:6379',
+      env: 'REDIS_URL',
+    },
+  },
   sites: {
     baja123: {
       active: {
