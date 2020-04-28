@@ -10,19 +10,20 @@ const readFileAsync = promisify(fs.readFile);
 
 async function extract(config) {
   if (config.env !== 'production') {
-    return readFileAsync('./stubs/instagram-tijuana.json', { encoding: 'utf8' });
+    const data = await readFileAsync('./stubs/instagram-tijuana.json', { encoding: 'utf8' });
+    return JSON.parse(data);
   }
 
   const limit = 50;
   const fields = 'caption,like_count,comments_count,media_type,media_url,permalink,children{media_type,media_url}';
   const url = `https://graph.facebook.com/v6.0/${config.hashtag}/recent_media?fields=${fields}&limit=${limit}&user_id=${config.userId}&access_token=${config.token}`;
 
-  return getRequest(url);
+  const apiResponse = await getRequest(url);
+  const data = await apiResponse.json();
+  return data;
 }
 
-function transform(string, source) {
-  const data = JSON.parse(string);
-
+function transform(data, source) {
   if (!data || !Array.isArray(data.data)) {
     return null;
   }
@@ -47,10 +48,10 @@ function transform(string, source) {
 }
 
 async function getPosts(config) {
-  const apiResponse = await extract(config);
+  const data = await extract(config);
   debug(`hashtag:${config.hashtag}`);
 
-  const posts = transform(apiResponse, config.hashtag);
+  const posts = await transform(data, config.hashtag);
   debug(`posts:${posts && posts.length}`);
 
   return posts;
