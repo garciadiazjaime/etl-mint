@@ -1,3 +1,5 @@
+const debug = require('debug')('app:instagram:proc');
+
 const { getUser } = require('./user-etl');
 const { getGeoLocation } = require('./location-etl');
 const { getMeta } = require('./meta');
@@ -11,12 +13,11 @@ async function waiter() {
   });
 }
 
-async function processor(job) {
+async function processor(post) {
   await waiter();
 
-  const { data: post } = job;
-
   const { user, location } = await getUser(post);
+
   if (!user) {
     return null;
   }
@@ -36,7 +37,9 @@ async function processor(job) {
     state: 'MAPPED',
   };
 
+  debug(`user:${!!user}, location:${!!location}, geoLocation:${!!geoLocation}`);
   const response = await savePost(data);
+  debug(`saved:${response && response.id}`);
 
   return response;
 }

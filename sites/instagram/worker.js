@@ -1,8 +1,8 @@
-const Queue = require('bull');
-const debug = require('debug')('app:instagram:wrk');
+const mapSeries = require('async/mapSeries');
 
-const config = require('../../config');
+const postProcessor = require('./post-processor');
 const { getPosts } = require('./instagram-api');
+const config = require('../../config');
 
 const taskConfig = {
   env: config.get('env'),
@@ -10,42 +10,12 @@ const taskConfig = {
   hashtag: config.get('instagram.hashtag'),
   userId: config.get('instagram.userId'),
   apiUrl: config.get('api.url'),
-  redisUr: config.get('redis.url'),
 };
 
-function main() {
-  const instagramQueue = new Queue('instagram', taskConfig.redisUr);
-  const postQueue = new Queue('instagram:post', taskConfig.redisUr);
+async function main() {
+  const posts = await getPosts(taskConfig);
 
-  instagramQueue.process(async () => {
-    const posts = await getPosts(taskConfig);
-
-    posts.forEach(item => postQueue.add(item));
-
-    return Promise.resolve();
-  });
-  instagramQueue.on('completed', () => {
-    debug('instagramQueue:completed');
-  });
-  instagramQueue.on('error', (error) => {
-    debug('postQueue:error', error);
-  });
-  instagramQueue.on('failed', (job, error) => {
-    debug('postQueue:failed', error);
-  });
-
-  instagramQueue.add({}, { repeat: { cron: '*/20 * * * *' } });
-
-  postQueue.process(`${__dirname}/post-processor`);
-  postQueue.on('completed', (job, result) => {
-    debug('saved', result.id);
-  });
-  postQueue.on('error', (error) => {
-    debug('postQueue:error', error);
-  });
-  postQueue.on('failed', (job, error) => {
-    debug('postQueue:failed', error);
-  });
+  await mapSeries(posts, postProcessor);
 }
 
 if (require.main === module) {
