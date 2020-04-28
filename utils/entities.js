@@ -19,7 +19,7 @@ const optionsMapper = [
   ['pizza', 'pizza'],
   ['torta', 'torta'],
   ['ensalada', 'ensalada'],
-  ['vegiee', 'setas|vegan|plantbased|veggie'],
+  ['veggie', 'setas|vegan|plantbased|vegiee|veggie'],
   ['menudo', 'menudito|menudo|menuderia'],
   ['carne asada', 'carne asada'],
   ['wings', 'wings'],
