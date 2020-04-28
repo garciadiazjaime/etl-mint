@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "DEBUG=app* node ./main",
+    "start": "node ./main",
     "lint": "npx eslint .",
     "deploy": "npm run docker:build && npm run docker:push",
     "docker:build": "docker build -t garciadiazjaime/etl-mint .",
