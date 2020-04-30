@@ -13,13 +13,26 @@ const taskConfig = {
 };
 
 async function main() {
-  const posts = await getPosts(taskConfig);
+  const posts = [];
+  const hashtags = taskConfig.hashtag.split(',');
 
-  await mapSeries(posts, postProcessor);
+  await mapSeries(hashtags, async (hashtag) => {
+    const response = await getPosts(taskConfig, hashtag);
+
+    if (Array.isArray(response) && response.length) {
+      posts.push(...response);
+    }
+  });
+
+  if (posts.length) {
+    await mapSeries(posts, postProcessor);
+  }
 }
 
 if (require.main === module) {
-  main();
+  main().then(() => {
+    process.exit(1);
+  });
 }
 
 module.exports = main;

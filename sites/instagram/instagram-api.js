@@ -28,9 +28,9 @@ function transform(data, source) {
     return null;
   }
 
-  return data.data.reduce((response, item) => {
+  return data.data.reduce((accu, item) => {
     if (item.caption && item.media_type !== 'VIDEO') {
-      response.push({
+      accu.push({
         id: item.id,
         likeCount: item.like_count,
         commentsCount: item.comments_count,
@@ -43,15 +43,15 @@ function transform(data, source) {
       });
     }
 
-    return response;
+    return accu;
   }, []);
 }
 
-async function getPosts(config) {
+async function getPosts(config, source) {
   const data = await extract(config);
   debug(`hashtag:${config.hashtag}`);
 
-  const posts = await transform(data, config.hashtag);
+  const posts = await transform(data, source);
   debug(`posts:${posts && posts.length}`);
 
   return posts;
