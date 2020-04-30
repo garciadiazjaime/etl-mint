@@ -166,6 +166,22 @@ const config = convict({
       env: 'INSTAGRAM_USER_ID',
       default: '',
     },
+    username: {
+      env: 'INSTAGRAM_USERNAME',
+      default: '',
+    },
+    password: {
+      env: 'INSTAGRAM_USER_PASSWORD',
+      default: '',
+    },
+    code: {
+      env: 'INSTAGRAM_CODE',
+      default: '',
+    },
+    session: {
+      env: 'INSTAGRAM_SESSION',
+      default: '',
+    },
   },
 });
 
