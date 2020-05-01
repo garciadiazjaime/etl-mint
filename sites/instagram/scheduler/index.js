@@ -100,7 +100,7 @@ function getPost(posts) {
 
   const post = {
     mediaUrl,
-    caption: getCaption(),
+    caption: getCaption(postRecord),
   };
 
   return post;
