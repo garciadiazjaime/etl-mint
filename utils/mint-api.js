@@ -17,6 +17,21 @@ async function getPosts({
           media_type
           media_url
         }
+        user {
+          username
+          fullName
+        }
+        location {
+          name
+          slug
+          address {
+            street
+          }
+        }
+        meta {
+          options
+          phones
+        }
       }
     }`,
   };

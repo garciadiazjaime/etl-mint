@@ -71,8 +71,13 @@ function getCaption(post) {
     response.push(post.user.fullName || post.user.username);
   }
 
-  if (location && location.address && location.address.street) {
-    response.push(location.address.street);
+  if (location) {
+    response.push(location.name);
+    response.push(location.slug);
+
+    if (location.address && location.address.street) {
+      response.push(location.address.street);
+    }
   }
 
   if (Array.isArray(meta.options) && meta.options.length) {
@@ -83,7 +88,7 @@ function getCaption(post) {
     response.push(meta.phones.join(' '));
   }
 
-  return response.join(' ');
+  return response.filter(item => item).join(' ');
 }
 
 function getPost(posts) {
