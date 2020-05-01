@@ -8,6 +8,7 @@ const streamPipeline = promisify(require('stream').pipeline);
 
 const readFilePromise = promisify(readFile);
 
+const { getPosts, savePost } = require('../../../utils/mint-api');
 const config = require('../../../config');
 
 const ig = new IgApiClient();
@@ -28,10 +29,8 @@ async function restoreSession() {
   ig.state.build = state.build;
 }
 
-function downloadImage() {
-  const url = 'https://scontent-sjc3-1.xx.fbcdn.net/v/t51.2885-15/95097353_2607363599526616_649658401352137388_n.jpg?_nc_cat=106&_nc_sid=8ae9d6&_nc_oc=AQmv_wY4R5_e9vyH4UGkaKM-v3XWtZlAqikGKQS50V9pPK044ScVyUk-t9c62D7EK-E&_nc_ht=scontent-sjc3-1.xx&oh=309d4ac232937e2e3a26b47f4acb3a9b&oe=5ED105C3';
-
-  return fetch(url)
+function downloadImage(post) {
+  return fetch(post.mediaUrl)
     .then((res) => {
       if (!res.ok) {
         throw new Error(`unexpected response ${res.statusText}`);
@@ -52,17 +51,71 @@ async function postImage() {
   });
 }
 
+function getMediaUrl(post) {
+  if (post.mediaUrl) {
+    return post.mediaUrl;
+  }
+
+  if (Array.isArray(post.children) && post.children.length) {
+    return post.children[0].media_url;
+  }
+
+  return '';
+}
+
+function getPost(posts) {
+  if (!Array.isArray(posts) || !posts.length) {
+    return false;
+  }
+
+  const mediaUrl = getMediaUrl(posts[0]);
+
+  if (!mediaUrl) {
+    return false;
+  }
+
+  const post = {
+    mediaUrl,
+  };
+
+  return post;
+}
+
+function updatePostState(data) {
+  const post = data[0];
+  post.published = true;
+
+  return savePost(post);
+}
+
 async function main() {
+  const data = await getPosts({ published: false });
+
+  const item = getPost(data);
+
+  if (!item) {
+    return debug('nothing to post');
+  }
+
   await restoreSession();
   debug('session open');
 
-  await downloadImage();
+  await downloadImage(item);
   debug('image downloaded');
 
   await postImage();
-  debug('post created');
+  debug(`post published:${data[0].id}`);
 
-  await unlinkSync(imageName);
+  await updatePostState(data);
+  debug(`post updated:${data[0].id}`);
+
+  unlinkSync(imageName);
+
+  return null;
 }
 
-main();
+if (require.main === module) {
+  main();
+}
+
+module.exports = main;
