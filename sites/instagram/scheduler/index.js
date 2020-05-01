@@ -40,10 +40,10 @@ function downloadImage(post) {
     });
 }
 
-async function postImage() {
+async function postImage(post) {
   const imageUrl = 'post.jpg';
   const file = await readFilePromise(imageUrl);
-  const caption = 'caption cool';
+  const { caption } = post;
 
   await ig.publish.photo({
     file,
@@ -63,12 +63,36 @@ function getMediaUrl(post) {
   return '';
 }
 
+function getCaption(post) {
+  const response = [];
+  const { user, location, meta } = post;
+
+  if (user) {
+    response.push(post.user.fullName || post.user.username);
+  }
+
+  if (location && location.address && location.address.street) {
+    response.push(location.address.street);
+  }
+
+  if (Array.isArray(meta.options) && meta.options.length) {
+    response.push(meta.options.join(' '));
+  }
+
+  if (Array.isArray(meta.phones) && meta.phones.length) {
+    response.push(meta.phones.join(' '));
+  }
+
+  return response.join(' ');
+}
+
 function getPost(posts) {
   if (!Array.isArray(posts) || !posts.length) {
     return false;
   }
+  const postRecord = posts[0];
 
-  const mediaUrl = getMediaUrl(posts[0]);
+  const mediaUrl = getMediaUrl(postRecord);
 
   if (!mediaUrl) {
     return false;
@@ -76,6 +100,7 @@ function getPost(posts) {
 
   const post = {
     mediaUrl,
+    caption: getCaption(),
   };
 
   return post;
@@ -91,19 +116,19 @@ function updatePostState(data) {
 async function main() {
   const data = await getPosts({ published: false });
 
-  const item = getPost(data);
+  const instagramPost = getPost(data);
 
-  if (!item) {
+  if (!instagramPost) {
     return debug('nothing to post');
   }
 
   await restoreSession();
   debug('session open');
 
-  await downloadImage(item);
+  await downloadImage(instagramPost);
   debug('image downloaded');
 
-  await postImage();
+  await postImage(instagramPost);
   debug(`post published:${data[0].id}`);
 
   await updatePostState(data);

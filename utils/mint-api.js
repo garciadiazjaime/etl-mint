@@ -3,10 +3,12 @@ const config = require('../config');
 
 const apiUrl = config.get('api.url');
 
-async function getPosts({ limit = 1, state = 'MAPPED', published = null }) {
+async function getPosts({
+  limit = 1, state = 'MAPPED', published = null, id = '',
+} = {}) {
   const payload = {
     query: `{
-      posts(first:${limit}, state:"${state}", published:${published}) {
+      posts(first:${limit}, state:"${state}", published:${published}, id:"${id}") {
         _id
         id
         mediaType

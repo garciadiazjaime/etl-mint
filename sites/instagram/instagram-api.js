@@ -47,7 +47,7 @@ function transform(data, source) {
   }, []);
 }
 
-async function getPosts(config, source) {
+async function getInstagramPosts(config, source) {
   const data = await extract(config);
   debug(`hashtag:${config.hashtag}`);
 
@@ -58,4 +58,4 @@ async function getPosts(config, source) {
 }
 
 
-module.exports.getPosts = getPosts;
+module.exports.getInstagramPosts = getInstagramPosts;

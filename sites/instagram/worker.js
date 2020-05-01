@@ -1,7 +1,7 @@
 const mapSeries = require('async/mapSeries');
 
 const postProcessor = require('./post-processor');
-const { getPosts } = require('./instagram-api');
+const { getInstagramPosts } = require('./instagram-api');
 const config = require('../../config');
 
 const taskConfig = {
@@ -17,7 +17,7 @@ async function main() {
   const hashtags = taskConfig.hashtag.split(',');
 
   await mapSeries(hashtags, async (hashtag) => {
-    const response = await getPosts(taskConfig, hashtag);
+    const response = await getInstagramPosts(taskConfig, hashtag);
 
     if (Array.isArray(response) && response.length) {
       posts.push(...response);

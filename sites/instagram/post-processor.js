@@ -3,18 +3,28 @@ const debug = require('debug')('app:instagram:proc');
 const { getUser } = require('./user-etl');
 const { getGeoLocation } = require('./location-etl');
 const { getMeta } = require('./meta');
-const { savePost } = require('../../utils/mint-api');
+const { savePost, getPosts } = require('../../utils/mint-api');
+
+const config = require('../../config');
+
+const secondsToWait = 1000 * (config.get('env') === 'production' ? 10 : 1);
 
 async function waiter() {
   return new Promise((resolve) => {
     setInterval(() => {
       resolve();
-    }, 10 * 1000);
+    }, secondsToWait);
   });
 }
 
 async function processor(post) {
   await waiter();
+
+  const apiResponse = await getPosts();
+
+  if (Array.isArray(apiResponse) && apiResponse.length) {
+    return debug(`already saved: ${post.id}`);
+  }
 
   const { user, location } = await getUser(post);
 

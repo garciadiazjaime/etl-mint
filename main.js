@@ -13,7 +13,7 @@ function main() {
   cron.schedule('*/30 * * * *', async () => {
     await instagramWorker();
   });
-  cron.schedule('21 * * * *', async () => {
+  cron.schedule('21 5-17/1 * * *', async () => {
     await instagramScheduler();
   });
 
