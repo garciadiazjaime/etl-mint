@@ -132,7 +132,7 @@ async function main() {
   }
 
   await restoreSession();
-  debug('session open');
+  debug(`caption: ${JSON.stringify(instagramPost.caption)}`);
 
   await downloadImage(instagramPost);
   debug('image downloaded');
