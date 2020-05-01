@@ -68,27 +68,31 @@ function getCaption(post) {
   const { user, location, meta } = post;
 
   if (user) {
-    response.push(post.user.fullName || post.user.username);
+    response.push(`user: ${post.user.fullName || post.user.username}`);
   }
 
   if (location) {
-    response.push(location.name);
-    response.push(location.slug);
+    if (location.name) {
+      response.push(`location: ${location.name}`);
+    }
+    if (location.slug) {
+      response.push(`slug: ${location.slug}`);
+    }
 
     if (location.address && location.address.street) {
-      response.push(location.address.street);
+      response.push(`street: ${location.address.street}`);
     }
   }
 
   if (Array.isArray(meta.options) && meta.options.length) {
-    response.push(meta.options.join(' '));
+    response.push(`options: ${meta.options.join(' ')}`);
   }
 
   if (Array.isArray(meta.phones) && meta.phones.length) {
-    response.push(meta.phones.join(' '));
+    response.push(`tel: ${meta.phones.join(' ')}`);
   }
 
-  return response.filter(item => item).join(' ');
+  return response.filter(item => item).join('\n');
 }
 
 function getPost(posts) {

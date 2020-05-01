@@ -45,6 +45,7 @@ async function processor(post) {
     },
     meta,
     state: 'MAPPED',
+    published: false,
   };
 
   debug(`user:${!!user}, location:${!!location}, geoLocation:${!!geoLocation}`);
