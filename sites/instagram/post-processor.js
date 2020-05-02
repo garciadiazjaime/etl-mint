@@ -20,7 +20,7 @@ async function waiter() {
 async function processor(post) {
   await waiter();
 
-  const apiResponse = await getPosts();
+  const apiResponse = await getPosts({ id: post.id });
 
   if (Array.isArray(apiResponse) && apiResponse.length) {
     return debug(`already saved: ${post.id}`);
