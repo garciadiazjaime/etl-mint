@@ -1,26 +1,44 @@
 const debug = require('debug')('app:instagram:pro:loc');
 
 const { getGeoLocation } = require('./location-etl');
-const { savePost } = require('../../utils/mint-api');
+const { savePost, getLocation } = require('../../utils/mint-api');
 
-async function processor(post) {
-  if (post.location && post.location.state && post.location.state !== 'RAW') {
-    return debug(`already saved, post: ${post.id}`);
+async function getNewLocation(post) {
+  const { location } = post;
+
+  if (location.id) {
+    const apiResponse = await getLocation({ id: location.id, state: 'MAPPED' });
+
+    if (Array.isArray(apiResponse) && apiResponse.length) {
+      debug(`location mapped found: ${apiResponse[0].id}, post: ${post.id}`);
+      return apiResponse[0];
+    }
   }
 
-  const geoLocation = await getGeoLocation(post.location);
+  const geoLocation = await getGeoLocation(location);
+
+  return {
+    ...location,
+    ...geoLocation,
+    state: 'MAPPED',
+  };
+}
+
+async function processor(post) {
+  if (post.location && post.location.state && post.location.state === 'MAPPED') {
+    return debug(`location already mapped, post: ${post.id}`);
+  }
+
+
+  const location = await getNewLocation(post);
 
   const data = {
     ...post,
-    location: {
-      ...post.location,
-      ...geoLocation,
-      state: 'MAPPED',
-    },
+    location,
   };
 
-  const response = await savePost(data);
-  return debug(`geoLocation:${!!geoLocation}, post:${response && response.id}`);
+  await savePost(data);
+  return debug(`saved, post:${post.id}`);
 }
 
 module.exports = processor;
