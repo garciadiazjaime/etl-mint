@@ -1,7 +1,6 @@
 const debug = require('debug')('app:instagram:proc');
 
 const { getUser } = require('./user-etl');
-const { getGeoLocation } = require('./location-etl');
 const { getMeta } = require('./meta');
 const { savePost, getPosts } = require('../../utils/mint-api');
 
@@ -32,8 +31,6 @@ async function processor(post) {
     return null;
   }
 
-  const geoLocation = await getGeoLocation(location);
-
   const meta = getMeta(post, location);
 
   const data = {
@@ -41,14 +38,14 @@ async function processor(post) {
     user,
     location: {
       ...location,
-      ...geoLocation,
+      state: 'RAW',
     },
     meta,
     state: 'MAPPED',
     published: false,
   };
 
-  debug(`user:${!!user}, location:${!!location}, geoLocation:${!!geoLocation}`);
+  debug(`user:${!!user}, location:${!!location}`);
   const response = await savePost(data);
   debug(`saved:${response && response.id}`);
 

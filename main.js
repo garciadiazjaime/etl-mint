@@ -3,7 +3,8 @@ const cron = require('node-cron');
 
 const realState = require('./sites/realState');
 const { getRealStateSites } = require('./sites/realState');
-const instagramWorker = require('./sites/instagram/worker');
+const instagramPostWorker = require('./sites/instagram/worker-post');
+const instagramLocationWorker = require('./sites/instagram/worker-location');
 const instagramScheduler = require('./sites/instagram/scheduler');
 
 
@@ -11,7 +12,8 @@ function main() {
   const sites = getRealStateSites();
 
   cron.schedule('*/30 * * * *', async () => {
-    await instagramWorker();
+    await instagramPostWorker();
+    await instagramLocationWorker();
   });
   cron.schedule('21 15-3/1 * * *', async () => {
     await instagramScheduler();
