@@ -4,21 +4,7 @@ const { getUser } = require('./user-etl');
 const { getMeta } = require('./meta');
 const { savePost, getPosts } = require('../../utils/mint-api');
 
-const config = require('../../config');
-
-const secondsToWait = 1000 * (config.get('env') === 'production' ? 10 : 1);
-
-async function waiter() {
-  return new Promise((resolve) => {
-    setInterval(() => {
-      resolve();
-    }, secondsToWait);
-  });
-}
-
 async function processor(post) {
-  await waiter();
-
   const apiResponse = await getPosts({ id: post.id });
 
   if (Array.isArray(apiResponse) && apiResponse.length) {

@@ -1,6 +1,7 @@
 const debug = require('debug')('app:instagram:etl');
 
 const extract = require('../../utils/extract');
+const { waiter } = require('../../utils/fetch');
 
 function getLocation(location) {
   if (!location) {
@@ -51,8 +52,9 @@ function transform(html) {
 }
 
 async function getUser(post) {
-  const source = 'instagram-post';
+  await waiter();
 
+  const source = 'instagram-post';
   debug(`extract:${post.permalink}`);
   const html = await extract(post.permalink, source);
 

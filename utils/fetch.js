@@ -1,7 +1,11 @@
 const fetch = require('node-fetch');
 
+const config = require('../config');
+
+const secondsToWait = 1000 * (config.get('env') === 'production' ? 10 : 1);
+
 async function postRequest(apiUrl, payload) {
-  const config = {
+  const postConfig = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -9,10 +13,10 @@ async function postRequest(apiUrl, payload) {
   };
 
   if (payload) {
-    config.body = JSON.stringify(payload);
+    postConfig.body = JSON.stringify(payload);
   }
 
-  const result = await fetch(apiUrl, config);
+  const result = await fetch(apiUrl, postConfig);
   const response = await result.json();
 
   return response;
@@ -22,5 +26,14 @@ function getRequest(url) {
   return fetch(url);
 }
 
+async function waiter() {
+  return new Promise((resolve) => {
+    setInterval(() => {
+      resolve();
+    }, secondsToWait);
+  });
+}
+
 module.exports.postRequest = postRequest;
 module.exports.getRequest = getRequest;
+module.exports.waiter = waiter;
