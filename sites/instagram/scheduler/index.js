@@ -73,26 +73,23 @@ function getCaption(post) {
 
   if (location) {
     if (location.name) {
-      response.push(`location: ${location.name}`);
-    }
-    if (location.slug) {
-      response.push(`slug: ${location.slug}`);
+      response.push(location.name);
     }
 
     if (location.address && location.address.street) {
-      response.push(`street: ${location.address.street}`);
+      response.push(location.address.street);
     }
   }
 
   if (Array.isArray(meta.options) && meta.options.length) {
-    response.push(`options: ${meta.options.join(' ')}`);
+    response.push(meta.options.join(' '));
   }
 
   if (Array.isArray(meta.phones) && meta.phones.length) {
-    response.push(`tel: ${meta.phones.join(' ')}`);
+    response.push(meta.phones.join(' '));
   }
 
-  return response.filter(item => item).join('\n');
+  return response.filter(item => item).join(' | ');
 }
 
 function getPost(posts) {
