@@ -16,6 +16,7 @@ async function getNewLocation(post) {
   }
 
   const geoLocation = await getGeoLocation(location);
+  debug(`geoLocation: ${!!geoLocation}, post: ${post.id}`);
 
   return {
     ...location,
@@ -38,6 +39,7 @@ async function processor(post) {
   };
 
   await savePost(data);
+
   return debug(`saved, post:${post.id}`);
 }
 

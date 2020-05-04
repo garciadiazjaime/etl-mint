@@ -4,7 +4,7 @@ const config = require('../config');
 const apiUrl = config.get('api.url');
 
 async function getPosts({
-  limit = 1, state = 'MAPPED', published = null, id = '', locationStatate = null,
+  limit = 1, state = 'MAPPED', published = null, id = '', locationStatate = '',
 } = {}) {
   const payload = {
     query: `{
