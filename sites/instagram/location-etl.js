@@ -29,8 +29,9 @@ async function getGeoLocation(location) {
   }
 
   return {
-    latitude: LocationsPage[0].graphql.location.lat,
-    longitude: LocationsPage[0].graphql.location.lng,
+    location: {
+      coordinates: [LocationsPage[0].graphql.location.lng, LocationsPage[0].graphql.location.lat],
+    },
   };
 }
 
