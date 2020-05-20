@@ -27,8 +27,10 @@ async function getPosts({
           id
           name
           slug
-          latitude
-          longitude
+          location {
+            type
+            coordinates
+          }
           state
           address {
             street
