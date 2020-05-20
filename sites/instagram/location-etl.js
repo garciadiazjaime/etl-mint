@@ -30,6 +30,7 @@ async function getGeoLocation(location) {
 
   return {
     location: {
+      type: 'Point',
       coordinates: [LocationsPage[0].graphql.location.lng, LocationsPage[0].graphql.location.lat],
     },
   };

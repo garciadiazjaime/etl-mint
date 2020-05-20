@@ -62,8 +62,10 @@ async function getLocation({ id = '', slug = '', state = '' }) {
         id
         name
         slug
-        latitude
-        longitude
+        location {
+          type
+          coordinates
+        }
         address {
           street
           zipCode
