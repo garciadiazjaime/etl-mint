@@ -1,6 +1,6 @@
 const optionsMapper = [
   ['cafe', 'café|cafe|coffee|latte'],
-  ['postre', 'postre|crepa|cupcake|brownie|chocolate|dessert|rebanada|pastel|panaderia|repostería|reposteria|galleta|cookie'],
+  ['postre', 'postre|crepa|cupcake|brownie|chocolate|dessert|rebanada|pastel|panaderia|repostería|reposteria|galleta|cookie|dessert|pay'],
   ['desayuno', 'desayuno|breakfast|yogurt|granola'],
   ['omelette', 'omelette'],
   ['poke', 'poke'],

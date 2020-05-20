@@ -14,7 +14,7 @@ function getMeta(post, location) {
   if (location && location.id) {
     rank += 15;
 
-    if (location.latitude) {
+    if (Array.isArray(location.location) && location.location.length) {
       rank += 5;
     }
   }
