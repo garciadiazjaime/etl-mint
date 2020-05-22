@@ -17,10 +17,10 @@ async function main() {
   const hashtags = taskConfig.hashtag.split(',');
 
   await mapSeries(hashtags, async (hashtag) => {
-    const response = await getInstagramPosts(taskConfig, hashtag);
+    const instagramPosts = await getInstagramPosts(taskConfig, hashtag);
 
-    if (Array.isArray(response) && response.length) {
-      posts.push(...response);
+    if (Array.isArray(instagramPosts) && instagramPosts.length) {
+      posts.push(...instagramPosts);
     }
   });
 

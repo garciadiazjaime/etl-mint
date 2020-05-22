@@ -38,17 +38,21 @@ function transform(html) {
 
   const { location, owner } = data.shortcode_media;
 
-  const user = {
-    id: owner.id,
-    username: owner.username,
-    fullName: owner.full_name,
-    profilePicture: owner.profile_pic_url,
+  const response = {
+    user: {
+      id: owner.id,
+      username: owner.username,
+      fullName: owner.full_name,
+      profilePicture: owner.profile_pic_url,
+    },
   };
 
-  return {
-    user,
-    location: getLocation(location),
-  };
+  const postLocation = getLocation(location);
+  if (postLocation) {
+    response.location = postLocation;
+  }
+
+  return response;
 }
 
 async function getUser(post) {
@@ -62,9 +66,7 @@ async function getUser(post) {
     return {};
   }
 
-  const data = transform(html);
-
-  return data;
+  return transform(html);
 }
 
 
