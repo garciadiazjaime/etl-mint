@@ -34,7 +34,10 @@ function adjustDoor(door) {
 
 function getHour(value) {
   const date = new Date(value);
-  return date.toLocaleString('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric' });
+  const hour = date.toLocaleString('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric' });
+  const plural = hour !== '1 PM';
+
+  return `a la${plural ? 's' : ''} ${hour}`;
 }
 
 function getTweets(report) {
@@ -51,11 +54,11 @@ function getTweets(report) {
     Object.keys(report[port]).forEach((door) => {
       ids[report[port][door][0]._id] = true; //eslint-disable-line
       reportTime = report[port][door][0].created;
-      tweet += `\n#${adjustDoor(door)} 🚘 a las ${getHour(report[port][door][0].created)} 🕐`;
+      tweet += `\n#${adjustDoor(door)} 🚘 ${getHour(report[port][door][0].created)} 🕐`;
     });
 
     if (Object.keys(ids).length === 1) {
-      tweet = `El día de ayer por #${adjustPort(port)} 🚘\nel mayor tiempo en espera fue a las ${getHour(reportTime)} 🕐`;
+      tweet = `El día de ayer por #${adjustPort(port)} 🚘\nel mayor tiempo en espera fue ${getHour(reportTime)} 🕐`;
     }
 
     accu.push(tweet);
@@ -64,7 +67,7 @@ function getTweets(report) {
   }, []);
 
   if (Object.keys(ids).length === 1) {
-    tweets = [`El día de ayer por #SanYsidro y #Otay 🚘\nel mayor tiempo en espera fue a las ${getHour(reportTime)} 🕐`];
+    tweets = [`El día de ayer por #SanYsidro y #Otay 🚘\nel mayor tiempo en espera fue ${getHour(reportTime)} 🕐`];
   }
 
   return tweets;
