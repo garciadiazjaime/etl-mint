@@ -27,7 +27,8 @@
     "punycode": "^2.1.1",
     "puppeteer": "^2.1.1",
     "request": "^2.88.0",
-    "request-promise": "^4.2.4"
+    "request-promise": "^4.2.4",
+    "twitter-lite": "^0.13.0"
   },
   "devDependencies": {
     "eslint": "^5.16.0",

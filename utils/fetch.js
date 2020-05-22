@@ -22,8 +22,9 @@ async function postRequest(apiUrl, payload) {
   return response;
 }
 
-function getRequest(url) {
-  return fetch(url);
+async function getRequest(url) {
+  const response = await fetch(url);
+  return response.json();
 }
 
 async function waiter() {

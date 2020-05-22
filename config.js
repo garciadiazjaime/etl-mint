@@ -183,6 +183,42 @@ const config = convict({
       default: '',
     },
   },
+  gcenter: {
+    api: {
+      url: {
+        doc: 'API URL',
+        format: String,
+        default: 'http://127.0.0.1:3030',
+        env: 'API_URL',
+      },
+    },
+    twitter: {
+      key: {
+        doc: '',
+        format: String,
+        default: '',
+        env: 'GC_TWITTER_KEY',
+      },
+      secret: {
+        doc: '',
+        format: String,
+        default: '',
+        env: 'GC_TWITTER_SECRET',
+      },
+      tokenKey: {
+        doc: '',
+        format: String,
+        default: '',
+        env: 'GC_TWITTER_TOKEN_KEY',
+      },
+      tokenSecret: {
+        doc: '',
+        format: String,
+        default: '',
+        env: 'GC_TWITTER_TOKEN_SECRET',
+      },
+    },
+  },
 });
 
 // Perform validation

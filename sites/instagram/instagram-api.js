@@ -18,9 +18,7 @@ async function extract(config) {
   const fields = 'caption,like_count,comments_count,media_type,media_url,permalink,children{media_type,media_url}';
   const url = `https://graph.facebook.com/v6.0/${config.hashtag}/recent_media?fields=${fields}&limit=${limit}&user_id=${config.userId}&access_token=${config.token}`;
 
-  const apiResponse = await getRequest(url);
-  const data = await apiResponse.json();
-  return data;
+  return getRequest(url);
 }
 
 function transform(data, source) {
