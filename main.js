@@ -16,7 +16,7 @@ function main() {
     await instagramPostWorker();
     await instagramLocationWorker();
   });
-  cron.schedule('13 17/1,0-5 * * *', async () => {
+  cron.schedule('13 17/2,0-5 * * *', async () => {
     await instagramScheduler();
   });
 

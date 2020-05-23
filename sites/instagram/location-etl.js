@@ -28,6 +28,10 @@ async function getGeoLocation(location) {
     return null;
   }
 
+  if (!LocationsPage[0].graphql.location.lng || !LocationsPage[0].graphql.location.lat) {
+    return null;
+  }
+
   return {
     location: {
       type: 'Point',

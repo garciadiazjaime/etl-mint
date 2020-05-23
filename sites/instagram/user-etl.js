@@ -3,24 +3,29 @@ const debug = require('debug')('app:instagram:etl');
 const extract = require('../../utils/extract');
 const { waiter } = require('../../utils/fetch');
 
-function getLocation(location) {
-  if (!location) {
+function getLocation(postLocation) {
+  if (!postLocation) {
     return null;
   }
 
-  const address = location.address_json ? JSON.parse(location.address_json) : {};
+  const address = postLocation.address_json ? JSON.parse(postLocation.address_json) : null;
 
-  return {
-    id: location.id,
-    name: location.name,
-    slug: location.slug,
-    address: {
+  const location = {
+    id: postLocation.id,
+    name: postLocation.name,
+    slug: postLocation.slug,
+  };
+
+  if (address) {
+    location.address = {
       street: address.street_address,
       zipCode: address.zip_code,
       city: address.city_name,
       country: address.country_code,
-    },
-  };
+    };
+  }
+
+  return location;
 }
 
 function transform(html) {

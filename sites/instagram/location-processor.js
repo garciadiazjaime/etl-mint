@@ -18,6 +18,14 @@ async function getNewLocation(post) {
   const geoLocation = await getGeoLocation(location);
   debug(`geoLocation: ${!!geoLocation}, post: ${post.id}`);
 
+  if (!location.location.type) {
+    delete location.location;
+  }
+
+  if (!location.address) {
+    delete location.address;
+  }
+
   return {
     ...location,
     ...geoLocation,
@@ -29,7 +37,6 @@ async function processor(post) {
   if (post.location && post.location.state && post.location.state === 'MAPPED') {
     return debug(`location already mapped, post: ${post.id}`);
   }
-
 
   const location = await getNewLocation(post);
 

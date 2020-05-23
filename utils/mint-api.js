@@ -4,11 +4,11 @@ const config = require('../config');
 const apiUrl = config.get('api.url');
 
 async function getPosts({
-  limit = 1, state = 'MAPPED', published = null, id = '', locationStatate = '',
+  limit = 1, state = 'MAPPED', published = null, id = '', locationState = '',
 } = {}) {
   const payload = {
     query: `{
-      posts(first:${limit}, state:"${state}", published:${published}, id:"${id}", locationStatate:"${locationStatate}") {
+      posts(first:${limit}, state:"${state}", published:${published}, id:"${id}", locationState:"${locationState}") {
         _id
         id
         mediaType
@@ -62,6 +62,7 @@ async function getLocation({ id = '', slug = '', state = '' }) {
         id
         name
         slug
+        state
         location {
           type
           coordinates
