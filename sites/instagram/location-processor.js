@@ -3,7 +3,7 @@ const debug = require('debug')('app:instagram:pro:loc');
 const { getGeoLocation } = require('./location-etl');
 const { savePost, getLocation } = require('../../utils/mint-api');
 
-async function getNewLocation(post) {
+async function getNewLocation(post, cookies) {
   const { location } = post;
 
   if (location.id) {
@@ -15,7 +15,7 @@ async function getNewLocation(post) {
     }
   }
 
-  const geoLocation = await getGeoLocation(location);
+  const geoLocation = await getGeoLocation(location, cookies);
   debug(`geoLocation: ${!!geoLocation}, post: ${post.id}`);
 
   if (!location.location.type) {
@@ -33,12 +33,12 @@ async function getNewLocation(post) {
   };
 }
 
-async function processor(post) {
+async function processor(post, cookies) {
   if (post.location && post.location.state && post.location.state === 'MAPPED') {
     return debug(`location already mapped, post: ${post.id}`);
   }
 
-  const location = await getNewLocation(post);
+  const location = await getNewLocation(post, cookies);
 
   const data = {
     ...post,

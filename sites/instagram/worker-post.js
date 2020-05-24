@@ -14,11 +14,9 @@ const taskConfig = {
   apiUrl: config.get('api.url'),
 };
 
-async function main() {
+async function main(cookies) {
   const posts = [];
   const hashtags = taskConfig.hashtag.split(',');
-
-  const cookies = await workerLogin();
 
   await mapSeries(hashtags, async (hashtag) => {
     const instagramPosts = await getInstagramPosts(taskConfig, hashtag);

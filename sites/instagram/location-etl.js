@@ -5,7 +5,7 @@ const { waiter } = require('../../utils/fetch');
 
 const source = 'instagram-location';
 
-async function getGeoLocation(location) {
+async function getGeoLocation(location, cookies) {
   if (!location || !location.id || !location.slug) {
     return null;
   }
@@ -14,7 +14,7 @@ async function getGeoLocation(location) {
 
   const url = `https://www.instagram.com/explore/locations/${location.id}/${location.slug}/`;
   debug(`extract:${url}`);
-  const html = await extract(url, source);
+  const html = await extract(url, source, cookies);
 
   const matches = html.match(/_sharedData = (.*);<\/script/);
   if (!Array.isArray(matches) || !matches.length) {
@@ -41,4 +41,6 @@ async function getGeoLocation(location) {
 }
 
 
-module.exports.getGeoLocation = getGeoLocation;
+module.exports = {
+  getGeoLocation,
+};
