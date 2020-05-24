@@ -2,7 +2,7 @@ const debug = require('debug')('app:instagram:proc');
 
 const { getUser } = require('./user-etl');
 const { getMeta } = require('./meta');
-const { savePost, getPosts } = require('../../utils/mint-api');
+const { savePost, getPosts, getLocation } = require('../../utils/mint-api');
 
 async function processor(instagramPost) {
   const apiPost = await getPosts({ id: instagramPost.id });
@@ -29,10 +29,17 @@ async function processor(instagramPost) {
   };
 
   if (location) {
-    post.location = {
-      ...location,
-      state: 'RAW',
-    };
+    const locationApi = await getLocation({ id: location.id, state: 'MAPPED' });
+
+    if (Array.isArray(locationApi) && locationApi.length) {
+      debug(`location mapped found: ${locationApi[0].id}, post: ${post.id}`);
+      post.location = { ...locationApi[0] };
+    } else {
+      post.location = {
+        ...location,
+        state: 'RAW',
+      };
+    }
   }
 
   debug(`user:${!!user}, location:${!!location}`);
