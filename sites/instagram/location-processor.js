@@ -10,7 +10,7 @@ async function getNewLocation(post, cookies) {
     const apiResponse = await getLocation({ id: location.id, state: 'MAPPED' });
 
     if (Array.isArray(apiResponse) && apiResponse.length) {
-      debug(`location mapped found: ${apiResponse[0].id}, post: ${post.id}`);
+      debug(`location mapped found: ${apiResponse[0].id}/${apiResponse[0].slug}, post: ${post.id}`);
       return apiResponse[0];
     }
   }
