@@ -1,6 +1,5 @@
 const mapSeries = require('async/mapSeries');
 
-const workerLogin = require('./worker-login');
 const postProcessor = require('./post-processor');
 const { getInstagramPosts } = require('./instagram-api');
 const { waiter } = require('../../utils/fetch');
@@ -29,7 +28,9 @@ async function main(cookies) {
   });
 
   if (posts.length) {
-    await mapSeries(posts, post => postProcessor(post, cookies));
+    await mapSeries(posts, async (post) => {
+      await postProcessor(post, cookies);
+    });
   }
 }
 

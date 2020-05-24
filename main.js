@@ -12,14 +12,18 @@ const workerLogin = require('./sites/instagram/worker-login');
 const gcTwitter = require('./sites/gcenter/twitter');
 
 
+async function instagramWorker() {
+  const cookies = await workerLogin();
+
+  await instagramPostWorker(cookies);
+  await instagramLocationWorker(cookies);
+}
+
 function main() {
   const sites = getRealStateSites();
 
-  cron.schedule('29 15/1,0-5 * * *', async () => {
-    const cookies = await workerLogin();
-    await instagramPostWorker(cookies);
-    await instagramLocationWorker(cookies);
-  });
+  cron.schedule('29 15/1,0-5 * * *', instagramWorker);
+
   cron.schedule('13 17/2,0-5 * * *', async () => {
     await instagramScheduler();
   });
@@ -33,4 +37,8 @@ function main() {
   });
 }
 
-main();
+if (process.argv[2]) {
+  instagramWorker();
+} else {
+  main();
+}

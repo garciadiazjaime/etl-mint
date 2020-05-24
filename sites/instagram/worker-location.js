@@ -7,7 +7,9 @@ async function main(cookies) {
   const posts = await getPosts({ locationState: 'RAW', limit: 20 });
 
   if (posts.length) {
-    await mapSeries(posts, post => locationProcessor(post, cookies));
+    await mapSeries(posts, async (post) => {
+      await locationProcessor(post, cookies);
+    });
   }
 }
 
