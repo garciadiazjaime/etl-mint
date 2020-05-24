@@ -35,6 +35,8 @@ async function waiter() {
   });
 }
 
-module.exports.postRequest = postRequest;
-module.exports.getRequest = getRequest;
-module.exports.waiter = waiter;
+module.exports = {
+  postRequest,
+  getRequest,
+  waiter,
+};

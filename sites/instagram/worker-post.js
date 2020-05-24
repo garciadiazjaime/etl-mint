@@ -2,6 +2,7 @@ const mapSeries = require('async/mapSeries');
 
 const postProcessor = require('./post-processor');
 const { getInstagramPosts } = require('./instagram-api');
+const { waiter } = require('../../utils/fetch');
 const config = require('../../config');
 
 const taskConfig = {
@@ -22,6 +23,8 @@ async function main() {
     if (Array.isArray(instagramPosts) && instagramPosts.length) {
       posts.push(...instagramPosts);
     }
+
+    await waiter();
   });
 
   if (posts.length) {
