@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 
 const config = require('../config');
 
-const secondsToWait = 1000 * (config.get('env') === 'production' ? 10 : 1);
+const secondsToWait = 1000 * (config.get('env') === 'production' ? 1 : 1);
 
 async function postRequest(apiUrl, payload) {
   const postConfig = {

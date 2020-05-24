@@ -28,7 +28,7 @@ async function main() {
   });
 
   if (posts.length) {
-    await mapSeries(posts, postProcessor);
+    await mapSeries([posts[0]], postProcessor);
   }
 }
 

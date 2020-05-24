@@ -66,7 +66,7 @@ async function getUser(post) {
   const source = 'instagram-post';
   debug(`extract:${post.permalink}`);
   const html = await extract(post.permalink, source);
-
+  debug(html);
   if (html.includes('Page Not Found')) {
     return {};
   }
@@ -75,4 +75,6 @@ async function getUser(post) {
 }
 
 
-module.exports.getUser = getUser;
+module.exports = {
+  getUser,
+};
