@@ -8,7 +8,7 @@ const puppeteer = require('puppeteer');
 const readFileAsync = promisify(fs.readFile);
 const config = require('../config');
 
-async function extract(url, source) {
+async function extract(url, source, cookies) {
   if (config.get('env') !== 'production') {
     return readFileAsync(`./stubs/${source}.html`, { encoding: 'utf8' });
   }
@@ -24,6 +24,11 @@ async function extract(url, source) {
     ],
   });
   const page = await browser.newPage();
+
+  if (Array.isArray(cookies) && cookies.length) {
+    await page.setCookie(...cookies);
+  }
+
   await page.setUserAgent(userAgent);
 
   try {

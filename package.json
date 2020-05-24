@@ -21,7 +21,6 @@
     "cheerio": "^1.0.0-rc.3",
     "convict": "^5.0.0",
     "debug": "^4.1.1",
-    "express": "^4.17.1",
     "instagram-private-api": "^1.39.2",
     "node-cron": "^2.0.3",
     "node-fetch": "^2.6.0",

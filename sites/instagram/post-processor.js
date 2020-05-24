@@ -4,14 +4,14 @@ const { getUser } = require('./user-etl');
 const { getMeta } = require('./meta');
 const { savePost, getPosts, getLocation } = require('../../utils/mint-api');
 
-async function processor(instagramPost) {
+async function processor(instagramPost, cookies) {
   const apiPost = await getPosts({ id: instagramPost.id });
 
   if (Array.isArray(apiPost) && apiPost.length) {
     return debug(`already saved: ${instagramPost.id}`);
   }
 
-  const { user, location } = await getUser(instagramPost);
+  const { user, location } = await getUser(instagramPost, cookies);
 
   if (!user) {
     debug(`NO_USER: ${instagramPost.permalink}`);

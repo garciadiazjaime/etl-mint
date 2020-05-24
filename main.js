@@ -1,15 +1,5 @@
 const mapSeries = require('async/mapSeries');
 const cron = require('node-cron');
-const express = require('express');
-
-const app = express();
-const port = process.env.PORT || 8080;
-
-app.get('/', (req, res) => {
-  res.send(':)');
-});
-
-app.listen(port);
 
 const realState = require('./sites/realState');
 const { getRealStateSites } = require('./sites/realState');

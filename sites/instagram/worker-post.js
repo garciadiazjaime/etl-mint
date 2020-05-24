@@ -1,5 +1,6 @@
 const mapSeries = require('async/mapSeries');
 
+const workerLogin = require('./worker-login');
 const postProcessor = require('./post-processor');
 const { getInstagramPosts } = require('./instagram-api');
 const { waiter } = require('../../utils/fetch');
@@ -17,6 +18,8 @@ async function main() {
   const posts = [];
   const hashtags = taskConfig.hashtag.split(',');
 
+  const cookies = await workerLogin();
+
   await mapSeries(hashtags, async (hashtag) => {
     const instagramPosts = await getInstagramPosts(taskConfig, hashtag);
 
@@ -28,7 +31,7 @@ async function main() {
   });
 
   if (posts.length) {
-    await mapSeries([posts[0]], postProcessor);
+    await mapSeries(posts, post => postProcessor(post, cookies));
   }
 }
 

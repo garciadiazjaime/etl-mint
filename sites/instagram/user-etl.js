@@ -60,12 +60,12 @@ function transform(html) {
   return response;
 }
 
-async function getUser(post) {
+async function getUser(post, cookies) {
   await waiter();
 
   const source = 'instagram-post';
   debug(`extract:${post.permalink}`);
-  const html = await extract(post.permalink, source);
+  const html = await extract(post.permalink, source, cookies);
   debug(html);
   if (html.includes('Page Not Found')) {
     return {};
