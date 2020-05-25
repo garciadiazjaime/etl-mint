@@ -1,7 +1,7 @@
 const optionsMapper = [
   ['cafe', 'café|cafe|coffee|latte|ᴄᴏғғᴇᴇ|caffe'],
   ['postre', 'postre|crepa|cupcake|brownie|chocolate|dessert|rebanada|repostería|reposteria|galleta|cookie|dessert|pay|croissant|chocolat|pastry'],
-  ['panaderia', 'bollería|bolleria|panaderia'],
+  ['panaderia', 'bollería|bolleria|panaderia|torcidos'],
   ['churros', 'churro|ᴄʜᴜʀʀᴇʀɪᴀ|𝒄𝒉𝒖𝒓𝒓𝒐'],
   ['pastel', 'cake|pastel'],
   ['desayuno', 'desayuno|breakfast|yogurt|granola'],
@@ -21,7 +21,7 @@ const optionsMapper = [
   ['smoothies', 'smoothies'],
   ['chilaquiles', 'chilaquiles'],
   ['pasta', 'pasta|lasagna|fettuccine'],
-  ['pizza', 'pizza'],
+  ['pizza', 'pizza|🍕'],
   ['torta', 'torta'],
   ['sandwich', 'sandwich|sándwich'],
   ['ensalada', 'ensalada|salad'],
@@ -41,14 +41,13 @@ const optionsMapper = [
   ['pupusas', 'pupusas'],
   ['hotdog', 'hotdog'],
   ['tortilla española', 'tortillaespañola|tortilla española'],
-  ['queso', 'queso'],
   ['cortes', 'filete|steak|cortesdecarne'],
   ['mac&cheese', 'mac&cheese|mac and chesse|mac & cheese'],
   ['pollo asado', 'pollo asado'],
   ['pulpo', 'pulpito|pulpo'],
   ['lomo de puerco', 'pollo asado'],
   ['prosciutto', 'prosciutto'],
-  ['quesos', 'cheese'],
+  ['quesos', 'cheese', 'queso'],
   ['asiáticos', 'asiátic|asiatic'],
   ['paella', 'paella'],
   ['italiano', 'italian'],
@@ -57,10 +56,13 @@ const optionsMapper = [
   ['ceviche', 'cevichito|ceviche'],
   ['pollo', 'pollito|pollo'],
   ['trufas', 'trufas|truffles'],
-
+  ['noodles', 'noodles'],
+  ['consomé', 'consomé|consome'],
   ['jugos', 'jugo'],
   ['bebidas', 'limonada|aguas frescas|agua fresca'],
+  ['bar', 'cantina|coctelera|coctelería|cocteleria|pulquito|pulque|tragos|mixología|mixologia|cocthelado'],
   ['cerveza', 'beer|cerveza|cheve|tecate roja'],
+  ['helados', 'helado|paleta'],
 ];
 
 function getOptions(caption) {
