@@ -24,7 +24,7 @@ function main() {
 
   cron.schedule('29 15/1,0-5 * * *', instagramWorker);
 
-  cron.schedule('13 17/2,0-5 * * *', async () => {
+  cron.schedule('13 17/2,0-5/2 * * *', async () => {
     await instagramScheduler();
   });
 

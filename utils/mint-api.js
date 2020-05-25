@@ -14,8 +14,10 @@ async function getPosts({
         mediaType
         mediaUrl
         children {
+          id
           media_type
           media_url
+          caption
         }
         user {
           id

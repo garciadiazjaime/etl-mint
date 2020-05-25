@@ -56,4 +56,6 @@ async function getInstagramPosts(config, hashtag) {
 }
 
 
-module.exports.getInstagramPosts = getInstagramPosts;
+module.exports = {
+  getInstagramPosts,
+};
