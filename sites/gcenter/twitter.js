@@ -49,7 +49,7 @@ function getTweets(report) {
   }
 
   let tweets = Object.keys(report).reduce((accu, port) => {
-    let tweet = `El día de ayer por ${adjustPort(port)}, el mayor tiempo en espera fue:`;
+    let tweet = `El día de ayer por #${adjustPort(port)}, el mayor tiempo en espera fue:`;
 
     Object.keys(report[port]).forEach((door) => {
       ids[report[port][door][0]._id] = true; //eslint-disable-line
