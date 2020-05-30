@@ -9,6 +9,7 @@ const instagramLocationWorker = require('./sites/instagram/worker-location');
 const instagramScheduler = require('./sites/instagram/scheduler');
 const workerLogin = require('./sites/instagram/worker-login');
 
+const gcenterWorker = require('./sites/gcenter/worker-ports');
 const gcTwitter = require('./sites/gcenter/twitter');
 
 
@@ -34,6 +35,10 @@ function main() {
 
   cron.schedule('42 13 * * *', async () => {
     await gcTwitter();
+  });
+
+  cron.schedule('*/13 * * * *', async () => {
+    await gcenterWorker();
   });
 }
 

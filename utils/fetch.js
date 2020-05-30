@@ -27,6 +27,10 @@ async function getRequest(url) {
   return response.json();
 }
 
+async function getRequestPlain(url) {
+  return fetch(url);
+}
+
 async function waiter() {
   return new Promise((resolve) => {
     setInterval(() => {
@@ -39,4 +43,5 @@ module.exports = {
   postRequest,
   getRequest,
   waiter,
+  getRequestPlain,
 };

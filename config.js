@@ -218,6 +218,12 @@ const config = convict({
         env: 'GC_TWITTER_TOKEN_SECRET',
       },
     },
+    source: {
+      doc: 'SOURCE URL',
+      format: String,
+      default: '',
+      env: 'GC_SOURCE_URL',
+    },
   },
 });
 

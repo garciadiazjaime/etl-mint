@@ -90,8 +90,28 @@ function savePost(post) {
   return postRequest(`${apiUrl}/instagram/post`, post);
 }
 
+function saveReport(report) {
+  if (!Array.isArray(report) || !report.length) {
+    return null;
+  }
+
+  const body = {
+    query: `mutation Report($report: [PortInput]!) {
+      addReport(report: $report) {
+        _id
+      }
+    }`,
+    variables: {
+      report,
+    },
+  };
+
+  return postRequest(`${apiUrl}/graphiql`, body);
+}
+
 module.exports = {
   getPosts,
   getLocation,
   savePost,
+  saveReport,
 };
