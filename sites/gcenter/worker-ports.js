@@ -9,6 +9,17 @@ const config = require('../../config');
 
 const parser = new xml2js.Parser();
 
+const typeMap = {
+  1: 'passenger_vehicle_lanes',
+  2: 'pedestrian_lanes',
+};
+
+const entryMap = {
+  1: 'standard_lanes',
+  2: 'NEXUS_SENTRI_lanes',
+  3: 'ready_lanes',
+};
+
 const portsMonitored = {
   250401: {
     city: 'tijuana',
@@ -59,7 +70,7 @@ function transform(data) {
   const uuid = getUUID();
 
   return report.port.reduce((accu, item) => {
-    const portId = item.port_number[0];
+    const portId = parseInt(item.port_number[0], 10);
 
     if (portId && portsMonitored[portId]) {
       const meta = {
@@ -73,17 +84,19 @@ function transform(data) {
       const { types, entries } = portsMonitored[portId];
 
       types.forEach((type) => {
-        if (Array.isArray(item[type])) {
+        const typeKey = typeMap[type];
+        if (Array.isArray(item[typeKey])) {
           entries.forEach((entry) => {
-            if (Array.isArray(item[type][0][entry])) {
+            const entryKey = entryMap[entry];
+            if (Array.isArray(item[typeKey][0][entryKey])) {
               accu.push({
                 ...meta,
                 type,
                 entry,
-                updateTime: item[type][0][entry][0].update_time[0],
-                status: item[type][0][entry][0].operational_status[0],
-                delay: getInt(item[type][0][entry][0].delay_minutes[0]),
-                lanes: getInt(item[type][0][entry][0].lanes_open[0]),
+                updateTime: item[typeKey][0][entryKey][0].update_time[0],
+                status: item[typeKey][0][entryKey][0].operational_status[0],
+                delay: getInt(item[typeKey][0][entryKey][0].delay_minutes[0]),
+                lanes: getInt(item[typeKey][0][entryKey][0].lanes_open[0]),
               });
             }
           });
