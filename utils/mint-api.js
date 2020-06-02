@@ -60,7 +60,7 @@ async function getPosts({
 async function getLocation({ id = '', slug = '', state = '' }) {
   const payload = {
     query: `{
-      location(id:"${id}", slug:"${slug}", state:"${state}") {
+      locations(id:"${id}", slug:"${slug}", state:"${state}") {
         id
         name
         slug
