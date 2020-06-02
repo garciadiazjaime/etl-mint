@@ -4,6 +4,7 @@ const debug = require('debug')('app:gcenter:worker');
 
 const { getRequestPlain } = require('../../utils/fetch');
 const { saveReport } = require('../../utils/mint-api');
+const { getUUID } = require('../../utils/string');
 const config = require('../../config');
 
 const parser = new xml2js.Parser();
@@ -12,20 +13,20 @@ const portsMonitored = {
   250401: {
     city: 'tijuana',
     name: 'San Ysidro',
-    types: ['passenger_vehicle_lanes', 'pedestrian_lanes'],
-    entries: ['standard_lanes', 'NEXUS_SENTRI_lanes', 'ready_lanes'],
+    types: [1, 2],
+    entries: [1, 2, 3],
   },
   250601: {
     city: 'tijuana',
     name: 'Otay',
-    types: ['passenger_vehicle_lanes', 'pedestrian_lanes'],
-    entries: ['standard_lanes', 'NEXUS_SENTRI_lanes', 'ready_lanes'],
+    types: [1, 2],
+    entries: [1, 2, 3],
   },
   250407: {
     city: 'tijuana',
     name: 'PedWest',
-    types: ['pedestrian_lanes'],
-    entries: ['standard_lanes', 'NEXUS_SENTRI_lanes', 'ready_lanes'],
+    types: [2],
+    entries: [1, 2, 3],
   },
 };
 
@@ -55,6 +56,8 @@ function transform(data) {
     return [];
   }
 
+  const uuid = getUUID();
+
   return report.port.reduce((accu, item) => {
     const portId = item.port_number[0];
 
@@ -64,6 +67,7 @@ function transform(data) {
         city: portsMonitored[portId].city,
         name: portsMonitored[portId].name,
         portStatus: item.port_status[0],
+        uuid,
       };
 
       const { types, entries } = portsMonitored[portId];
