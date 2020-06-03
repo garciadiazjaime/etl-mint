@@ -42,7 +42,7 @@ const optionsMapper = [
   ['chimichurri', 'chimichurri'],
   ['pupusas', 'pupusas'],
   ['hotdog', 'hotdog'],
-  ['tortilla española', 'tortillaespañola|tortilla española'],
+  ['tortilla española', 'tortillaespañola|tortilla española|tortilla de patata'],
   ['cortes', 'filete|steak|cortesdecarne'],
   ['mac&cheese', 'mac&cheese|mac and chesse|mac & cheese'],
   ['pollo asado', 'pollo asado'],
@@ -62,9 +62,11 @@ const optionsMapper = [
   ['consomé', 'consomé|consome'],
   ['jugos', 'jugo'],
   ['bebidas', 'limonada|aguas frescas|agua fresca|kombucha'],
-  ['bar', 'cantina|coctelera|coctelería|cocteleria|pulquito|pulque|tragos|mixología|mixologia|cocthelado|mojito'],
+  ['bar', 'cantina|coctelera|coctelería|cocteleria|pulquito|pulque|tragos|mixología|mixologia|cocthelado|mojito|vinos|wine'],
   ['cerveza', 'beer|cerveza|cheve|tecate roja'],
   ['helados', 'helado|paleta'],
+  ['cochinita', 'cochinita'],
+  ['dulces', 'dulces'],
 ];
 
 function getOptions(caption) {
