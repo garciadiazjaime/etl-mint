@@ -113,14 +113,12 @@ function load(data) {
 }
 
 async function main() {
-  debug('start');
   const data = await extract();
 
   const report = transform(data);
-  debug(report && report.length);
 
   await load(report);
-  debug('done');
+  debug(report && report.length);
 }
 
 

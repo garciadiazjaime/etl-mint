@@ -25,7 +25,7 @@ function main() {
 
   cron.schedule('29 15/1,0-5 * * *', instagramWorker);
 
-  cron.schedule('13 17/2,0-5/2 * * *', async () => {
+  cron.schedule('13 17/2 * * *', async () => {
     await instagramScheduler();
   });
 
@@ -37,7 +37,7 @@ function main() {
     await gcTwitter();
   });
 
-  cron.schedule('*/13 * * * *', async () => {
+  cron.schedule('*/13 11-23/1 * * *', async () => {
     await gcenterWorker();
   });
 }

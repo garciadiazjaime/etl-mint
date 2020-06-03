@@ -49,6 +49,11 @@ async function postImage(post) {
     file,
     caption,
   });
+
+  await ig.publish.story({
+    file,
+    caption,
+  });
 }
 
 function getMediaUrl(post) {
@@ -68,7 +73,7 @@ function getCaption(post) {
   const { user, location, meta } = post;
 
   if (user) {
-    response.push(`user: ${post.user.fullName || post.user.username}`);
+    response.push(post.user.fullName || post.user.username);
   }
 
   if (location) {
