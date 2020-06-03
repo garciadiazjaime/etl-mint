@@ -23,9 +23,9 @@ async function instagramWorker() {
 function main() {
   const sites = getRealStateSites();
 
-  cron.schedule('29 15/1,0-5 * * *', instagramWorker);
+  cron.schedule('29 15-23,0-5 * * *', instagramWorker);
 
-  cron.schedule('13 17/2 * * *', async () => {
+  cron.schedule('13 17-23/2 * * *', async () => {
     await instagramScheduler();
   });
 
@@ -37,7 +37,7 @@ function main() {
     await gcTwitter();
   });
 
-  cron.schedule('*/13 11-23/1 * * *', async () => {
+  cron.schedule('*/13 11-23 * * *', async () => {
     await gcenterWorker();
   });
 }
