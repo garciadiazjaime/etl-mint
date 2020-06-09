@@ -11,12 +11,8 @@ function getMeta(post, location) {
     rank += 30;
   }
 
-  if (location && location.id) {
-    rank += 15;
-
-    if (Array.isArray(location.location) && location.location.length) {
-      rank += 5;
-    }
+  if (location && location.address && location.address.street) {
+    rank += 20;
   }
 
   if (options.length) {
