@@ -11,7 +11,7 @@ async function processor(post) {
     meta,
   };
 
-  if (location && !location.location) {
+  if (location && location.location && !location.location.type) {
     delete data.location.location;
   }
 
