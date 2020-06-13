@@ -6,6 +6,7 @@ const { getRealStateSites } = require('./sites/realState');
 
 const instagramPostWorker = require('./sites/instagram/worker-post');
 const instagramLocationWorker = require('./sites/instagram/worker-location');
+const instagramMetaWorker = require('./sites/instagram/worker-meta');
 const instagramScheduler = require('./sites/instagram/scheduler');
 const workerLogin = require('./sites/instagram/worker-login');
 
@@ -23,10 +24,14 @@ async function instagramWorker() {
 function main() {
   const sites = getRealStateSites();
 
-  cron.schedule('29 15-23,0-5 * * *', instagramWorker);
+  cron.schedule('29 17-23,0-4 * * *', instagramWorker);
 
-  cron.schedule('13 17-23/2 * * *', async () => {
+  cron.schedule('13 18-23/2 * * *', async () => {
     await instagramScheduler();
+  });
+
+  cron.schedule('49 5 * * *', async () => {
+    await instagramMetaWorker();
   });
 
   cron.schedule('42 */4 * * *', async () => {

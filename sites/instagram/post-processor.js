@@ -8,7 +8,7 @@ async function processor(instagramPost, cookies) {
   const apiPost = await getPosts({ id: instagramPost.id });
 
   if (Array.isArray(apiPost) && apiPost.length) {
-    return debug(`already saved: ${instagramPost.id}`);
+    return null;
   }
 
   const { user, location } = await getUser(instagramPost, cookies);
@@ -42,9 +42,8 @@ async function processor(instagramPost, cookies) {
     }
   }
 
-  debug(`user:${!!user}, location:${!!location}`);
   const response = await savePost(post);
-  debug(`saved:${response && response.id}`);
+  debug(`user:${!!user}, location:${!!location}, saved:${response && response.id}`);
 
   return response;
 }
