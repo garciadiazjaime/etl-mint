@@ -12,6 +12,7 @@ const workerLogin = require('./sites/instagram/worker-login');
 
 const gcenterWorker = require('./sites/gcenter/worker-ports');
 const gcTwitter = require('./sites/gcenter/twitter');
+const gcFacebook = require('./sites/gcenter/facebook');
 
 
 async function instagramWorker() {
@@ -40,6 +41,7 @@ function main() {
 
   cron.schedule('42 13 * * *', async () => {
     await gcTwitter();
+    await gcFacebook();
   });
 
   cron.schedule('*/13 11-23 * * *', async () => {

@@ -218,6 +218,14 @@ const config = convict({
         env: 'GC_TWITTER_TOKEN_SECRET',
       },
     },
+    facebook: {
+      token: {
+        doc: '',
+        format: String,
+        default: '',
+        env: 'GC_FACEBOOK_TOKEN',
+      },
+    },
     source: {
       doc: 'SOURCE URL',
       format: String,
