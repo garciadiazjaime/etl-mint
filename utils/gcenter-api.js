@@ -75,4 +75,5 @@ async function getPublications() {
 
 module.exports = {
   getPublications,
+  getLast24hrsSummary,
 };

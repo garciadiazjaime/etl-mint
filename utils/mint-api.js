@@ -110,9 +110,39 @@ function saveReport(report) {
   return postRequest(`${apiUrl}/graphiql`, body);
 }
 
+async function getPorts({
+  limit = 1, since = '', to = '', name = '', type = null, entry = null,
+}) {
+  const payload = {
+    query: `{
+      port(first:${limit}, since: "${since}", to: "${to}", name: "${name}", type: ${type}, entry: ${entry}) {
+        portId
+        city
+        name
+        portStatus
+        type
+        entry
+        updateTime
+        status
+        delay
+        lanes
+        uuid
+        createdAt
+      }
+    }`,
+  };
+
+  const {
+    data: { port },
+  } = await postRequest(`${apiUrl}/graphiql`, payload);
+
+  return port;
+}
+
 module.exports = {
   getPosts,
   getLocation,
   savePost,
   saveReport,
+  getPorts,
 };
