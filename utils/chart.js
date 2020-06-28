@@ -57,7 +57,7 @@ function getLineChart({
     .tickPadding(_tickPadding);
 
   const lineChart = d3.line()
-    .x(d => xScale(d.label) + _margin.left)
+    .x(d => xScale(d.label) + _margin.left - 1)
     .y(d => yScale(d.value));
 
   if (_isCurve) lineChart.curve(d3.curveBasis);

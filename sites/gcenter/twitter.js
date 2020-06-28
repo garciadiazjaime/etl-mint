@@ -1,20 +1,26 @@
+const fs = require('fs');
+
 const mapSeries = require('async/mapSeries');
 const Twitter = require('twitter-lite');
 const debug = require('debug')('app:twitter');
+
 
 const { getPublications } = require('../../utils/gcenter-api');
 const { waiter } = require('../../utils/fetch');
 const config = require('../../config');
 
-const client = new Twitter({
-  consumer_key: config.get('gcenter.twitter.key'),
-  consumer_secret: config.get('gcenter.twitter.secret'),
-  access_token_key: config.get('gcenter.twitter.tokenKey'),
-  access_token_secret: config.get('gcenter.twitter.tokenSecret'),
-});
+function getClient(subdomain = 'api') {
+  return new Twitter({
+    subdomain,
+    consumer_key: config.get('gcenter.twitter.key'),
+    consumer_secret: config.get('gcenter.twitter.secret'),
+    access_token_key: config.get('gcenter.twitter.tokenKey'),
+    access_token_secret: config.get('gcenter.twitter.tokenSecret'),
+  });
+}
 
 
-async function main() {
+async function postStatus() {
   debug('start');
 
   const tweets = await getPublications();
@@ -22,6 +28,8 @@ async function main() {
   if (!Array.isArray(tweets) || !tweets.length) {
     return null;
   }
+
+  const client = getClient();
 
   await client.get('account/verify_credentials');
 
@@ -32,10 +40,39 @@ async function main() {
   });
 }
 
-if (require.main === module) {
-  main().then(() => {
-    process.exit(1);
-  });
+async function postReportImage(mediaID) {
+  const client = getClient();
+
+  await client.get('account/verify_credentials');
+
+  await client.post('statuses/update', { status: '', media_ids: mediaID });
+
+  debug('image published');
 }
 
-module.exports = main;
+async function postImage() {
+  const filename = './data/output.png';
+
+  const base64Image = fs.readFileSync(filename, { encoding: 'base64' });
+
+  const client = getClient('upload');
+
+  debug('image loaded');
+
+  const mediaUploadResponse = await client.post('media/upload', {
+    media_data: base64Image,
+  });
+
+  await postReportImage(mediaUploadResponse.media_id_string);
+}
+
+if (require.main === module) {
+  // postStatus();
+
+  postImage();
+}
+
+module.exports = {
+  postStatus,
+  postImage,
+};
