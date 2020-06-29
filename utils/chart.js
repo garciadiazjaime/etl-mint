@@ -1,6 +1,7 @@
 const D3Node = require('d3-node');
-const puppeteer = require('puppeteer');
 const debug = require('debug')('app:chart');
+
+const { getBrowser } = require('./browser');
 
 function getLineChart({
   data,
@@ -81,7 +82,7 @@ function getLineChart({
   return d3n;
 }
 
-function captureImage(html, {
+async function captureImage(html, {
   jpeg, quality, path, viewport,
 }, callback) {
   const screenShotOptions = { viewport, path, quality };
@@ -89,24 +90,23 @@ function captureImage(html, {
     screenShotOptions.type = 'jpeg';
   }
 
-  return puppeteer.launch()
-    .then((browser) => {
-      browser.newPage()
-        .then((page) => {
-          page.setContent(html);
-          if (viewport) {
-            page.setViewport(viewport);
-          }
-          page.screenshot(screenShotOptions)
-            .then(() => browser.close())
-            .then(() => {
-              debug('>> Exported:', screenShotOptions.path);
-              if (typeof callback === 'function') callback();
-            })
-            .catch(debug);
-        });
-    })
-    .catch(debug);
+  const browser = await getBrowser();
+
+  const page = await browser.newPage();
+
+  page.setContent(html);
+
+  if (viewport) {
+    page.setViewport(viewport);
+  }
+
+  await page.screenshot(screenShotOptions);
+
+  await browser.close();
+
+  debug('>> Exported:', screenShotOptions.path);
+
+  if (typeof callback === 'function') callback();
 }
 
 function saveImage(dest, d3n, opts = {}, callback) {
