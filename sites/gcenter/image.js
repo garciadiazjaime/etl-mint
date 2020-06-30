@@ -53,16 +53,17 @@ async function main() {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
 
-  saveImage('./data/output', getLineChart({
-    data,
-    container: `<div id="container">
-      <h2>Así estuvo la espera (minutos) ayer en Garita de San Ysidro</h2>
-      <p>${yesterday.toLocaleString('en-US', {
+  const dateLabel = yesterday.toLocaleString('en-US', {
     timeZone: 'America/Los_Angeles',
     day: '2-digit',
     month: 'short',
     year: 'numeric',
-  })} - Carro 🚘</p>
+  });
+
+  saveImage('./data/output', getLineChart({
+    data,
+    container: `<div id="container">
+      <h2>Garita de San Ysidro | ${dateLabel} - Carro</h2>
       <div id="chart"></div>
     </div>`,
     lineColors: ['#173F5F', 'darkorange'],

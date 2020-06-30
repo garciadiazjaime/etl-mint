@@ -49,7 +49,7 @@ function main() {
     await gcFacebook();
   });
 
-  cron.schedule('*/13 11-23 * * *', async () => {
+  cron.schedule('*/30 * * * *', async () => {
     await gcenterWorker();
   });
 }

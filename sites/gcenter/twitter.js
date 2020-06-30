@@ -45,7 +45,9 @@ async function postReportImage(mediaID) {
 
   await client.get('account/verify_credentials');
 
-  await client.post('statuses/update', { status: '', media_ids: mediaID });
+  const status = 'Así estuvo la espera en minutos ayer en #Garita de #SanYsidro 🚘';
+
+  await client.post('statuses/update', { status, media_ids: mediaID });
 
   debug('image published');
 }
