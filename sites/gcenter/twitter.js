@@ -45,7 +45,16 @@ async function postReportImage(mediaID) {
 
   await client.get('account/verify_credentials');
 
-  const status = 'Así estuvo la espera en minutos ayer en #Garita de #SanYsidro 🚘';
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const dateLabel = yesterday.toLocaleString('en-US', {
+    timeZone: 'America/Los_Angeles',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+
+  const status = `Reporte de ayer ${dateLabel} en minutos en #Garita de #SanYsidro 🚘`;
 
   await client.post('statuses/update', { status, media_ids: mediaID });
 

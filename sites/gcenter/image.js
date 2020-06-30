@@ -13,14 +13,21 @@ function getData(data) {
 
   const response = data.reduce((accu, item) => {
     const date = new Date(parseInt(item.createdAt, 10));
-    const hour = date.toLocaleString('en-US', {
+    const key = date.toLocaleString('en-US', {
       timeZone: 'America/Los_Angeles', hour: 'numeric', day: 'numeric', hour12: false,
     });
 
-    if (!hours[hour]) {
-      hours[hour] = hour;
+    if (!hours[key]) {
+      hours[key] = key;
 
-      if (date.getDate() === yesterday.getDate()) {
+      const recordDay = date.toLocaleString('en-US', {
+        timeZone: 'America/Los_Angeles', day: 'numeric',
+      });
+      const chartDay = yesterday.toLocaleString('en-US', {
+        timeZone: 'America/Los_Angeles', day: 'numeric',
+      });
+
+      if (recordDay === chartDay) {
         accu[0].push({
           key: item.createdAt,
           label: date.toLocaleString('en-US', { timeZone: 'America/Los_Angeles', hour: '2-digit' }),

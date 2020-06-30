@@ -16,14 +16,11 @@ function getLineChart({
   width: _width = 960,
   height: _height = 500,
   margin: _margin = {
-    top: 20, right: 20, bottom: 60, left: 30,
+    top: 10, right: 20, bottom: 20, left: 25,
   },
-  lineWidth: _lineWidth = 1.5,
+  lineWidth: _lineWidth = 5,
   lineColor: _lineColor = 'steelblue',
   lineColors: _lineColors = ['steelblue'],
-  isCurve: _isCurve = true,
-  tickSize: _tickSize = 5,
-  tickPadding: _tickPadding = 5,
 } = {}) {
   const d3n = new D3Node({
     selector: _selector,
@@ -42,38 +39,41 @@ function getLineChart({
 
   const g = svg.append('g');
 
-  const { allKeys } = data;
   const xScale = d3.scaleBand()
     .domain(data[0].map(item => item.label))
     .rangeRound([0, width]);
+  const xAxis = d3.axisBottom(xScale)
+    .tickSize(-height)
+    .tickSizeOuter(0);
 
   const yScale = d3.scaleLinear()
-    .domain(allKeys ? [d3.min(data, d => d3.min(d, v => v.value)), d3.max(data, d => d3.max(d, v => v.value))] : d3.extent(data, d => d.value))
+    .domain([Math.max(d3.min(data, d => d3.min(d, v => v.value) - 5, 0)), d3.max(data, d => d3.max(d, v => v.value) + 5)])
     .rangeRound([height, 0]);
-  const xAxis = d3.axisBottom(xScale)
-    .tickSize(_tickSize)
-    .tickPadding(_tickPadding);
   const yAxis = d3.axisLeft(yScale)
-    .tickSize(_tickSize)
-    .tickPadding(_tickPadding);
+    .tickSize(-width)
+    .tickSizeOuter(0);
 
   const lineChart = d3.line()
-    .x(d => xScale(d.label) + _margin.left + 8)
+    .x(d => xScale(d.label) + 19)
     .y(d => yScale(d.value));
 
-  if (_isCurve) lineChart.curve(d3.curveBasis);
-
-  g.append('g')
+  const xAxisElement = g.append('g')
     .attr('transform', `translate(0, ${height})`)
     .call(xAxis);
 
-  g.append('g').call(yAxis);
+  xAxisElement.selectAll('.tick line')
+    .attr('opacity', '0.05');
+
+  const yAxisElement = g.append('g').call(yAxis);
+
+  yAxisElement.selectAll('.tick line')
+    .attr('opacity', '0.05');
 
   g.append('g')
     .attr('fill', 'none')
     .attr('stroke-width', _lineWidth)
     .selectAll('path')
-    .data(allKeys ? data : [data])
+    .data(data)
     .enter()
     .append('path')
     .attr('stroke', (d, i) => (i < _lineColors.length ? _lineColors[i] : _lineColor))
