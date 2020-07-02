@@ -28,9 +28,14 @@ function getData(data) {
       });
 
       if (recordDay === chartDay) {
+        const label = date.toLocaleString('en-US', { timeZone: 'America/Los_Angeles', hour: '2-digit' });
+
+        const labelFormatted = !['12 AM', '12 PM'].includes(label) ? label.replace(/AM|PM/gi, '') : label;
+
         accu[0].push({
           key: item.createdAt,
-          label: date.toLocaleString('en-US', { timeZone: 'America/Los_Angeles', hour: '2-digit' }),
+          label,
+          labelFormatted,
           value: item.delay,
         });
       }
@@ -71,6 +76,7 @@ async function main() {
     data,
     container: `<div id="container">
       <h2>Garita de San Ysidro | ${dateLabel} - Carro</h2>
+      <small>Minutos</small>
       <div id="chart"></div>
     </div>`,
     lineColors: ['#173F5F', 'darkorange'],

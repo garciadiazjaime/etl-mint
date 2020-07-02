@@ -44,17 +44,19 @@ function getLineChart({
     .rangeRound([0, width]);
   const xAxis = d3.axisBottom(xScale)
     .tickSize(-height)
-    .tickSizeOuter(0);
+    .tickSizeOuter(0)
+    .tickFormat((d, i) => data[0][i].labelFormatted || d);
 
   const yScale = d3.scaleLinear()
     .domain([Math.max(d3.min(data, d => d3.min(d, v => v.value) - 5, 0)), d3.max(data, d => d3.max(d, v => v.value) + 5)])
     .rangeRound([height, 0]);
+
   const yAxis = d3.axisLeft(yScale)
     .tickSize(-width)
     .tickSizeOuter(0);
 
   const lineChart = d3.line()
-    .x(d => xScale(d.label) + 19)
+    .x(d => xScale(d.label) + 16)
     .y(d => yScale(d.value));
 
   const xAxisElement = g.append('g')

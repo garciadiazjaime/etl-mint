@@ -54,7 +54,7 @@ async function postReportImage(mediaID) {
     year: 'numeric',
   });
 
-  const status = `Reporte de ayer ${dateLabel} en minutos en #Garita de #SanYsidro 🚘`;
+  const status = `Reporte de ayer ${dateLabel} en #Garita de #SanYsidro 🚘`;
 
   await client.post('statuses/update', { status, media_ids: mediaID });
 
