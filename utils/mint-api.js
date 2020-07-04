@@ -110,6 +110,25 @@ function saveReport(report) {
   return postRequest(`${apiUrl}/graphiql`, body);
 }
 
+function createRealState(data) {
+  if (!Array.isArray(data) || !data.length) {
+    return null;
+  }
+
+  const body = {
+    query: `mutation CreatRealState($data: [RealStateInput]!) {
+      createRealState(data: $data) {
+        _id
+      }
+    }`,
+    variables: {
+      data,
+    },
+  };
+
+  return postRequest(`${apiUrl}/graphiql`, body);
+}
+
 async function getPorts({
   limit = 1, since = '', to = '', name = '', type = null, entry = null,
 }) {
@@ -145,4 +164,5 @@ module.exports = {
   savePost,
   saveReport,
   getPorts,
+  createRealState,
 };

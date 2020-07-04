@@ -1,7 +1,7 @@
 const debug = require('debug')('app:realstate');
 
 const extract = require('../../utils/extract');
-const load = require('../../utils/load');
+const { createRealState } = require('../../utils/mint-api');
 
 const baja123 = require('./baja123');
 const century21global = require('./century21global');
@@ -83,15 +83,25 @@ async function main({ city, source }) {
   if (!transformer) {
     return debug('error:invalid transformer');
   }
-  const data = transformer(html, domain);
+  let data = transformer(html, domain);
+
+  if (Array.isArray(data) && data.length) {
+    data = data.map(item => ({
+      ...item,
+      source,
+      city,
+    }));
+  }
+
   debug(`${source}:transform:${data.length}`);
 
+  const response = await createRealState(data);
 
-  const response = await load(data, city, source);
-  if (!response) {
-    return debug('error:invalid response');
+  if (!response || (Array.isArray(response.errors) && response.errors.length)) {
+    return debug('error:invalid response', JSON.stringify(response));
   }
-  debug(`${source}:load:${response.length}`);
+
+  debug(`${source}:load`);
 
   return 0;
 }

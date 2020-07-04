@@ -1,6 +1,7 @@
 const cheerio = require('cheerio');
 
 const { getPrice, getCurrency } = require('../../utils/currency');
+const { getLocation } = require('./shared');
 
 function transform(html, domain) {
   const $ = cheerio.load(html);
@@ -16,16 +17,16 @@ function transform(html, domain) {
     const url = domain + $(element).find('.title a').attr('href');
     const address = $(element).find('meta[itemprop="addressLocality"]').attr('content');
 
-    const place = {
+    let place = {
       address,
       currency,
       description,
       images,
-      latitude,
-      longitude,
       price,
       url,
     };
+
+    place = getLocation(place, latitude, longitude);
 
     return place;
   });

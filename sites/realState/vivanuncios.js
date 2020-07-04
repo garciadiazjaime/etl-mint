@@ -1,3 +1,5 @@
+const { getLocation } = require('./shared');
+
 function getCurrency(item) {
   if (item.minimumPrice && item.minimumPrice.currency) {
     return item.minimumPrice.currency;
@@ -67,16 +69,23 @@ function transform(html, domain) {
   const matches = html.match(/adsToPlot":(.*),"ads":/);
   const data = JSON.parse(matches[1]);
 
-  const places = data.map(item => ({
-    address: item.geo.address,
-    currency: getCurrency(item),
-    description: item.description,
-    images: getImages(item),
-    latitude: getLatitude(item),
-    longitude: getLongitude(item),
-    price: getPrice(item),
-    url: domain + (item.viewSeoUrl || item.seoUrl),
-  }));
+  const places = data.map((item) => {
+    let place = {
+      address: item.geo.address,
+      currency: getCurrency(item),
+      description: item.description,
+      images: getImages(item),
+      price: getPrice(item),
+      url: domain + (item.viewSeoUrl || item.seoUrl),
+    };
+
+    const latitude = getLatitude(item);
+    const longitude = getLongitude(item);
+
+    place = getLocation(place, latitude, longitude);
+
+    return place;
+  });
 
   return places;
 }

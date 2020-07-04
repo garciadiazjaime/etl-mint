@@ -3,6 +3,7 @@ const cheerio = require('cheerio');
 
 const { getPrice, getCurrency } = require('../../utils/currency');
 const { cleanString } = require('../../utils/string');
+const { getLocation } = require('./shared');
 
 function transform(html, domain) {
   const $ = cheerio.load(html);
@@ -18,16 +19,16 @@ function transform(html, domain) {
     const url = domain + $(element).find('.photo-inner a').attr('href');
     const address = $(element).find('.inner-left input[name^="ShortAddress"]').val();
 
-    const place = {
+    let place = {
       address,
       currency,
       description,
       images,
-      latitude,
-      longitude,
       price,
       url,
     };
+
+    place = getLocation(place, latitude, longitude);
 
     return place;
   });

@@ -2,13 +2,14 @@ const cheerio = require('cheerio');
 
 const { getCurrency } = require('../../utils/currency');
 const { cleanString } = require('../../utils/string');
+const { getLocation } = require('./shared');
 
 function transform(html) {
   const $ = cheerio.load(html);
 
   return $('div[itemprop="offers"]').toArray().map((element) => {
     const value = $(element).find('.amount').text();
-    const price = $(element).find('meta[itemprop="price"]').attr('content');
+    const price = parseFloat($(element).find('meta[itemprop="price"]').attr('content'));
     const currency = getCurrency(value);
     const description = `${$(element).find('a').attr('title')} ${cleanString($(element).find('div.description').text())}`;
     const images = [$(element).find('img').attr('src')];
@@ -17,16 +18,16 @@ function transform(html) {
     const latitude = $(element).find('meta[itemprop="latitude"]').attr('content');
     const longitude = $(element).find('meta[itemprop="longitude"]').attr('content');
 
-    const place = {
+    let place = {
       address,
       currency,
       description,
       images,
-      latitude,
-      longitude,
       price,
       url,
     };
+
+    place = getLocation(place, latitude, longitude);
 
     return place;
   });

@@ -25,6 +25,9 @@ async function instagramWorker() {
 
 function main() {
   const sites = getRealStateSites();
+  cron.schedule('42 */4 * * *', async () => {
+    await mapSeries(sites, realState);
+  });
 
   cron.schedule('29 17-23,0-4 * * *', instagramWorker);
 
@@ -34,10 +37,6 @@ function main() {
 
   cron.schedule('49 5 * * *', async () => {
     await instagramMetaWorker();
-  });
-
-  cron.schedule('42 */4 * * *', async () => {
-    await mapSeries(sites, realState);
   });
 
   cron.schedule('42 13 * * *', async () => {

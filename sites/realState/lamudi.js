@@ -8,7 +8,7 @@ function transform(html) {
 
   return $('.js-listingContainer .ListingCell-row .ListingCell-content').toArray().map((element) => {
     const value = $(element).find('.ListingCell-KeyInfo-price a').text().trim();
-    const price = getPrice(value);
+    const price = getPrice(value) || null;
     const currency = getCurrency(value);
     const description = cleanString($(element).find('.ListingCell-shortDescription a').text());
     const images = [$(element).find('.ListingCell-image img').data('src')];
