@@ -4,7 +4,7 @@ const cron = require('node-cron');
 const realState = require('./sites/realState');
 const { getRealStateSites } = require('./sites/realState');
 
-const instagramPostWorker = require('./sites/instagram/worker-post');
+const instagramPostWorker = require('./sites/instagram/worker/post');
 const instagramLocationWorker = require('./sites/instagram/worker-location');
 const instagramMetaWorker = require('./sites/instagram/worker-meta');
 const instagramScheduler = require('./sites/instagram/scheduler');

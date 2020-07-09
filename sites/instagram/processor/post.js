@@ -1,11 +1,13 @@
 const debug = require('debug')('app:instagram:proc');
 
-const { getUser } = require('./user-etl');
-const { getMeta } = require('./meta');
-const { createInstagramPost, getPosts, getLocation } = require('../../utils/mint-api');
+const { getUser } = require('../user-etl');
+const { getMeta } = require('../meta');
+const { createInstagramPost, getPosts, getLocation } = require('../../../utils/mint-api');
+const { getPostID } = require('../queries');
 
 async function processor(instagramPost, cookies) {
-  const apiPost = await getPosts({ id: instagramPost.id });
+  const query = getPostID(instagramPost.id);
+  const apiPost = await getPosts(query);
 
   if (Array.isArray(apiPost) && apiPost.length) {
     return null;

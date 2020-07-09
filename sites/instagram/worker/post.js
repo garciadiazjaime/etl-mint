@@ -1,9 +1,9 @@
 const mapSeries = require('async/mapSeries');
 
-const postProcessor = require('./post-processor');
-const { getInstagramPosts } = require('./instagram-api');
-const { waiter } = require('../../utils/fetch');
-const config = require('../../config');
+const postProcessor = require('../processor/post');
+const { getInstagramPosts } = require('../instagram-api');
+const { waiter } = require('../../../utils/fetch');
+const config = require('../../../config');
 
 const taskConfig = {
   env: config.get('env'),
