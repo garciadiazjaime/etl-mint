@@ -2,7 +2,7 @@ const debug = require('debug')('app:instagram:proc');
 
 const { getUser } = require('./user-etl');
 const { getMeta } = require('./meta');
-const { savePost, getPosts, getLocation } = require('../../utils/mint-api');
+const { createInstagramPost, getPosts, getLocation } = require('../../utils/mint-api');
 
 async function processor(instagramPost, cookies) {
   const apiPost = await getPosts({ id: instagramPost.id });
@@ -42,7 +42,8 @@ async function processor(instagramPost, cookies) {
     }
   }
 
-  const response = await savePost(post);
+  const response = await createInstagramPost(post);
+
   debug(`user:${!!user}, location:${!!location}, saved:${response && response.id}`);
 
   return response;

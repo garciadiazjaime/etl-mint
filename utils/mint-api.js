@@ -4,13 +4,14 @@ const config = require('../config');
 const apiUrl = config.get('api.url');
 
 async function getPosts({
-  limit = 1, state = 'MAPPED', published = null, id = '', locationState = '',
+  limit = 1, state = 'MAPPED', published = null, id = '', locationState = '', lastCheck = '',
 } = {}) {
   const payload = {
     query: `{
-      posts(first:${limit}, state:"${state}", published:${published}, id:"${id}", locationState:"${locationState}") {
+      posts(first:${limit}, state:"${state}", published:${published}, id:"${id}", locationState:"${locationState}", lastCheck:"${lastCheck}") {
         _id
         id
+        permalink
         mediaType
         mediaUrl
         caption
@@ -53,7 +54,7 @@ async function getPosts({
 
   const {
     data: { posts },
-  } = await postRequest(`${apiUrl}/instagram/graphiql`, payload);
+  } = await postRequest(`${apiUrl}/graphiql`, payload);
 
   return posts;
 }
@@ -82,13 +83,30 @@ async function getLocation({ id = '', slug = '', state = '' }) {
 
   const {
     data: { location },
-  } = await postRequest(`${apiUrl}/instagram/graphiql`, payload);
+  } = await postRequest(`${apiUrl}/graphiql`, payload);
 
   return location;
 }
 
-function savePost(post) {
-  return postRequest(`${apiUrl}/instagram/post`, post);
+async function createInstagramPost(data) {
+  if (!data) {
+    return null;
+  }
+
+  const body = {
+    query: `mutation MutationCreateInstagramPost($data: PostInput!) {
+      createInstagramPost(data: $data) {
+        id
+      }
+    }`,
+    variables: {
+      data,
+    },
+  };
+
+  const response = await postRequest(`${apiUrl}/graphiql`, body);
+
+  return response.data.createInstagramPost;
 }
 
 function saveReport(report) {
@@ -161,7 +179,7 @@ async function getPorts({
 module.exports = {
   getPosts,
   getLocation,
-  savePost,
+  createInstagramPost,
   saveReport,
   getPorts,
   createRealState,
