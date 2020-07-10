@@ -1,11 +1,11 @@
 const mapSeries = require('async/mapSeries');
 
-const locationProcessor = require('./location-processor');
-const { getPosts } = require('../../utils/mint-api');
+const locationProcessor = require('../processor/location');
+const { getPosts } = require('../../../utils/mint-api');
+const { getPostsWithLocationRaw } = require('../queries');
 
 async function main(cookies) {
-  const posts = await getPosts({ locationState: 'RAW', limit: 20 });
-
+  const posts = await getPosts(getPostsWithLocationRaw());
   if (posts.length) {
     await mapSeries(posts, async (post) => {
       await locationProcessor(post, cookies);

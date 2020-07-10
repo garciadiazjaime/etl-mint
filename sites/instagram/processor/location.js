@@ -1,18 +1,19 @@
 const debug = require('debug')('app:instagram:pro:loc');
 
-const { getGeoLocation } = require('./location-etl');
-const { savePost, getLocation } = require('../../utils/mint-api');
+const { getGeoLocation } = require('../location-etl');
+const { createInstagramPost, getLocation } = require('../../../utils/mint-api');
+const { getLocationsMappedByID } = require('../queries');
 
 async function getNewLocation(post, cookies) {
   const { location } = post;
 
-  if (location.id) {
-    const apiResponse = await getLocation({ id: location.id, state: 'MAPPED' });
+  const query = getLocationsMappedByID(location.id);
+  const apiResponse = await getLocation(query);
 
-    if (Array.isArray(apiResponse) && apiResponse.length) {
-      debug(`location mapped found: ${apiResponse[0].id}/${apiResponse[0].slug}, post: ${post.id}`);
-      return apiResponse[0];
-    }
+  if (Array.isArray(apiResponse) && apiResponse.length) {
+    const locationApi = apiResponse[0];
+    debug(`location mapped found: ${locationApi.id}/${locationApi.slug}, post: ${post.id}`);
+    return locationApi;
   }
 
   const geoLocation = await getGeoLocation(location, cookies);
@@ -34,10 +35,6 @@ async function getNewLocation(post, cookies) {
 }
 
 async function processor(post, cookies) {
-  if (post.location && post.location.state && post.location.state === 'MAPPED') {
-    return debug(`location already mapped, post: ${post.id}`);
-  }
-
   const location = await getNewLocation(post, cookies);
 
   const data = {
@@ -45,7 +42,7 @@ async function processor(post, cookies) {
     location,
   };
 
-  await savePost(data);
+  await createInstagramPost(data);
 
   return debug(`saved, post:${post.id}`);
 }

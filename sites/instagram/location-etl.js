@@ -6,10 +6,6 @@ const { waiter } = require('../../utils/fetch');
 const source = 'instagram-location';
 
 async function getGeoLocation(location, cookies) {
-  if (!location || !location.id || !location.slug) {
-    return null;
-  }
-
   await waiter();
 
   const url = `https://www.instagram.com/explore/locations/${location.id}/${location.slug}/`;

@@ -3,13 +3,12 @@ const debug = require('debug')('app:instagram:proc');
 const { getUser } = require('../user-etl');
 const { getMeta } = require('../meta');
 const { createInstagramPost, getPosts, getLocation } = require('../../../utils/mint-api');
-const { getPostID } = require('../queries');
+const { getPostID, getLocationsMappedByID } = require('../queries');
 
 async function processor(instagramPost, cookies) {
-  const query = getPostID(instagramPost.id);
-  const apiPost = await getPosts(query);
+  const postApi = await getPosts(getPostID(instagramPost.id));
 
-  if (Array.isArray(apiPost) && apiPost.length) {
+  if (Array.isArray(postApi) && postApi.length) {
     return null;
   }
 
@@ -31,7 +30,7 @@ async function processor(instagramPost, cookies) {
   };
 
   if (location) {
-    const locationApi = await getLocation({ id: location.id, state: 'MAPPED' });
+    const locationApi = await getLocation(getLocationsMappedByID(location.id));
 
     if (Array.isArray(locationApi) && locationApi.length) {
       debug(`location mapped found: ${locationApi[0].id}, post: ${post.id}`);

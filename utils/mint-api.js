@@ -15,26 +15,9 @@ async function getPosts(query) {
   return posts;
 }
 
-async function getLocation({ id = '', slug = '', state = '' }) {
+async function getLocation(query) {
   const payload = {
-    query: `{
-      locations(id:"${id}", slug:"${slug}", state:"${state}") {
-        id
-        name
-        slug
-        state
-        location {
-          type
-          coordinates
-        }
-        address {
-          street
-          zipCode
-          city
-          country
-        }
-      }
-    }`,
+    query,
   };
 
   const {
