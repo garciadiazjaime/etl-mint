@@ -42,9 +42,9 @@ async function processor(post, cookies) {
     location,
   };
 
-  await createInstagramPost(data);
+  const response = await createInstagramPost(data);
 
-  return debug(`saved, post:${post.id}`);
+  debug(`saved:${response && response.id}`);
 }
 
 module.exports = processor;

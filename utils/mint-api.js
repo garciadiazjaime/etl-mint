@@ -3,26 +3,26 @@ const config = require('../config');
 
 const apiUrl = config.get('api.url');
 
-async function getPosts(query) {
+async function graphiqlHelper(query) {
   const payload = {
     query,
   };
 
   const {
-    data: { posts },
+    data,
   } = await postRequest(`${apiUrl}/graphiql`, payload);
+
+  return data;
+}
+
+async function getPosts(query) {
+  const { posts } = await graphiqlHelper(query);
 
   return posts;
 }
 
 async function getLocation(query) {
-  const payload = {
-    query,
-  };
-
-  const {
-    data: { location },
-  } = await postRequest(`${apiUrl}/graphiql`, payload);
+  const { location } = await graphiqlHelper(query);
 
   return location;
 }
@@ -45,7 +45,7 @@ async function createInstagramPost(data) {
 
   const response = await postRequest(`${apiUrl}/graphiql`, body);
 
-  return response.data.createInstagramPost;
+  return response && response.data && response.data.createInstagramPost;
 }
 
 function saveReport(report) {
