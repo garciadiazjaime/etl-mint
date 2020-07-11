@@ -1,25 +1,16 @@
 const debug = require('debug')('app:login-processor');
 
-const puppeteer = require('puppeteer');
-
-const config = require('../../config');
+const { getBrowser } = require('../../../utils/browser');
+const config = require('../../../config');
 
 async function main() {
-  const url = 'https://www.instagram.com/accounts/login/?next=/p/CAlG4Vwge7m/';
-
-  const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4152.0 Safari/537.36';
-  const browser = await puppeteer.launch({
-    headless: true,
-    executablePath: '/usr/bin/chromium-browser',
-    args: [
-      '--no-sandbox',
-      '--disable-gpu',
-      '--headless',
-    ],
-  });
+  const url = 'https://www.instagram.com/accounts/login';
 
   debug('start');
+  const browser = await getBrowser();
+
   const page = await browser.newPage();
+  const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4152.0 Safari/537.36';
   await page.setUserAgent(userAgent);
 
   await page.goto(url);

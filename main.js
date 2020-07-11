@@ -8,7 +8,7 @@ const instagramPostWorker = require('./sites/instagram/worker/post');
 const instagramLocationWorker = require('./sites/instagram/worker/location');
 const instagramMetaWorker = require('./sites/instagram/worker/meta');
 const instagramScheduler = require('./sites/instagram/scheduler');
-const workerLogin = require('./sites/instagram/worker-login');
+const workerLogin = require('./sites/instagram/worker/login');
 
 const gcenterWorker = require('./sites/gcenter/worker-ports');
 const gcTwitter = require('./sites/gcenter/twitter');
