@@ -22,9 +22,9 @@ async function getPosts(query) {
 }
 
 async function getLocation(query) {
-  const { location } = await graphiqlHelper(query);
+  const { locations } = await graphiqlHelper(query);
 
-  return location;
+  return locations;
 }
 
 async function createInstagramPost(data) {
@@ -46,6 +46,48 @@ async function createInstagramPost(data) {
   const response = await postRequest(`${apiUrl}/graphiql`, body);
 
   return response && response.data && response.data.createInstagramPost;
+}
+
+async function createInstagramLocation(data) {
+  if (!data) {
+    return null;
+  }
+
+  const body = {
+    query: `mutation MutationCreateInstagramLocation($data: LocationInput!) {
+      createInstagramLocation(data: $data) {
+        id
+      }
+    }`,
+    variables: {
+      data,
+    },
+  };
+
+  const response = await postRequest(`${apiUrl}/graphiql`, body);
+
+  return response && response.data && response.data.createInstagramLocation;
+}
+
+async function createInstagramUser(data) {
+  if (!data) {
+    return null;
+  }
+
+  const body = {
+    query: `mutation MutationCreateInstagramUser($data: UserInput!) {
+      createInstagramUser(data: $data) {
+        id
+      }
+    }`,
+    variables: {
+      data,
+    },
+  };
+
+  const response = await postRequest(`${apiUrl}/graphiql`, body);
+
+  return response && response.data && response.data.createInstagramUser;
 }
 
 function saveReport(report) {
@@ -119,6 +161,8 @@ module.exports = {
   getPosts,
   getLocation,
   createInstagramPost,
+  createInstagramUser,
+  createInstagramLocation,
   saveReport,
   getPorts,
   createRealState,

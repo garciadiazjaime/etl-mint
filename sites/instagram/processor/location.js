@@ -1,18 +1,19 @@
 const debug = require('debug')('app:instagram:pro:loc');
 
 const { getGeoLocation } = require('../location-etl');
-const { createInstagramPost, getLocation } = require('../../../utils/mint-api');
+const { createInstagramPost, createInstagramLocation, getLocation } = require('../../../utils/mint-api');
 const { getLocationsMappedByID } = require('../queries-mint-api');
 
 async function getNewLocation(post, cookies) {
   const { location } = post;
 
   const query = getLocationsMappedByID(location.id);
+
   const apiResponse = await getLocation(query);
 
   if (Array.isArray(apiResponse) && apiResponse.length) {
     const locationApi = apiResponse[0];
-    debug(`location mapped found: ${locationApi.id}/${locationApi.slug}, post: ${post.id}`);
+    debug(`location found: ${locationApi.id}`);
     return locationApi;
   }
 
@@ -37,14 +38,16 @@ async function getNewLocation(post, cookies) {
 async function processor(post, cookies) {
   const location = await getNewLocation(post, cookies);
 
+  await createInstagramLocation(location);
+
   const data = {
     ...post,
     location,
   };
 
-  const response = await createInstagramPost(data);
+  const postApiResponse = await createInstagramPost(data);
 
-  debug(`saved:${response && response.id}`);
+  debug(`post:${postApiResponse && postApiResponse.id}`);
 }
 
 module.exports = processor;

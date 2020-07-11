@@ -12,7 +12,6 @@ function getPostsWithLocationRaw(limit = 20) {
       permalink
       id
       location {
-        _id
         id
         name
         slug
