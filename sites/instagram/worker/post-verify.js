@@ -1,7 +1,7 @@
 const debug = require('debug')('app:instagram:worker:expire');
 const mapSeries = require('async/mapSeries');
 
-const processor = require('../processor/expire');
+const processor = require('../processor/post-verify');
 const { getPosts } = require('../../../utils/mint-api');
 const { getPostToVerify } = require('../queries-mint-api');
 
@@ -24,7 +24,9 @@ async function main() {
 }
 
 if (require.main === module) {
-  main();
+  main().then(() => {
+    process.exit(1);
+  });
 }
 
 module.exports = main;

@@ -1,13 +1,19 @@
 const debug = require('debug')('app:instagram:proc:expire');
 
 const { createInstagramPost } = require('../../../utils/mint-api');
+const { waiter } = require('../../../utils/fetch');
 const extract = require('../../../utils/extract');
 
 
 async function processor(data, cookies) {
-  const post = { ...data };
+  const post = {
+    ...data,
+    lastCheck: new Date().toJSON(),
+  };
 
-  debug(`extract:${post.permalink}`);
+  await waiter();
+
+  debug(`extract:${post.id}`);
   const source = 'instagram-post-not-found';
   const html = await extract(post.permalink, source, cookies);
 

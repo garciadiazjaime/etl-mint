@@ -63,9 +63,9 @@ function getPostsMeta(limit = 100) {
   }`;
 }
 
-function getPostToVerify(to, limit = 20) {
+function getPostToVerify(lastCheck, limit = 20) {
   return `{
-    posts(first:${limit}, to:"${to}", state: "MAPPED") {
+    posts(first:${limit}, lastCheck:"${lastCheck}", state: "MAPPED") {
       id
       permalink
     }
