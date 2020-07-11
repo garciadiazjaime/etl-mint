@@ -33,6 +33,36 @@ function getPostsWithLocationRaw(limit = 20) {
   }`;
 }
 
+function getPostsMeta(limit = 100) {
+  return `{
+    posts(first:${limit}, state:"MAPPED") {
+      id
+      caption
+      meta {
+        _id
+      }
+      location {
+        _id
+        id
+        name
+        slug
+        location {
+          type
+          coordinates
+        }
+        address {
+          _id
+          street
+          zipCode
+          city
+          country
+        }
+        state
+      }
+    }
+  }`;
+}
+
 function getLocationsMappedByID(id) {
   return `{
     locations(id:"${id}", state:"MAPPED") {
@@ -59,4 +89,5 @@ module.exports = {
   getPostID,
   getPostsWithLocationRaw,
   getLocationsMappedByID,
+  getPostsMeta,
 };

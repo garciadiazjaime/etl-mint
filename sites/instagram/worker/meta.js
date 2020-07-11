@@ -1,17 +1,18 @@
 const debug = require('debug')('app:instagram:worker:meta');
 const mapSeries = require('async/mapSeries');
 
-const processor = require('./processor-meta');
-const { getPosts } = require('../../utils/mint-api');
+const processor = require('../processor/meta');
+const { getPosts } = require('../../../utils/mint-api');
+const { getPostsMeta } = require('../queries');
 
 async function main() {
-  const posts = await getPosts({ limit: 100 });
-
-  if (!Array.isArray(posts) || !posts.length) {
-    return null;
-  }
+  const posts = await getPosts(getPostsMeta());
 
   debug(posts.length);
+
+  if (!posts.length) {
+    return null;
+  }
 
   await mapSeries(posts, processor);
 

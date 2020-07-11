@@ -160,7 +160,7 @@ const config = convict({
     },
     hashtag: {
       env: 'INSTAGRAM_HASHTAG_ID',
-      default: '',
+      default: 'hashtag',
     },
     userId: {
       env: 'INSTAGRAM_USER_ID',

@@ -1,4 +1,4 @@
-const debug = require('debug')('app:instagram:proc');
+const debug = require('debug')('app:instagram:pro:post');
 
 const { getUser } = require('../user-etl');
 const { getMeta } = require('../meta');
@@ -7,6 +7,8 @@ const { getPostID, getLocationsMappedByID } = require('../queries');
 
 async function processor(instagramPost, cookies) {
   const postApi = await getPosts(getPostID(instagramPost.id));
+
+  debug(postApi && postApi.length);
 
   if (Array.isArray(postApi) && postApi.length) {
     return null;

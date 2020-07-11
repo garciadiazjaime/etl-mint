@@ -27,4 +27,6 @@ function getMeta(post, location) {
 }
 
 
-module.exports.getMeta = getMeta;
+module.exports = {
+  getMeta,
+};
