@@ -3,7 +3,7 @@ const mapSeries = require('async/mapSeries');
 
 const processor = require('../processor/meta');
 const { getPosts } = require('../../../utils/mint-api');
-const { getPostsMeta } = require('../queries');
+const { getPostsMeta } = require('../queries-mint-api');
 
 async function main() {
   const posts = await getPosts(getPostsMeta());

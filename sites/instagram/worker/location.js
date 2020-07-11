@@ -3,7 +3,7 @@ const mapSeries = require('async/mapSeries');
 
 const locationProcessor = require('../processor/location');
 const { getPosts } = require('../../../utils/mint-api');
-const { getPostsWithLocationRaw } = require('../queries');
+const { getPostsWithLocationRaw } = require('../queries-mint-api');
 
 async function main(cookies) {
   const posts = await getPosts(getPostsWithLocationRaw());

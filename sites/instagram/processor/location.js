@@ -2,7 +2,7 @@ const debug = require('debug')('app:instagram:pro:loc');
 
 const { getGeoLocation } = require('../location-etl');
 const { createInstagramPost, getLocation } = require('../../../utils/mint-api');
-const { getLocationsMappedByID } = require('../queries');
+const { getLocationsMappedByID } = require('../queries-mint-api');
 
 async function getNewLocation(post, cookies) {
   const { location } = post;
