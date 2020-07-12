@@ -2,6 +2,7 @@ const debug = require('debug')('app:instagram:etl');
 
 const extract = require('../../utils/extract');
 const { waiter } = require('../../utils/fetch');
+const { getData } = require('./post-extract');
 
 function getLocation(postLocation) {
   if (!postLocation) {
@@ -29,19 +30,11 @@ function getLocation(postLocation) {
 }
 
 function transform(html) {
-  let matches = html.match(/graphql":(.*)}]},"hostname"/);
+  const data = getData(html);
 
-  if (!Array.isArray(matches) || !matches.length) {
-    matches = html.match(/{"graphql":(.*)}\);/);
-
-    if (!Array.isArray(matches) || !matches.length) {
-      return {};
-    }
-  }
-
-  const data = JSON.parse(matches[1]);
-
-  const { location, owner } = data.shortcode_media;
+  const {
+    location, owner,
+  } = data.shortcode_media;
 
   const response = {
     user: {

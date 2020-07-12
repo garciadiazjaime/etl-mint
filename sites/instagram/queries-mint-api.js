@@ -71,6 +71,15 @@ function getPostToVerify(lastCheck, limit = 20) {
   }`;
 }
 
+function getPostToUpdateMedia(postUpdate, limit = 20) {
+  return `{
+    posts(first:${limit}, postUpdate:"${postUpdate}", state: "MAPPED") {
+      id
+      permalink
+    }
+  }`;
+}
+
 function getLocationsMappedByID(id) {
   return `{
     locations(id:"${id}", state:"MAPPED") {
@@ -99,4 +108,5 @@ module.exports = {
   getLocationsMappedByID,
   getPostsMeta,
   getPostToVerify,
+  getPostToUpdateMedia,
 };
