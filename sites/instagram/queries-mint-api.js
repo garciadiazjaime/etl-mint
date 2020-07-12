@@ -41,22 +41,9 @@ function getPostsMeta(limit = 100) {
         _id
       }
       location {
-        _id
-        id
-        name
-        slug
-        location {
-          type
-          coordinates
-        }
         address {
-          _id
           street
-          zipCode
-          city
-          country
         }
-        state
       }
     }
   }`;

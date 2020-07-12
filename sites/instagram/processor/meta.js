@@ -3,10 +3,9 @@ const { getMeta } = require('../meta');
 
 
 async function processor(post) {
-  const { location } = post;
-  const meta = await getMeta(post, location);
+  const meta = await getMeta(post, post.location);
 
-  const data = {
+  const postUpdated = {
     ...post,
     meta: {
       ...post.meta,
@@ -14,17 +13,9 @@ async function processor(post) {
     },
   };
 
-  if (location) {
-    if (location.location && !location.location.type) {
-      delete data.location.location;
-    }
+  delete postUpdated.location;
 
-    if (!location.address) {
-      delete data.location.address;
-    }
-  }
-
-  return createInstagramPost(data);
+  return createInstagramPost(postUpdated);
 }
 
 module.exports = processor;
