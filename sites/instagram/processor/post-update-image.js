@@ -32,6 +32,18 @@ async function processor(post, cookies) {
   const source = 'instagram-post-update-image';
   const html = await extract(post.permalink, source, cookies);
 
+  if (html.includes('Page Not Found')) {
+    const postUpdated = {
+      ...post,
+      state: 'DELETED',
+      postUpdate: new Date().toJSON(),
+    };
+
+    debug('deleted');
+
+    return createInstagramPost(postUpdated);
+  }
+
   const mediaData = transform(html);
 
   const postUpdated = {
