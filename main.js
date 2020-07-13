@@ -23,14 +23,14 @@ async function instagramWorker() {
 
   await instagramPostWorker(cookies);
   await instagramLocationWorker(cookies);
+  await instagramPostVerifyWorker(cookies);
+  await instagramPostUpdateImageWorker(cookies);
 }
 
 function main() {
   const sites = getRealStateSites();
   cron.schedule('42 */4 * * *', async () => {
     await mapSeries(sites, realState);
-    await instagramPostVerifyWorker();
-    await instagramPostUpdateImageWorker();
   });
 
   cron.schedule('29 17-23,0-4 * * *', instagramWorker);

@@ -5,7 +5,7 @@ const processor = require('../processor/post-update-image');
 const { getPosts } = require('../../../utils/mint-api');
 const { getPostToUpdateMedia } = require('../queries-mint-api');
 
-async function main() {
+async function main(cookies) {
   const oldDate = new Date();
   oldDate.setDate(oldDate.getDate() - 14);
 
@@ -19,7 +19,9 @@ async function main() {
     return null;
   }
 
-  await mapSeries(posts, processor);
+  await mapSeries(posts, async (post) => {
+    await processor(post, cookies);
+  });
 
   return debug('updated');
 }

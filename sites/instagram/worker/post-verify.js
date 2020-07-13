@@ -1,11 +1,11 @@
-const debug = require('debug')('app:instagram:worker:expire');
+const debug = require('debug')('app:instagram:worker:verify');
 const mapSeries = require('async/mapSeries');
 
 const processor = require('../processor/post-verify');
 const { getPosts } = require('../../../utils/mint-api');
 const { getPostToVerify } = require('../queries-mint-api');
 
-async function main() {
+async function main(cookies) {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
 
@@ -18,9 +18,11 @@ async function main() {
     return null;
   }
 
-  await mapSeries(posts, processor);
+  await mapSeries(posts, async (post) => {
+    await processor(post, cookies);
+  });
 
-  return debug('updated');
+  return debug('end');
 }
 
 if (require.main === module) {

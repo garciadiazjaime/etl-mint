@@ -1,4 +1,4 @@
-const debug = require('debug')('app:instagram:proc:expire');
+const debug = require('debug')('app:instagram:proc:update-image');
 
 const { createInstagramPost } = require('../../../utils/mint-api');
 const { waiter } = require('../../../utils/fetch');

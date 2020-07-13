@@ -1,4 +1,4 @@
-const debug = require('debug')('app:instagram:proc:expire');
+const debug = require('debug')('app:instagram:proc:verify');
 
 const { createInstagramPost } = require('../../../utils/mint-api');
 const { waiter } = require('../../../utils/fetch');
@@ -13,7 +13,6 @@ async function processor(data, cookies) {
 
   await waiter();
 
-  debug(`extract:${post.id}`);
   const source = 'instagram-post-not-found';
   const html = await extract(post.permalink, source, cookies);
 
@@ -21,7 +20,7 @@ async function processor(data, cookies) {
     return null;
   }
 
-  debug('deleted');
+  debug(`deleted:${post.id}`);
   post.state = 'DELETED';
   return createInstagramPost(post);
 }
