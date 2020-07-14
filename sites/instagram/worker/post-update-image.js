@@ -7,9 +7,9 @@ const { getPostToUpdateMedia } = require('../queries-mint-api');
 
 async function main(cookies) {
   const oldDate = new Date();
-  oldDate.setDate(oldDate.getDate() - 14);
+  oldDate.setDate(oldDate.getDate() - 28);
 
-  const query = getPostToUpdateMedia(oldDate.toJSON());
+  const query = getPostToUpdateMedia(oldDate.toJSON(), 100);
 
   const posts = await getPosts(query);
 
