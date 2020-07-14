@@ -19,10 +19,12 @@ function transform(html) {
   const data = getData(html);
 
   const {
-    display_resources, __typename,
+    display_url: mediaUrl
   } = data.shortcode_media;
 
-  return getMediaUrl(display_resources, __typename);
+  return {
+    mediaUrl
+  };
 }
 
 async function processor(post, cookies) {
