@@ -5,16 +5,6 @@ const { waiter } = require('../../../utils/fetch');
 const extract = require('../../../utils/extract');
 const { getData } = require('../post-extract');
 
-function getMediaUrl(data, type) {
-  if (type !== 'GraphImage' || !Array.isArray(data) || !data.length) {
-    return null;
-  }
-
-  return {
-    mediaUrl: data[data.length - 1].src,
-  };
-}
-
 function transform(html) {
   const data = getData(html);
 
@@ -22,9 +12,9 @@ function transform(html) {
     display_url: mediaUrl
   } = data.shortcode_media;
 
-  return {
+  return mediaUrl ? {
     mediaUrl
-  };
+  } : {};
 }
 
 async function processor(post, cookies) {
