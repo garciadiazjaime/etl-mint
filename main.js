@@ -33,7 +33,7 @@ function main() {
     await mapSeries(sites, realState);
   });
 
-  cron.schedule('17,47 * * * *', instagramWorker);
+  cron.schedule('17 * * * *', instagramWorker);
 
   cron.schedule('13 18-23/2 * * *', async () => {
     await instagramScheduler();
