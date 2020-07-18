@@ -13,8 +13,8 @@ const instagramPostVerifyWorker = require('./sites/instagram/worker/post-verify'
 const instagramPostUpdateImageWorker = require('./sites/instagram/worker/post-update-image');
 
 const gcenterWorker = require('./sites/gcenter/worker-ports');
+const gcGenerateImage = require('./sites/gcenter/image');
 const gcTwitter = require('./sites/gcenter/twitter');
-const gcTwitterImage = require('./sites/gcenter/image');
 const gcFacebook = require('./sites/gcenter/facebook');
 
 
@@ -33,7 +33,7 @@ function main() {
     await mapSeries(sites, realState);
   });
 
-  cron.schedule('17 * * * *', instagramWorker);
+  cron.schedule('17 0-6,16-23 * * *', instagramWorker);
 
   cron.schedule('13 18-23/2 * * *', async () => {
     await instagramScheduler();
@@ -44,12 +44,12 @@ function main() {
   });
 
   cron.schedule('42 13 * * *', async () => {
-    await gcTwitterImage();
+    await gcGenerateImage();
   });
 
   cron.schedule('42 15 * * *', async () => {
     await gcTwitter.postImage();
-    await gcFacebook();
+    await gcFacebook.postImage();
   });
 
   cron.schedule('*/30 * * * *', async () => {

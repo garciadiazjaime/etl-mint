@@ -2,11 +2,12 @@ const fs = require('fs');
 
 const mapSeries = require('async/mapSeries');
 const Twitter = require('twitter-lite');
-const debug = require('debug')('app:twitter');
+const debug = require('debug')('app:gc:tw');
 
 
 const { getPublications } = require('../../utils/gcenter-api');
 const { waiter } = require('../../utils/fetch');
+const { getPostMessage } = require('./util');
 const config = require('../../config');
 
 function getClient(subdomain = 'api') {
@@ -45,16 +46,7 @@ async function postReportImage(mediaID) {
 
   await client.get('account/verify_credentials');
 
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  const dateLabel = yesterday.toLocaleString('en-US', {
-    timeZone: 'America/Los_Angeles',
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  });
-
-  const status = `Reporte de ayer ${dateLabel} en #Garita de #SanYsidro 🚘`;
+  const status = getPostMessage();
 
   await client.post('statuses/update', { status, media_ids: mediaID });
 

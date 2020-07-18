@@ -9,7 +9,7 @@ async function main(cookies) {
   const oldDate = new Date();
   oldDate.setDate(oldDate.getDate() - 28);
 
-  const query = getPostToUpdateMedia(oldDate.toJSON(), 100);
+  const query = getPostToUpdateMedia(oldDate.toJSON());
 
   const posts = await getPosts(query);
 
