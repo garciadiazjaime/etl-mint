@@ -12,7 +12,6 @@ function getLineChart({
       <div id="chart"></div>
     </div>
   `,
-  style: _style = '',
   width: _width = 960,
   height: _height = 500,
   margin: _margin = {
@@ -24,7 +23,6 @@ function getLineChart({
 } = {}) {
   const d3n = new D3Node({
     selector: _selector,
-    svgStyles: _style,
     container: _container,
   });
 
@@ -40,15 +38,17 @@ function getLineChart({
   const g = svg.append('g');
 
   const xScale = d3.scaleBand()
-    .domain(data[0].map(item => item.label))
+    .domain(data.map(item => item.label))
     .rangeRound([0, width]);
+
   const xAxis = d3.axisBottom(xScale)
     .tickSize(-height)
     .tickSizeOuter(0)
-    .tickFormat((d, i) => data[0][i].labelFormatted || d);
+    .tickFormat((d, i) => data[i].labelFormatted || d);
 
+  const yDomain = [Math.max(d3.min(data, d => d.value) - 5, 0), d3.max(data, d => d.value) + 5];
   const yScale = d3.scaleLinear()
-    .domain([Math.max(d3.min(data, d => d3.min(d, v => v.value) - 5, 0)), d3.max(data, d => d3.max(d, v => v.value) + 5)])
+    .domain(yDomain)
     .rangeRound([height, 0]);
 
   const yAxis = d3.axisLeft(yScale)
@@ -75,7 +75,7 @@ function getLineChart({
     .attr('fill', 'none')
     .attr('stroke-width', _lineWidth)
     .selectAll('path')
-    .data(data)
+    .data([data])
     .enter()
     .append('path')
     .attr('stroke', (d, i) => (i < _lineColors.length ? _lineColors[i] : _lineColor))

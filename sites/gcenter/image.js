@@ -32,7 +32,7 @@ function getData(data) {
 
         const labelFormatted = !['12 AM', '12 PM'].includes(label) ? label.replace(/AM|PM/gi, '') : label;
 
-        accu[0].push({
+        accu.push({
           key: item.createdAt,
           label,
           labelFormatted,
@@ -41,11 +41,9 @@ function getData(data) {
       }
     }
     return accu;
-  }, [[], []]);
+  }, []);
 
-  response[0].sort((a, b) => a.key - b.key);
-
-  response.allKeys = Object.keys(hours).map(item => hours[item]);
+  response.sort((a, b) => a.key - b.key);
 
   return response;
 }
@@ -82,7 +80,6 @@ async function main() {
     lineColors: ['#173F5F', 'darkorange'],
     width: 800,
     height: 500,
-    isCurve: false,
     lineWidth: 2,
   }));
 }
