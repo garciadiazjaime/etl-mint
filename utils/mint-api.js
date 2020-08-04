@@ -1,6 +1,8 @@
 const { postRequest } = require('./fetch');
 const config = require('../config');
 
+const reportStub = require('../stubs/gcenter-report');
+
 const apiUrl = config.get('api.url');
 
 async function graphiqlHelper(query) {
@@ -128,9 +130,41 @@ function createRealState(data) {
   return postRequest(`${apiUrl}/graphiql`, body);
 }
 
+function createPolitician(data) {
+  if (!data || !data.profileURL) {
+    return null;
+  }
+
+  const body = {
+    query: `mutation Add {
+      addPolitician(
+        name: "${data.name}", 
+        party: "${data.party}", 
+        partyImageURL: "${data.partyImageURL}",
+        profileURL: "${data.profileURL}",
+        pictureURL: "${data.pictureURL}", 
+        type: "${data.type}", 
+        state: "${data.state}", 
+        circunscripcion: "${data.circunscripcion}", 
+        district: ${data.district}, 
+        email: "${data.email}", 
+        startDate: "${data.startDate}",
+        status: ${data.status},
+        role: "${data.role}",
+      )
+    }`,
+  };
+
+  return postRequest(`${apiUrl}/graphiql`, body);
+}
+
 async function getPorts({
   limit = 1, since = '', to = '', name = '', type = null, entry = null,
 }) {
+  if (config.get('env') !== 'production') {
+    return reportStub;
+  }
+
   const payload = {
     query: `{
       port(first:${limit}, since: "${since}", to: "${to}", name: "${name}", type: ${type}, entry: ${entry}) {
@@ -166,4 +200,5 @@ module.exports = {
   saveReport,
   getPorts,
   createRealState,
+  createPolitician,
 };

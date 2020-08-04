@@ -22,6 +22,7 @@
     "convict": "^5.0.0",
     "d3-node": "^2.2.2",
     "debug": "^4.1.1",
+    "encoding": "^0.1.13",
     "fb": "^2.0.0",
     "instagram-private-api": "^1.39.2",
     "node-cron": "^2.0.3",
@@ -29,7 +30,6 @@
     "punycode": "^2.1.1",
     "puppeteer": "^2.1.1",
     "request": "^2.88.0",
-    "request-promise": "^4.2.4",
     "twitter-lite": "^0.13.0",
     "xml2js": "^0.4.23"
   },
