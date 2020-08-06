@@ -7,7 +7,7 @@ const { getPostWithoutLocation } = require('../queries-mint-api');
 const { getCounter } = require('../../../utils/counter');
 
 async function main() {
-  const query = getPostWithoutLocation(1);
+  const query = getPostWithoutLocation();
   const posts = await getPosts(query);
 
   if (!posts.length) {

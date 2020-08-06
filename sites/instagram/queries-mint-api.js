@@ -67,7 +67,7 @@ function getPostToUpdateMedia(postUpdate, limit = 20) {
   }`;
 }
 
-function getPostWithoutLocation(limit = 20) {
+function getPostWithoutLocation(limit = 50) {
   return `{
     posts(first:${limit}, state: "MAPPED", hasLocation: true) {
       id
@@ -78,7 +78,7 @@ function getPostWithoutLocation(limit = 20) {
   }`;
 }
 
-function getPostsFromUserId(userId, limit = 20) {
+function getPostsFromUserId(userId, limit = 30) {
   return `{
     posts(first:${limit}, state: "MAPPED", userId: "${userId}") {
       id
