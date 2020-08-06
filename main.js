@@ -41,8 +41,8 @@ function main() {
   });
 
   cron.schedule('49 5 * * *', async () => {
-    await instagramMetaWorker();
     await instagramPostWithoutLocation();
+    await instagramMetaWorker();
   });
 
   cron.schedule('42 13 * * *', async () => {
