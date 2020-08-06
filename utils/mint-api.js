@@ -1,8 +1,6 @@
 const { postRequest } = require('./fetch');
 const config = require('../config');
 
-const reportStub = require('../stubs/gcenter-report');
-
 const apiUrl = config.get('api.url');
 
 async function graphiqlHelper(query) {
@@ -161,10 +159,6 @@ function createPolitician(data) {
 async function getPorts({
   limit = 1, since = '', to = '', name = '', type = null, entry = null,
 }) {
-  if (config.get('env') !== 'production') {
-    return reportStub;
-  }
-
   const payload = {
     query: `{
       port(first:${limit}, since: "${since}", to: "${to}", name: "${name}", type: ${type}, entry: ${entry}) {
