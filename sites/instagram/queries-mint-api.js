@@ -67,6 +67,41 @@ function getPostToUpdateMedia(postUpdate, limit = 20) {
   }`;
 }
 
+function getPostWithoutLocation(limit = 20) {
+  return `{
+    posts(first:${limit}, state: "MAPPED", hasLocation: true) {
+      id
+      user {
+        id
+      }
+    }
+  }`;
+}
+
+function getPostsFromUserId(userId, limit = 20) {
+  return `{
+    posts(first:${limit}, state: "MAPPED", userId: "${userId}") {
+      id
+      location {
+        id
+        name
+        slug
+        location {
+          type
+          coordinates
+        }
+        address {
+          street
+          zipCode
+          city
+          country
+        }
+        state
+      }
+    }
+  }`;
+}
+
 function getLocationsMappedByID(id) {
   return `{
     locations(id:"${id}", state:"MAPPED") {
@@ -96,4 +131,6 @@ module.exports = {
   getPostsMeta,
   getPostToVerify,
   getPostToUpdateMedia,
+  getPostWithoutLocation,
+  getPostsFromUserId,
 };
