@@ -1,6 +1,8 @@
 const debug = require('debug')('app:instagram:sche:logn');
 const { IgApiClient, IgCheckpointError } = require('instagram-private-api');
 
+const getCode = require('./code');
+
 const config = require('../../../config');
 
 const taskConfig = {
@@ -8,10 +10,9 @@ const taskConfig = {
   password: config.get('instagram.password'),
 };
 
-
 const ig = new IgApiClient();
 
-async function login() {
+async function main() {
   ig.state.generateDevice(taskConfig.username);
   await ig.simulate.preLoginFlow();
 
@@ -25,7 +26,12 @@ async function login() {
       debug(error);
     }
   }
+
+  getCode(ig);
 }
 
+if (require.main === module) {
+  main();
+}
 
-module.exports = login;
+module.exports = main;

@@ -8,7 +8,8 @@ const streamPipeline = promisify(require('stream').pipeline);
 
 const readFilePromise = promisify(readFile);
 
-const { getPosts, savePost } = require('../../../utils/mint-api');
+const { getPosts, createInstagramPost } = require('../../../utils/mint-api');
+const { getPostToPublish } = require('../queries-mint-api');
 const config = require('../../../config');
 
 const ig = new IgApiClient();
@@ -117,15 +118,19 @@ function getPost(posts) {
   return post;
 }
 
-function updatePostState(data) {
-  const post = data[0];
-  post.published = true;
+function updatePostState(post) {
+  const postUpdated = {
+    id: post.id,
+    published: true,
+  };
 
-  return savePost(post);
+
+  return createInstagramPost(postUpdated);
 }
 
 async function main() {
-  const data = await getPosts({ published: false });
+  const query = getPostToPublish();
+  const data = await getPosts(query);
 
   const instagramPost = getPost(data);
 

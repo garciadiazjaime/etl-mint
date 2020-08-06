@@ -102,6 +102,32 @@ function getPostsFromUserId(userId, limit = 30) {
   }`;
 }
 
+function getPostToPublish() {
+  return `{
+    posts(first:1, state: "MAPPED", published: false) {
+      id
+      mediaUrl
+      children {
+        media_url
+      }
+      user {
+        fullName
+        username
+      }
+      location {
+        name
+        address {
+          street
+        }
+      }
+      meta {
+        options
+        phones
+      }
+    }
+  }`;
+}
+
 function getLocationsMappedByID(id) {
   return `{
     locations(id:"${id}", state:"MAPPED") {
@@ -133,4 +159,5 @@ module.exports = {
   getPostToUpdateMedia,
   getPostWithoutLocation,
   getPostsFromUserId,
+  getPostToPublish,
 };

@@ -1,5 +1,4 @@
 const debug = require('debug')('app:instagram:sche:code');
-const { IgApiClient } = require('instagram-private-api');
 
 const config = require('../../../config');
 
@@ -9,13 +8,10 @@ const taskConfig = {
 };
 
 
-const ig = new IgApiClient();
-
-
-async function setCode() {
+async function main(ig) {
   ig.state.generateDevice(taskConfig.username);
   await ig.simulate.preLoginFlow();
-  await ig.challenge.sendSecurityCode(taskConfig.code);
+  // await ig.challenge.sendSecurityCode(taskConfig.code);
 
   const cookies = await ig.state.serializeCookieJar();
   const state = {
@@ -32,12 +28,11 @@ async function setCode() {
   };
   const base64Session = Buffer.from(JSON.stringify(sessionData)).toString('base64');
 
-  if (base64Session) {
-    config.set('instagram.session', base64Session);
-  }
-
   debug(base64Session);
 }
 
+if (require.main === module) {
+  main();
+}
 
-module.exports = setCode;
+module.exports = main;
