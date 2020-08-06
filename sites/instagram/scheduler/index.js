@@ -147,7 +147,7 @@ async function main() {
   await postImage(instagramPost);
   debug(`post published:${data[0].id}`);
 
-  await updatePostState(data);
+  await updatePostState(data[0]);
   debug(`post updated:${data[0].id}`);
 
   unlinkSync(imageName);
