@@ -8,6 +8,7 @@ const instagramPostWorker = require('./sites/instagram/worker/post');
 const instagramLocationWorker = require('./sites/instagram/worker/location');
 const instagramMetaWorker = require('./sites/instagram/worker/meta');
 const instagramPostWithoutLocation = require('./sites/instagram/worker/post-without-location');
+const instagramPostWithoutPhone = require('./sites/instagram/worker/post-without-phone');
 const instagramScheduler = require('./sites/instagram/scheduler');
 const workerLogin = require('./sites/instagram/worker/login');
 const instagramPostVerifyWorker = require('./sites/instagram/worker/post-verify');
@@ -42,6 +43,7 @@ function main() {
 
   cron.schedule('49 5 * * *', async () => {
     await instagramPostWithoutLocation();
+    await instagramPostWithoutPhone();
     await instagramMetaWorker();
   });
 
