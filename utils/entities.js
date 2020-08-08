@@ -11,7 +11,7 @@ const optionsMapper = [
   ['donas', 'donas|donitas'],
   ['nieve', 'nieve|thrifty'],
   ['cinnamon rolls', 'cinnamon rolls'],
-  ['panaderia', 'bollería|bolleria|panaderia|torcidos|pastry'],
+  ['panaderia', 'bollería|bolleria|panaderia|torcidos|pastry|bread'],
   ['churros', 'churro|ᴄʜᴜʀʀᴇʀɪᴀ|𝒄𝒉𝒖𝒓𝒓𝒐'],
   ['pastel', 'cake|pastel'],
   ['desayuno', 'desayuno|breakfast'],
@@ -38,7 +38,7 @@ const optionsMapper = [
   ['salmon', 'salmon|samón'],
   ['clamato', 'clamato'],
   ['burro', 'burro|burrito'],
-  ['tacos', 'taco|taqueria|taquería|suadero|taquero'],
+  ['tacos', 'taco|taqueria|taquería|suadero|taquero|🌮'],
   ['smoothies', 'smoothies'],
   ['chilaquiles', 'chilaquiles|chilas verdes'],
   ['pasta', 'pasta|lasagna|fettuccine'],
@@ -88,7 +88,7 @@ const optionsMapper = [
   ['cocthelado', 'cocthelado'],
   ['coctelería', 'coctelera|coctelería|cocteleria'],
   ['pulque', 'pulquito|pulque'],
-  ['mixología', 'mixología|mixologia'],
+  ['mixología', 'mixología|mixologia|martini|piña colada'],
   ['mojito', 'mojito'],
   ['vinos', 'vinos|wine'],
   ['sangria', 'sangria'],
@@ -122,6 +122,7 @@ const optionsMapper = [
   ['alambre de res', 'alambre de res'],
   ['chamoy', 'chamoy'],
   ['tapa', 'tapa'],
+  ['foodtruck', 'foodtruck'],
 ];
 
 function getOptions(caption) {
