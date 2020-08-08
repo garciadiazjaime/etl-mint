@@ -69,10 +69,26 @@ function getPostToUpdateMedia(postUpdate, limit = 20) {
 
 function getPostWithoutLocation(limit = 50) {
   return `{
-    posts(first:${limit}, state: "MAPPED", hasLocation: true) {
+    posts(first:${limit}, state: "MAPPED", hasLocation: false) {
       id
       user {
         id
+      }
+    }
+  }`;
+}
+
+function getPostsWithoutPhones(limit = 50) {
+  return `{
+    posts(first:${limit}, state: "MAPPED", hasPhone: false) {
+      id
+      user {
+        id
+      }
+      meta {
+        options
+        phones
+        rank
       }
     }
   }`;
@@ -97,6 +113,9 @@ function getPostsFromUserId(userId, limit = 30) {
           country
         }
         state
+      }
+      meta {
+        phones
       }
     }
   }`;
@@ -158,6 +177,7 @@ module.exports = {
   getPostToVerify,
   getPostToUpdateMedia,
   getPostWithoutLocation,
+  getPostsWithoutPhones,
   getPostsFromUserId,
   getPostToPublish,
 };
