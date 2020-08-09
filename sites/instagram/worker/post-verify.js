@@ -3,7 +3,10 @@ const mapSeries = require('async/mapSeries');
 
 const processor = require('../processor/post-verify');
 const { getPosts } = require('../../../utils/mint-api');
+const { getCounter } = require('../../../utils/counter');
 const { getPostToVerify } = require('../queries-mint-api');
+
+const counterGenerator = getCounter();
 
 async function main(cookies) {
   const yesterday = new Date();
@@ -18,11 +21,13 @@ async function main(cookies) {
     return null;
   }
 
+  const counter = counterGenerator();
+
   await mapSeries(posts, async (post) => {
-    await processor(post, cookies);
+    await processor(post, cookies, counter);
   });
 
-  return debug('end');
+  return debug(`${counter.count()} / ${posts.length}`);
 }
 
 if (require.main === module) {

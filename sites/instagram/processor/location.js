@@ -35,7 +35,7 @@ async function getNewLocation(post, cookies) {
   };
 }
 
-async function processor(post, cookies) {
+async function processor(post, cookies, counter) {
   const location = await getNewLocation(post, cookies);
 
   await createInstagramLocation(location);
@@ -45,9 +45,13 @@ async function processor(post, cookies) {
     location,
   };
 
-  const postApiResponse = await createInstagramPost(data);
+  const response = await createInstagramPost(data);
 
-  debug(`post:${postApiResponse && postApiResponse.id}`);
+  if (!response || !response.id) {
+    debug(response);
+  } else {
+    counter.increment();
+  }
 }
 
 module.exports = processor;

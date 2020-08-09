@@ -9,15 +9,15 @@ function transform(html) {
   const data = getData(html);
 
   const {
-    display_url: mediaUrl
+    display_url: mediaUrl,
   } = data.shortcode_media;
 
   return mediaUrl ? {
-    mediaUrl
+    mediaUrl,
   } : {};
 }
 
-async function processor(post, cookies) {
+async function processor(post, cookies, counter) {
   await waiter();
 
   debug(`extract:${post.id}`);
@@ -31,7 +31,7 @@ async function processor(post, cookies) {
       postUpdate: new Date().toJSON(),
     };
 
-    debug('deleted');
+    counter.incremet();
 
     return createInstagramPost(postUpdated);
   }
@@ -43,8 +43,6 @@ async function processor(post, cookies) {
     ...mediaData,
     postUpdate: new Date().toJSON(),
   };
-
-  debug('updated');
 
   return createInstagramPost(postUpdated);
 }

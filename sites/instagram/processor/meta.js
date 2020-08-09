@@ -2,7 +2,7 @@ const { createInstagramPost } = require('../../../utils/mint-api');
 const { getMeta } = require('../meta');
 
 
-async function processor(post) {
+async function processor(post, counter) {
   const meta = await getMeta(post, post.location);
 
   const postUpdated = {
@@ -14,6 +14,8 @@ async function processor(post) {
   };
 
   delete postUpdated.location;
+
+  counter.increment();
 
   return createInstagramPost(postUpdated);
 }

@@ -1,8 +1,10 @@
+const debug = require('debug')('app:instagram:worker:post');
 const mapSeries = require('async/mapSeries');
 
 const postProcessor = require('../processor/post');
 const { getInstagramPosts } = require('../instagram-api');
 const { waiter } = require('../../../utils/fetch');
+const { getCounter } = require('../../../utils/counter');
 const config = require('../../../config');
 
 const taskConfig = {
@@ -12,6 +14,8 @@ const taskConfig = {
   userId: config.get('instagram.userId'),
   apiUrl: config.get('api.url'),
 };
+
+const counterGenerator = getCounter();
 
 async function main(cookies) {
   const posts = [];
@@ -27,11 +31,13 @@ async function main(cookies) {
     await waiter();
   });
 
-  if (posts.length) {
-    await mapSeries(posts, async (post) => {
-      await postProcessor(post, cookies);
-    });
-  }
+  const counter = counterGenerator();
+
+  await mapSeries(posts, async (post) => {
+    await postProcessor(post, cookies, counter);
+  });
+
+  return debug(`${counter.count()} / ${posts.length}`);
 }
 
 if (require.main === module) {

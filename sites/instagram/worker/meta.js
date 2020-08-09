@@ -3,20 +3,21 @@ const mapSeries = require('async/mapSeries');
 
 const processor = require('../processor/meta');
 const { getPosts } = require('../../../utils/mint-api');
+const { getCounter } = require('../../../utils/counter');
 const { getPostsMeta } = require('../queries-mint-api');
+
+const counterGenerator = getCounter();
 
 async function main() {
   const posts = await getPosts(getPostsMeta());
 
-  debug(posts.length);
+  const counter = counterGenerator();
 
-  if (!posts.length) {
-    return null;
-  }
+  await mapSeries(posts, async (post) => {
+    await processor(post, counter);
+  });
 
-  await mapSeries(posts, processor);
-
-  return debug('updated');
+  return debug(`${counter.count()} / ${posts.length}`);
 }
 
 if (require.main === module) {

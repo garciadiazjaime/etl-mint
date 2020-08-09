@@ -1,11 +1,9 @@
-const debug = require('debug')('app:instagram:proc:verify');
-
 const { createInstagramPost } = require('../../../utils/mint-api');
 const { waiter } = require('../../../utils/fetch');
 const extract = require('../../../utils/extract');
 
 
-async function processor(data, cookies) {
+async function processor(data, cookies, counter) {
   const post = {
     ...data,
     lastCheck: new Date().toJSON(),
@@ -20,7 +18,7 @@ async function processor(data, cookies) {
     return null;
   }
 
-  debug(`deleted:${post.id}`);
+  counter.increment();
   post.state = 'DELETED';
   return createInstagramPost(post);
 }

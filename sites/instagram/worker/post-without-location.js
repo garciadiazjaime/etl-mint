@@ -21,7 +21,7 @@ async function main() {
     await processor(post, counter);
   });
 
-  return debug(`locations: ${counter.count()} / ${posts.length}`);
+  return debug(`${counter.count()} / ${posts.length}`);
 }
 
 if (require.main === module) {

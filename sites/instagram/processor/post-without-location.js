@@ -1,12 +1,9 @@
-const debug = require('debug')('app:instagram:proc:post-without-location');
-
 const { getPosts } = require('../../../utils/mint-api');
 const { getPostsFromUserId } = require('../queries-mint-api');
 const { createInstagramPost } = require('../../../utils/mint-api');
 
-function getLocation(posts, post) {
+function getLocation(posts) {
   if (!Array.isArray(posts) || posts.length < 3) {
-    debug(`not enought posts. User: ${post.user.id}, #: ${posts.length}`);
     return null;
   }
 
@@ -44,7 +41,7 @@ async function processor(post, counter) {
   const query = getPostsFromUserId(post.user.id);
   const posts = await getPosts(query);
 
-  const location = getLocation(posts, post);
+  const location = getLocation(posts);
 
   const newPost = {
     id: post.id,
@@ -55,8 +52,6 @@ async function processor(post, counter) {
     newPost.location = location;
     counter.increment();
   }
-
-  debug(`updated, postId: ${post.id}, location: ${!!location}`);
 
   return createInstagramPost(newPost);
 }

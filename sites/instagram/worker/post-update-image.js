@@ -3,7 +3,10 @@ const mapSeries = require('async/mapSeries');
 
 const processor = require('../processor/post-update-image');
 const { getPosts } = require('../../../utils/mint-api');
+const { getCounter } = require('../../../utils/counter');
 const { getPostToUpdateMedia } = require('../queries-mint-api');
+
+const counterGenerator = getCounter();
 
 async function main(cookies) {
   const oldDate = new Date();
@@ -19,11 +22,13 @@ async function main(cookies) {
     return null;
   }
 
+  const counter = counterGenerator();
+
   await mapSeries(posts, async (post) => {
-    await processor(post, cookies);
+    await processor(post, cookies, counter);
   });
 
-  return debug('updated');
+  return debug(`${counter.count()} / ${posts.length}`);
 }
 
 if (require.main === module) {

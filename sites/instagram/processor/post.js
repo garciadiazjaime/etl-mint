@@ -7,7 +7,7 @@ const {
 } = require('../../../utils/mint-api');
 const { getPostID, getLocationsMappedByID } = require('../queries-mint-api');
 
-async function processor(instagramPost, cookies) {
+async function processor(instagramPost, cookies, counter) {
   const postApi = await getPosts(getPostID(instagramPost.id));
 
   if (Array.isArray(postApi) && postApi.length) {
@@ -51,7 +51,11 @@ async function processor(instagramPost, cookies) {
 
   const response = await createInstagramPost(post);
 
-  debug(`user:${!!user}, location:${!!location}, saved:${response && response.id}`);
+  if (!response || !response.id) {
+    debug(response);
+  } else {
+    counter.increment();
+  }
 
   return response;
 }
