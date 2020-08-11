@@ -1,5 +1,3 @@
-const debug = require('debug')('app:instagram:etl');
-
 const extract = require('../../utils/extract');
 const { waiter } = require('../../utils/fetch');
 
@@ -9,7 +7,6 @@ async function getGeoLocation(location, cookies) {
   await waiter();
 
   const url = `https://www.instagram.com/explore/locations/${location.id}/${location.slug}/`;
-  debug(`extract:${url}`);
   const html = await extract(url, source, cookies);
 
   const matches = html.match(/_sharedData = (.*);<\/script/);

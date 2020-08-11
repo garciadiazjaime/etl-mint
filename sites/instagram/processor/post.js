@@ -52,7 +52,7 @@ async function processor(instagramPost, cookies, counter) {
   const response = await createInstagramPost(post);
 
   if (!response || !response.id) {
-    debug(response);
+    debug(post);
   } else {
     counter.increment();
   }

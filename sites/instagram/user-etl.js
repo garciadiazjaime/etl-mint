@@ -1,5 +1,3 @@
-const debug = require('debug')('app:instagram:etl');
-
 const extract = require('../../utils/extract');
 const { waiter } = require('../../utils/fetch');
 const { getData } = require('./post-extract');
@@ -57,7 +55,6 @@ async function getUser(post, cookies) {
   await waiter();
 
   const source = 'instagram-post';
-  debug(`extract:${post.permalink}`);
   const html = await extract(post.permalink, source, cookies);
 
   if (html.includes('Page Not Found')) {
