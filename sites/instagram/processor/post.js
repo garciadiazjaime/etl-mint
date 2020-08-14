@@ -43,7 +43,7 @@ async function processor(instagramPost, cookies, counter) {
         slug: locationApi[0].slug,
         state: locationApi[0].state,
       };
-      if (locationApi[0].location) {
+      if (locationApi[0].location && locationApi[0].location.type) {
         post.location.location = locationApi[0].location;
       }
       if (locationApi[0].address) {
