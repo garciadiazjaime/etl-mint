@@ -37,21 +37,31 @@ async function processor(instagramPost, cookies, counter) {
     const locationApi = await getLocation(getLocationsMappedByID(location.id));
 
     if (Array.isArray(locationApi) && locationApi.length) {
-      debug(`location found: ${locationApi[0].id}`);
-      post.location = { ...locationApi[0] };
+      post.location = {
+        id: locationApi[0].id,
+        name: locationApi[0].name,
+        slug: locationApi[0].slug,
+        state: locationApi[0].state,
+      };
+      if (locationApi[0].location) {
+        post.location.location = locationApi[0].location;
+      }
+      if (locationApi[0].address) {
+        post.location.address = locationApi[0].address;
+      }
     } else {
       post.location = {
         ...location,
         state: 'RAW',
       };
-      const locationResponse = await createInstagramLocation(post.location);
-      debug(`location: ${locationResponse.id}`);
+      await createInstagramLocation(post.location);
     }
   }
 
   const response = await createInstagramPost(post);
 
   if (!response || !response.id) {
+    debug(response);
     debug(post);
   } else {
     counter.increment();

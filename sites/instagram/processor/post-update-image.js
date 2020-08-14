@@ -31,7 +31,7 @@ async function processor(post, cookies, counter) {
       postUpdate: new Date().toJSON(),
     };
 
-    counter.incremet();
+    counter.increment();
 
     return createInstagramPost(postUpdated);
   }
