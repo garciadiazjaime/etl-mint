@@ -58,7 +58,7 @@ function getPostToVerify(lastCheck, limit = 20) {
   }`;
 }
 
-function getPostToUpdateMedia(postUpdate, limit = 20) {
+function getPostToUpdateMedia(postUpdate, limit = 200) {
   return `{
     posts(first:${limit}, postUpdate:"${postUpdate}", state: "MAPPED") {
       id

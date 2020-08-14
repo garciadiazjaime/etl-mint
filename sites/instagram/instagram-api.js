@@ -47,6 +47,11 @@ function transform(data, hashtag) {
 
 async function getInstagramPosts(config, hashtag) {
   const data = await extract(config, hashtag);
+
+  if (data.error) {
+    return debug(data.error);
+  }
+
   debug(`hashtag:${hashtag}`);
 
   const posts = await transform(data, hashtag);

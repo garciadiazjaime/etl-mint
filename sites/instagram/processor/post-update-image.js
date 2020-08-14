@@ -31,8 +31,6 @@ async function processor(post, cookies, counter) {
       postUpdate: new Date().toJSON(),
     };
 
-    counter.increment();
-
     return createInstagramPost(postUpdated);
   }
 
@@ -43,6 +41,8 @@ async function processor(post, cookies, counter) {
     ...mediaData,
     postUpdate: new Date().toJSON(),
   };
+
+  counter.increment();
 
   return createInstagramPost(postUpdated);
 }
