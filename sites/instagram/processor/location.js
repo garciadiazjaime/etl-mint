@@ -4,7 +4,7 @@ const { getGeoLocation } = require('../location-etl');
 const { createInstagramPost, createInstagramLocation, getLocation } = require('../../../utils/mint-api');
 const { getLocationsMappedByID } = require('../queries-mint-api');
 
-async function getNewLocation(post, cookies) {
+async function getNewLocation(post, cookies, counter) {
   const { location } = post;
 
   const query = getLocationsMappedByID(location.id);
@@ -13,12 +13,10 @@ async function getNewLocation(post, cookies) {
 
   if (Array.isArray(apiResponse) && apiResponse.length) {
     const locationApi = apiResponse[0];
-    debug(`location found: ${locationApi.id}`);
     return locationApi;
   }
 
   const geoLocation = await getGeoLocation(location, cookies);
-  debug(`geoLocation: ${!!geoLocation}, post: ${post.id}`);
 
   if (!location.location.type) {
     delete location.location;
@@ -28,6 +26,8 @@ async function getNewLocation(post, cookies) {
     delete location.address;
   }
 
+  counter.increment();
+
   return {
     ...location,
     ...geoLocation,
@@ -36,7 +36,7 @@ async function getNewLocation(post, cookies) {
 }
 
 async function processor(post, cookies, counter) {
-  const location = await getNewLocation(post, cookies);
+  const location = await getNewLocation(post, cookies, counter);
 
   await createInstagramLocation(location);
 
@@ -49,8 +49,6 @@ async function processor(post, cookies, counter) {
 
   if (!response || !response.id) {
     debug(response);
-  } else {
-    counter.increment();
   }
 }
 
