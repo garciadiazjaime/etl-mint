@@ -47,9 +47,13 @@ async function postImage() {
 }
 
 if (require.main === module) {
-  // postStatus();
+  // postStatus().then(() => {
+  //   process.exit(1);
+  // });
 
-  postImage();
+  postImage().then(() => {
+    process.exit(1);
+  });
 }
 
 module.exports = {
