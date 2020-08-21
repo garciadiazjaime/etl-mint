@@ -9,10 +9,7 @@ const { getPostToUpdateMedia } = require('../queries-mint-api');
 const counterGenerator = getCounter();
 
 async function main(cookies) {
-  const oldDate = new Date();
-  oldDate.setDate(oldDate.getDate() - 28);
-
-  const query = getPostToUpdateMedia(oldDate.toJSON());
+  const query = getPostToUpdateMedia();
 
   const posts = await getPosts(query);
 
