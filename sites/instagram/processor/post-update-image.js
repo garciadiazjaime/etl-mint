@@ -23,9 +23,8 @@ async function processor(post, cookies, counter) {
 
   if (html.includes('Page Not Found')) {
     const postUpdated = {
-      ...post,
+      id: post.id,
       state: 'DELETED',
-      postUpdate: new Date().toJSON(),
     };
 
     return createInstagramPost(postUpdated);
@@ -34,9 +33,9 @@ async function processor(post, cookies, counter) {
   const mediaData = transform(html);
 
   const postUpdated = {
-    ...post,
+    id: post.id,
     ...mediaData,
-    postUpdate: new Date().toJSON(),
+    invalidImage: false,
   };
 
   counter.increment();

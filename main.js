@@ -23,10 +23,10 @@ const gcFacebook = require('./sites/gcenter/facebook');
 async function instagramWorker() {
   const cookies = await workerLogin();
 
+  await instagramPostUpdateImageWorker(cookies);
   await instagramPostWorker(cookies);
   await instagramLocationWorker(cookies);
   await instagramPostVerifyWorker(cookies);
-  await instagramPostUpdateImageWorker(cookies);
 }
 
 function main() {
