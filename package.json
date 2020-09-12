@@ -26,7 +26,7 @@
     "fb": "^2.0.0",
     "instagram-private-api": "^1.39.2",
     "node-cron": "^2.0.3",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "punycode": "^2.1.1",
     "puppeteer": "^2.1.1",
     "request": "^2.88.0",
