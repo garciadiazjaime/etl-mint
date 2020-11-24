@@ -35,30 +35,30 @@ function main() {
     await mapSeries(sites, realState);
   });
 
-  cron.schedule('17 0-6,16-23 * * *', instagramWorker);
+  // cron.schedule('17 0-6,16-23 * * *', instagramWorker);
 
-  cron.schedule('13 18-23/2 * * *', async () => {
-    await instagramScheduler();
-  });
+  // cron.schedule('13 18-23/2 * * *', async () => {
+  //   await instagramScheduler();
+  // });
 
-  cron.schedule('49 5 * * *', async () => {
-    await instagramPostWithoutLocation();
-    await instagramPostWithoutPhone();
-    await instagramMetaWorker();
-  });
+  // cron.schedule('49 5 * * *', async () => {
+  //   await instagramPostWithoutLocation();
+  //   await instagramPostWithoutPhone();
+  //   await instagramMetaWorker();
+  // });
 
-  cron.schedule('42 13 * * *', async () => {
-    await gcGenerateImage();
-  });
+  // cron.schedule('42 13 * * *', async () => {
+  //   await gcGenerateImage();
+  // });
 
-  cron.schedule('42 15 * * *', async () => {
-    await gcTwitter.postImage();
-    await gcFacebook.postImage();
-  });
+  // cron.schedule('42 15 * * *', async () => {
+  //   await gcTwitter.postImage();
+  //   await gcFacebook.postImage();
+  // });
 
-  cron.schedule('*/30 * * * *', async () => {
-    await gcenterWorker();
-  });
+  // cron.schedule('*/30 * * * *', async () => {
+  //   await gcenterWorker();
+  // });
 }
 
 if (process.argv[2]) {
