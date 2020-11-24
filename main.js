@@ -21,12 +21,13 @@ const gcFacebook = require('./sites/gcenter/facebook');
 
 
 async function instagramWorker() {
-  const cookies = await workerLogin();
+  await instagramPostWorker();
 
-  await instagramPostUpdateImageWorker(cookies);
-  await instagramPostWorker(cookies);
-  await instagramLocationWorker(cookies);
-  await instagramPostVerifyWorker(cookies);
+  // const cookies = await workerLogin();
+
+  // await instagramPostUpdateImageWorker(cookies);
+  // await instagramLocationWorker(cookies);
+  // await instagramPostVerifyWorker(cookies);
 }
 
 function main() {
@@ -35,7 +36,7 @@ function main() {
     await mapSeries(sites, realState);
   });
 
-  // cron.schedule('17 0-6,16-23 * * *', instagramWorker);
+  cron.schedule('17 0-6,16-23 * * *', instagramWorker);
 
   // cron.schedule('13 18-23/2 * * *', async () => {
   //   await instagramScheduler();
