@@ -21,9 +21,9 @@ const gcFacebook = require('./sites/gcenter/facebook');
 
 
 async function instagramWorker() {
-  // const cookies = await workerLogin();
+  const cookies = await workerLogin();
   await instagramPostWorker();
-  await instagramLocationWorker();
+  await instagramLocationWorker(cookies);
 
 
   // await instagramPostUpdateImageWorker(cookies);
@@ -32,11 +32,11 @@ async function instagramWorker() {
 
 function main() {
   const sites = getRealStateSites();
-  cron.schedule('42 */4 * * *', async () => {
+  cron.schedule('42 */8 * * *', async () => {
     await mapSeries(sites, realState);
   });
 
-  cron.schedule('17 0-6,16-23 * * *', instagramWorker);
+  cron.schedule('17 */6 * * *', instagramWorker);
 
   // cron.schedule('13 18-23/2 * * *', async () => {
   //   await instagramScheduler();
