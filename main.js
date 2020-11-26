@@ -4,8 +4,8 @@ const cron = require('node-cron');
 const realState = require('./sites/realState');
 const { getRealStateSites } = require('./sites/realState');
 
-const instagramPostWorker = require('./sites/instagram/worker/post-from-api');
-const instagramLocationWorker = require('./sites/instagram/worker/post-from-etl');
+const instagramPostFromAPIWorker = require('./sites/instagram/worker/post-from-api');
+const instagramPostFromETLWorker = require('./sites/instagram/worker/post-from-etl');
 const instagramMetaWorker = require('./sites/instagram/worker/meta');
 const instagramPostWithoutLocation = require('./sites/instagram/worker/post-without-location');
 const instagramPostWithoutPhone = require('./sites/instagram/worker/post-without-phone');
@@ -22,8 +22,8 @@ const gcFacebook = require('./sites/gcenter/facebook');
 
 async function instagramWorker() {
   const cookies = await workerLogin();
-  await instagramPostWorker();
-  await instagramLocationWorker(cookies);
+  await instagramPostFromAPIWorker();
+  await instagramPostFromETLWorker(cookies);
 
 
   // await instagramPostUpdateImageWorker(cookies);
@@ -32,11 +32,11 @@ async function instagramWorker() {
 
 function main() {
   const sites = getRealStateSites();
-  cron.schedule('42 */8 * * *', async () => {
+  cron.schedule('42 */12 * * *', async () => {
     await mapSeries(sites, realState);
   });
 
-  cron.schedule('17 */6 * * *', instagramWorker);
+  cron.schedule('17 */12 * * *', instagramWorker);
 
   // cron.schedule('13 18-23/2 * * *', async () => {
   //   await instagramScheduler();
@@ -63,7 +63,9 @@ function main() {
 }
 
 if (process.argv[2]) {
-  instagramWorker();
+  instagramWorker().then(() => {
+    process.exit(1);
+  });
 } else {
   main();
 }

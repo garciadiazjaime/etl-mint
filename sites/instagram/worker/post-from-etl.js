@@ -12,6 +12,7 @@ const { getMeta } = require('../meta');
 
 async function main(cookies) {
   const { posts } = await graphiqlHelper(getUnmappedPosts(100));
+  debug(`# unmapped posts: ${posts.length}`);
 
   await mapSeries(posts, async (post) => {
     const responseFromETL = await getUserAndLocationAndImage(post, cookies);

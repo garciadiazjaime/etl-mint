@@ -1,12 +1,9 @@
-const debug = require('debug')('app:login-processor');
-
 const { getBrowser } = require('../../../utils/browser');
 const config = require('../../../config');
 
 async function main() {
   const url = 'https://www.instagram.com/accounts/login';
 
-  debug('start');
   const browser = await getBrowser();
 
   const page = await browser.newPage();
@@ -27,7 +24,6 @@ async function main() {
   const cookies = await page.cookies();
 
   await browser.close();
-  debug('end');
 
   return cookies;
 }
