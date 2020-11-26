@@ -4,13 +4,14 @@ const debug = require('debug')('app:post-from-etl');
 const {
   graphiqlHelper, updateInstagramPost, updateInstagramUser, updateInstagramLocation,
 } = require('../../../utils/mint-api');
-const { getRawPosts } = require('../queries-mint-api');
+const { getUnmappedPosts } = require('../queries-mint-api');
 const { getUserAndLocationAndImage } = require('../post-etl');
 const { getGeoLocation } = require('../location-etl');
+const { getMeta } = require('../meta');
 
 
 async function main(cookies) {
-  const { posts } = await graphiqlHelper(getRawPosts(100));
+  const { posts } = await graphiqlHelper(getUnmappedPosts(100));
 
   await mapSeries(posts, async (post) => {
     const responseFromETL = await getUserAndLocationAndImage(post, cookies);
@@ -64,6 +65,12 @@ async function main(cookies) {
         location: newLocation,
       };
     }
+
+    const meta = getMeta(post);
+    newPost = {
+      ...newPost,
+      meta,
+    };
 
     const response = await updateInstagramPost(newPost);
     debug(response);

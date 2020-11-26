@@ -164,7 +164,6 @@ function updateInstagramPost(post) {
   const body = {
     query: `mutation updateInstagramPost(
         $id: String,
-
         $permalink: String,
         $mediaUrl: String,
         $mediaType: String,
@@ -176,7 +175,8 @@ function updateInstagramPost(post) {
 
         $state: String,
         $user: UserInputType,
-        $location: LocationInputType
+        $location: LocationInputType,
+        $meta: MetaInputType
       ) {
       updateInstagramPost(
         id: $id,
@@ -190,9 +190,10 @@ function updateInstagramPost(post) {
         city: $city,
         source: $source,
 
-        state: $state
+        state: $state,
         user: $user,
         location: $location,
+        meta: $meta,
       )
     }`,
     variables: post,

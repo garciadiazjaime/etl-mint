@@ -6,12 +6,13 @@ function getPostID(id) {
   }`;
 }
 
-function getRawPosts(limit = 20) {
+function getUnmappedPosts(limit = 20) {
   return `{
     posts(first:${limit}, state:"RAW") {
       permalink
       id
       mediaType
+      caption
     }
   }`;
 }
@@ -155,7 +156,7 @@ function getLocationsMappedByID(id) {
 
 module.exports = {
   getPostID,
-  getRawPosts,
+  getUnmappedPosts,
   getLocationsMappedByID,
   getPostsMeta,
   getPostToVerify,
