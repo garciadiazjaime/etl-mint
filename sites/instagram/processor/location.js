@@ -4,6 +4,8 @@ const { getGeoLocation } = require('../location-etl');
 const { createInstagramPost, createInstagramLocation, getLocation } = require('../../../utils/mint-api');
 const { getLocationsMappedByID } = require('../queries-mint-api');
 
+const { getPost } = require('../post-etl');
+
 async function getNewLocation(post, cookies, counter) {
   const { location } = post;
 
@@ -35,21 +37,32 @@ async function getNewLocation(post, cookies, counter) {
   };
 }
 
-async function processor(post, cookies, counter) {
-  const location = await getNewLocation(post, cookies, counter);
+async function processor(post, cookies) {
+  console.log('post', post);
+  const responseETL = await getPost(post, cookies);
+  console.log('responseETL', responseETL);
 
-  await createInstagramLocation(location);
 
-  const data = {
+  // const location = await getNewLocation(post, cookies, counter);
+
+  // await createInstagramLocation(location);
+
+  // const data = {
+  //   ...post,
+  //   location,
+  // };
+
+  const newPost = {
     ...post,
-    location,
+    ...responseETL,
   };
+  console.log('perro:newPost', newPost);
+  // const responseAPI = await createInstagramPost();
+  // console.log('responseAPI', responseAPI);
 
-  const response = await createInstagramPost(data);
-
-  if (!response || !response.id) {
-    debug(response);
-  }
+  // if (!response || !response.id) {
+  //   debug(response);
+  // }
 }
 
 module.exports = processor;

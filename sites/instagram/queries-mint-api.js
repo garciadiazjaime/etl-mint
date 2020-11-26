@@ -6,28 +6,12 @@ function getPostID(id) {
   }`;
 }
 
-function getPostsWithLocationRaw(limit = 20) {
+function getRawPosts(limit = 20) {
   return `{
-    posts(first:${limit}, locationState:"RAW") {
+    posts(first:${limit}, state:"RAW") {
       permalink
       id
-      location {
-        id
-        name
-        slug
-        location {
-          type
-          coordinates
-        }
-        address {
-          _id
-          street
-          zipCode
-          city
-          country
-        }
-        state
-      }
+      mediaType
     }
   }`;
 }
@@ -171,7 +155,7 @@ function getLocationsMappedByID(id) {
 
 module.exports = {
   getPostID,
-  getPostsWithLocationRaw,
+  getRawPosts,
   getLocationsMappedByID,
   getPostsMeta,
   getPostToVerify,

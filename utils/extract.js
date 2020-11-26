@@ -1,17 +1,10 @@
-const debug = require('debug')('app:realstate');
+const debug = require('debug')('app:extract');
 
-const fs = require('fs');
-const { promisify } = require('util');
 
-const readFileAsync = promisify(fs.readFile);
 const { getBrowser } = require('./browser');
-const config = require('../config');
 
 async function extract(url, source, cookies) {
-  if (config.get('env') !== 'production') {
-    return readFileAsync(`./stubs/${source}.html`, { encoding: 'utf8' });
-  }
-
+  debug(url);
   const browser = await getBrowser();
   const page = await browser.newPage();
 

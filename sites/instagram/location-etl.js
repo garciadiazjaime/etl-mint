@@ -4,6 +4,10 @@ const { waiter } = require('../../utils/fetch');
 const source = 'instagram-location';
 
 async function getGeoLocation(location, cookies) {
+  if (!location || !location.id || !location.slug) {
+    return null;
+  }
+
   await waiter();
 
   const url = `https://www.instagram.com/explore/locations/${location.id}/${location.slug}/`;
@@ -26,7 +30,7 @@ async function getGeoLocation(location, cookies) {
   }
 
   return {
-    location: {
+    gps: {
       type: 'Point',
       coordinates: [LocationsPage[0].graphql.location.lng, LocationsPage[0].graphql.location.lat],
     },

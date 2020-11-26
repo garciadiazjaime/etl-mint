@@ -156,6 +156,94 @@ function createPolitician(data) {
   return postRequest(`${apiUrl}/graphiql`, body);
 }
 
+function updateInstagramPost(post) {
+  if (!post || !post.id) {
+    return null;
+  }
+
+  const body = {
+    query: `mutation updateInstagramPost(
+        $id: String,
+
+        $permalink: String,
+        $mediaUrl: String,
+        $mediaType: String,
+        $caption: String,
+        $commentsCount: Int,
+        $likeCount: Int,
+        $city: String,
+        $source: String,
+
+        $state: String,
+        $user: UserInputType,
+        $location: LocationInputType
+      ) {
+      updateInstagramPost(
+        id: $id,
+
+        permalink: $permalink,
+        mediaUrl: $mediaUrl,
+        mediaType: $mediaType,
+        caption: $caption,
+        commentsCount: $commentsCount,
+        likeCount: $likeCount,
+        city: $city,
+        source: $source,
+
+        state: $state
+        user: $user,
+        location: $location,
+      )
+    }`,
+    variables: post,
+  };
+
+  return postRequest(`${apiUrl}/graphiql`, body);
+}
+
+async function updateInstagramUser(user) {
+  if (!user || !user.id) {
+    return null;
+  }
+
+  const body = {
+    query: `mutation updateInstagramUser($id: String, $username: String, $fullName: String, $profilePicture: String, $followedBy: Int, $postsCount: Int) {
+      updateInstagramUser(
+        id: $id,
+        username: $username
+        fullName: $fullName,
+        profilePicture: $profilePicture,
+        followedBy: $followedBy,
+        postsCount: $postsCount
+      )
+    }`,
+    variables: user,
+  };
+
+  return postRequest(`${apiUrl}/graphiql`, body);
+}
+
+async function updateInstagramLocation(location) {
+  if (!location || !location.id) {
+    return null;
+  }
+
+  const body = {
+    query: `mutation updateInstagramLocation($id: String, $name: String, $slug: String, $address: AddressInputType, $gps: GPSInputType) {
+      updateInstagramLocation(
+        id: $id,
+        name: $name
+        slug: $slug,
+        address: $address,
+        gps: $gps
+      )
+    }`,
+    variables: location,
+  };
+
+  return postRequest(`${apiUrl}/graphiql`, body);
+}
+
 async function getPorts({
   limit = 1, since = '', to = '', name = '', type = null, entry = null,
 }) {
@@ -186,6 +274,7 @@ async function getPorts({
 }
 
 module.exports = {
+  graphiqlHelper,
   getPosts,
   getLocation,
   createInstagramPost,
@@ -195,4 +284,7 @@ module.exports = {
   getPorts,
   createRealState,
   createPolitician,
+  updateInstagramPost,
+  updateInstagramUser,
+  updateInstagramLocation,
 };

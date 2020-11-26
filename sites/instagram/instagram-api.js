@@ -1,22 +1,12 @@
-const debug = require('debug')('app:instagram:api');
-
-const fs = require('fs');
-const { promisify } = require('util');
+const debug = require('debug')('app:instagram-api');
 
 const { getRequest } = require('../../utils/fetch');
 
-const readFileAsync = promisify(fs.readFile);
-
-
 async function extract(config, hashtag) {
-  if (config.env !== 'production') {
-    const data = await readFileAsync('./stubs/instagram-tijuana.json', { encoding: 'utf8' });
-    return JSON.parse(data);
-  }
-
   const limit = 50;
   const fields = 'caption,like_count,comments_count,media_type,media_url,permalink,children{media_type,media_url}';
   const url = `https://graph.facebook.com/v6.0/${hashtag}/recent_media?fields=${fields}&limit=${limit}&user_id=${config.userId}&access_token=${config.token}`;
+  debug(`extract: ${url}`);
 
   return getRequest(url);
 }
@@ -27,32 +17,31 @@ function transform(data, hashtag) {
   }
 
   return data.data.reduce((accu, item) => {
-    if (item.caption && item.media_type !== 'VIDEO') {
-      accu.push({
-        id: item.id,
-        likeCount: item.like_count,
-        commentsCount: item.comments_count,
-        permalink: item.permalink,
-        caption: item.caption,
-        mediaUrl: item.media_url,
-        mediaType: item.media_type,
-        children: item.children && item.children.data,
-        source: hashtag,
-      });
-    }
+    const mediaUrl = item.media_type === 'CAROUSEL_ALBUM' ? item.children.data[0] : item.media_url;
+
+    accu.push({
+      id: item.id,
+      likeCount: item.like_count,
+      commentsCount: item.comments_count,
+      permalink: item.permalink,
+      caption: item.caption,
+      mediaUrl,
+      mediaType: item.media_type,
+      source: hashtag,
+    });
 
     return accu;
   }, []);
 }
 
 async function getInstagramPosts(config, hashtag) {
+  debug(`hashtag:${hashtag}`);
+
   const data = await extract(config, hashtag);
 
   if (data.error) {
     return debug(data.error);
   }
-
-  debug(`hashtag:${hashtag}`);
 
   const posts = await transform(data, hashtag);
   debug(`posts:${posts && posts.length}`);

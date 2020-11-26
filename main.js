@@ -4,8 +4,8 @@ const cron = require('node-cron');
 const realState = require('./sites/realState');
 const { getRealStateSites } = require('./sites/realState');
 
-const instagramPostWorker = require('./sites/instagram/worker/post');
-const instagramLocationWorker = require('./sites/instagram/worker/location');
+const instagramPostWorker = require('./sites/instagram/worker/post-from-api');
+const instagramLocationWorker = require('./sites/instagram/worker/post-from-etl');
 const instagramMetaWorker = require('./sites/instagram/worker/meta');
 const instagramPostWithoutLocation = require('./sites/instagram/worker/post-without-location');
 const instagramPostWithoutPhone = require('./sites/instagram/worker/post-without-phone');
@@ -21,12 +21,12 @@ const gcFacebook = require('./sites/gcenter/facebook');
 
 
 async function instagramWorker() {
-  await instagramPostWorker();
-
   // const cookies = await workerLogin();
+  await instagramPostWorker();
+  await instagramLocationWorker();
+
 
   // await instagramPostUpdateImageWorker(cookies);
-  // await instagramLocationWorker(cookies);
   // await instagramPostVerifyWorker(cookies);
 }
 

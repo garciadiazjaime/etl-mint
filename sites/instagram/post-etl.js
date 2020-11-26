@@ -31,10 +31,11 @@ function transform(html) {
   const data = getData(html);
 
   const {
-    location, owner,
+    location, owner, display_url,
   } = data.shortcode_media;
 
   const response = {
+    mediaUrl: display_url,
     user: {
       id: owner.id,
       username: owner.username,
@@ -42,6 +43,13 @@ function transform(html) {
       profilePicture: owner.profile_pic_url,
     },
   };
+
+  if (owner.edge_followed_by && owner.edge_followed_by.count) {
+    response.user.followedBy = owner.edge_followed_by.count;
+  }
+  if (owner.edge_owner_to_timeline_media && owner.edge_owner_to_timeline_media.count) {
+    response.user.postsCount = owner.edge_owner_to_timeline_media.count;
+  }
 
   const postLocation = getLocation(location);
   if (postLocation) {
@@ -51,14 +59,14 @@ function transform(html) {
   return response;
 }
 
-async function getUser(post, cookies) {
+async function getUserAndLocationAndImage(post, cookies) {
   await waiter();
 
   const source = 'instagram-post';
   const html = await extract(post.permalink, source, cookies);
 
   if (html.includes('Page Not Found')) {
-    return {};
+    return null;
   }
 
   return transform(html);
@@ -66,5 +74,5 @@ async function getUser(post, cookies) {
 
 
 module.exports = {
-  getUser,
+  getUserAndLocationAndImage,
 };

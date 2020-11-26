@@ -1,7 +1,7 @@
 const debug = require('debug')('app:instagram:worker:post');
 const mapSeries = require('async/mapSeries');
 
-const { createInstagramPost } = require('../../../utils/mint-api');
+const { updateInstagramPost } = require('../../../utils/mint-api');
 
 const { getInstagramPosts } = require('../instagram-api');
 const { waiter } = require('../../../utils/fetch');
@@ -30,7 +30,7 @@ async function main() {
   });
 
   await mapSeries(posts, async (post) => {
-    await createInstagramPost(post);
+    await updateInstagramPost(post);
   });
 
   return debug(`${posts.length}`);
