@@ -43,7 +43,7 @@ function getPostToVerify(lastCheck, limit = 20) {
   }`;
 }
 
-function getPostToUpdateMedia(limit = 100) {
+function getPostToUpdateMedia(limit = 20) {
   return `{
     posts(first:${limit}, invalidImage:true, state: "MAPPED") {
       id

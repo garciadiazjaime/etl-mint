@@ -1,4 +1,4 @@
-const { createInstagramPost } = require('../../../utils/mint-api');
+const { updateInstagramPost } = require('../../../utils/mint-api');
 const { waiter } = require('../../../utils/fetch');
 const extract = require('../../../utils/extract');
 const { getData } = require('../post-extract');
@@ -10,12 +10,10 @@ function transform(html) {
     display_url: mediaUrl,
   } = data.shortcode_media;
 
-  return mediaUrl ? {
-    mediaUrl,
-  } : {};
+  return mediaUrl;
 }
 
-async function processor(post, cookies, counter) {
+async function processor(post, cookies) {
   await waiter();
 
   const source = 'instagram-post-update-image';
@@ -27,20 +25,21 @@ async function processor(post, cookies, counter) {
       state: 'DELETED',
     };
 
-    return createInstagramPost(postUpdated);
+    return updateInstagramPost(postUpdated);
   }
 
-  const mediaData = transform(html);
+  const mediaUrl = transform(html);
+  if (!mediaUrl) {
+    return null;
+  }
 
   const postUpdated = {
     id: post.id,
-    ...mediaData,
+    mediaUrl,
     invalidImage: false,
   };
 
-  counter.increment();
-
-  return createInstagramPost(postUpdated);
+  return updateInstagramPost(postUpdated);
 }
 
 module.exports = processor;

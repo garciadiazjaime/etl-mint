@@ -59,11 +59,18 @@ function transform(html) {
   return response;
 }
 
-async function getUserAndLocationAndImage(post, cookies) {
+async function getHTMLFromPost(permalink, source, cookies) {
   await waiter();
 
+  const html = await extract(permalink, source, cookies);
+
+  return html;
+}
+
+async function getUserAndLocationAndImage(post, cookies) {
   const source = 'instagram-post';
-  const html = await extract(post.permalink, source, cookies);
+
+  const html = await getHTMLFromPost(post.permalink, source, cookies);
 
   if (html.includes('Page Not Found')) {
     return null;
@@ -74,5 +81,6 @@ async function getUserAndLocationAndImage(post, cookies) {
 
 
 module.exports = {
+  getHTMLFromPost,
   getUserAndLocationAndImage,
 };

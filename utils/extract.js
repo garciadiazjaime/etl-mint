@@ -4,7 +4,7 @@ const debug = require('debug')('app:extract');
 const { getBrowser } = require('./browser');
 
 async function extract(url, source, cookies) {
-  debug(url);
+  debug(`${source}:${url}`);
   const browser = await getBrowser();
   const page = await browser.newPage();
 

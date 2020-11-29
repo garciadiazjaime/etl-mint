@@ -6,7 +6,6 @@ async function extract(config, hashtag) {
   const limit = 50;
   const fields = 'caption,like_count,comments_count,media_type,media_url,permalink,children{media_type,media_url}';
   const url = `https://graph.facebook.com/v6.0/${hashtag}/recent_media?fields=${fields}&limit=${limit}&user_id=${config.userId}&access_token=${config.token}`;
-  debug(`extract: ${url}`);
 
   return getRequest(url);
 }
