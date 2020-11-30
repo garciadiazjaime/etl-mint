@@ -20,6 +20,7 @@ async function main(cookies) {
   const query = getPostToUpdateMedia();
 
   const posts = await getPosts(query);
+  debug(`outdated images: ${posts && posts.length}`);
 
   if (!posts.length) {
     return null;
@@ -28,7 +29,7 @@ async function main(cookies) {
   const source = 'instagram-post-update-image';
 
   const responses = await mapSeries(posts, async (post) => {
-    const html = await getHTMLFromPost(post, source, cookies);
+    const html = await getHTMLFromPost(post.permalink, source, cookies);
 
     if (html.includes('Page Not Found')) {
       debug(`post-deleted: ${post.id}`);
