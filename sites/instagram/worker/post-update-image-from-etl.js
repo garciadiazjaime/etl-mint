@@ -53,7 +53,8 @@ async function main(cookies) {
     };
 
     const response = await updateInstagramPost(postUpdated);
-    return debug(`image-updated: ${post.id}:${response}`);
+
+    return debug(response);
   });
 
   return Promise.all(responses);

@@ -177,7 +177,7 @@ function updateInstagramPost(post) {
         $user: UserInputType,
         $location: LocationInputType,
         $meta: MetaInputType,
-        $invalidImage: String
+        $invalidImage: Boolean
       ) {
       updateInstagramPost(
         id: $id,
