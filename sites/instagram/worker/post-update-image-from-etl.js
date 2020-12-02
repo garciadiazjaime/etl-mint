@@ -41,7 +41,6 @@ async function main(cookies) {
       return updateInstagramPost(postUpdated);
     }
 
-    debug(`image-updated: ${post.id}`);
     const mediaUrl = transform(html);
     if (!mediaUrl) {
       return null;
@@ -53,7 +52,8 @@ async function main(cookies) {
       invalidImage: false,
     };
 
-    return updateInstagramPost(postUpdated);
+    const response = await updateInstagramPost(postUpdated);
+    return debug(`image-updated: ${post.id}:${response}`);
   });
 
   return Promise.all(responses);

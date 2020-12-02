@@ -75,7 +75,7 @@ async function main({ city, source }) {
   if (!url) {
     return debug('error:invalid url');
   }
-  debug(`${source}:extract:${url}`);
+
   const html = await extract(url, source);
 
 
@@ -93,17 +93,13 @@ async function main({ city, source }) {
     }));
   }
 
-  debug(`${source}:transform:${data.length}`);
-
   const response = await createRealState(data);
 
   if (!response || (Array.isArray(response.errors) && response.errors.length)) {
     return debug('error:invalid response', JSON.stringify(response));
   }
 
-  debug(`${source}:load`);
-
-  return 0;
+  return debug(`${source}:${data.length}`);
 }
 
 if (require.main === module) {

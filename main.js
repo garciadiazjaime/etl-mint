@@ -39,7 +39,7 @@ function main() {
     await instagramPostFromAPIWorker();
   });
 
-  cron.schedule('17 */4 * * *', async () => {
+  cron.schedule('17 */3 * * *', async () => {
     const cookies = await workerLogin();
 
     await instagramPostFromETLWorker(cookies);
