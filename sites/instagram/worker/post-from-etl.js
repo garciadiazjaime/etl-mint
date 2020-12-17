@@ -11,10 +11,10 @@ const { getMeta } = require('../meta');
 
 
 async function main(cookies) {
-  const { posts } = await graphiqlHelper(getUnmappedPosts(20));
-  debug(`# unmapped posts: ${posts.length}`);
+  const { posts } = await graphiqlHelper(getUnmappedPosts(40));
+  debug(`# unmapped posts: ${posts.length}, only processing 20`);
 
-  await mapSeries(posts, async (post) => {
+  await mapSeries(posts.slice(0, 20), async (post) => {
     const responseFromETL = await getUserAndLocationAndImage(post, cookies);
 
     if (!responseFromETL) {
@@ -41,8 +41,7 @@ async function main(cookies) {
         ...newPost,
         user,
       };
-      const responseUser = await updateInstagramUser(user);
-      debug(responseUser);
+      await updateInstagramUser(user);
     }
 
     if (location) {
@@ -57,8 +56,7 @@ async function main(cookies) {
           ...locationFromETL,
         };
 
-        const responseLocation = await updateInstagramLocation(newLocation);
-        debug(responseLocation);
+        await updateInstagramLocation(newLocation);
       }
 
       newPost = {
@@ -73,8 +71,8 @@ async function main(cookies) {
       meta,
     };
 
-    const response = await updateInstagramPost(newPost);
-    debug(response);
+    await updateInstagramPost(newPost);
+
     return null;
   });
 }

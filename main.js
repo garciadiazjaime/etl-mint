@@ -35,7 +35,7 @@ function main() {
     await mapSeries(sites, realState);
   });
 
-  cron.schedule('17 */8 * * *', async () => {
+  cron.schedule('17 */10 * * *', async () => {
     await instagramPostFromAPIWorker();
   });
 
