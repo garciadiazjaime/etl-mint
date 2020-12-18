@@ -71,12 +71,13 @@ function transform(html, domain) {
 
   const places = data.map((item) => {
     let place = {
-      address: item.geo.address,
+      address: item.geo.address || item.geo.displayName,
       currency: getCurrency(item),
-      description: item.description,
+      description: item.title,
       images: getImages(item),
       price: getPrice(item),
       url: domain + (item.viewSeoUrl || item.seoUrl),
+      phone: item.phone,
     };
 
     const latitude = getLatitude(item);
