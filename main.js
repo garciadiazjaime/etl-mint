@@ -35,20 +35,20 @@ function main() {
     await mapSeries(sites, realState);
   });
 
-  cron.schedule('17 */10 * * *', async () => {
+  cron.schedule('17 */8 * * *', async () => {
     await instagramPostFromAPIWorker();
   });
 
-  cron.schedule('17 */3 * * *', async () => {
+  cron.schedule('17 */4 * * *', async () => {
     const cookies = await workerLogin();
 
     await instagramPostFromETLWorker(cookies);
     await instagramPostUpdateImageFromETLWorker(cookies);
   });
 
-  // cron.schedule('13 18-23/2 * * *', async () => {
-  //   await instagramScheduler();
-  // });
+  cron.schedule('13 23 * * *', async () => {
+    await instagramScheduler();
+  });
 
   // cron.schedule('49 5 * * *', async () => {
   //   await instagramPostWithoutLocation();

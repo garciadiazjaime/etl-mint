@@ -108,7 +108,7 @@ function getPostsFromUserId(userId, limit = 30) {
 
 function getPostToPublish() {
   return `{
-    posts(first:1, state: "MAPPED", published: false) {
+    posts(first:1, state: "MAPPED", published: null) {
       id
       mediaUrl
       children {
@@ -128,6 +128,7 @@ function getPostToPublish() {
         options
         phones
       }
+      createdAt
     }
   }`;
 }

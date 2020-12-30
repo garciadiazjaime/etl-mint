@@ -51,10 +51,10 @@ async function postImage(post) {
     caption,
   });
 
-  await ig.publish.story({
-    file,
-    caption,
-  });
+  // await ig.publish.story({
+  //   file,
+  //   caption,
+  // });
 }
 
 function getMediaUrl(post) {
@@ -71,31 +71,13 @@ function getMediaUrl(post) {
 
 function getCaption(post) {
   const response = [];
-  const { user, location, meta } = post;
+  const { user } = post;
 
-  if (user) {
-    response.push(post.user.fullName || post.user.username);
+  if (user && user.username) {
+    response.push(`@${user.username}`);
   }
 
-  if (location) {
-    if (location.name) {
-      response.push(location.name);
-    }
-
-    if (location.address && location.address.street) {
-      response.push(location.address.street);
-    }
-  }
-
-  if (Array.isArray(meta.options) && meta.options.length) {
-    response.push(meta.options.join(' '));
-  }
-
-  if (Array.isArray(meta.phones) && meta.phones.length) {
-    response.push(meta.phones.join(' '));
-  }
-
-  return response.filter(item => item).join(' | ');
+  return response.filter(item => item).join(' ');
 }
 
 function getPost(posts) {
