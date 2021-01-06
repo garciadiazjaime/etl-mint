@@ -35,11 +35,11 @@ function main() {
     await mapSeries(sites, realState);
   });
 
-  cron.schedule('17 */8 * * *', async () => {
+  cron.schedule('17 */10 * * *', async () => {
     await instagramPostFromAPIWorker();
   });
 
-  cron.schedule('17 */4 * * *', async () => {
+  cron.schedule('17 */6 * * *', async () => {
     const cookies = await workerLogin();
 
     await instagramPostFromETLWorker(cookies);
