@@ -12,6 +12,7 @@ const { getMeta } = require('../meta');
 async function getLocationFromAPIORETL(location, cookies) {
   const { locations: apiLocations } = await graphiqlHelper(getLocationsByID(location.id));
   if (Array.isArray(apiLocations) && apiLocations.length) {
+    debug(`location_found:${apiLocations[0].slug}`);
     return {
       ...apiLocations[0],
       ...location,
