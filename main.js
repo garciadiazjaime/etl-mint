@@ -18,6 +18,7 @@ const gcenterWorker = require('./sites/gcenter/worker-ports');
 const gcGenerateImage = require('./sites/gcenter/image');
 const gcTwitter = require('./sites/gcenter/twitter');
 const gcFacebook = require('./sites/gcenter/facebook');
+const netlify = require('./sites/netlify');
 
 
 async function instagramWorker() {
@@ -48,6 +49,7 @@ function main() {
 
   cron.schedule('13 23 * * *', async () => {
     await instagramScheduler();
+    await netlify();
   });
 
   // cron.schedule('49 5 * * *', async () => {

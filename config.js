@@ -233,6 +233,14 @@ const config = convict({
       env: 'GC_SOURCE_URL',
     },
   },
+  netlify: {
+    hook: {
+      doc: 'API URL',
+      format: String,
+      default: '',
+      env: 'NETLIFY_HOOK',
+    },
+  },
 });
 
 // Perform validation
