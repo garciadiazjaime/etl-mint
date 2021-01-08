@@ -4,11 +4,34 @@ const debug = require('debug')('app:post-from-etl');
 const {
   graphiqlHelper, updateInstagramPost, updateInstagramUser, updateInstagramLocation,
 } = require('../../../utils/mint-api');
-const { getUnmappedPosts } = require('../queries-mint-api');
+const { getUnmappedPosts, getLocationsByID } = require('../queries-mint-api');
 const { getUserAndLocationAndImage } = require('../post-etl');
 const { getGeoLocation } = require('../location-etl');
 const { getMeta } = require('../meta');
 
+async function getLocationFromAPIORETL(location, cookies) {
+  const { locations: apiLocations } = await graphiqlHelper(getLocationsByID(location.id));
+  if (Array.isArray(apiLocations) && apiLocations.length) {
+    return {
+      ...apiLocations[0],
+      ...location,
+    };
+  }
+
+  const locationFromETL = await getGeoLocation(location, cookies);
+  if (!locationFromETL) {
+    return null;
+  }
+
+  const newLocation = {
+    ...location,
+    ...locationFromETL,
+  };
+
+  await updateInstagramLocation(newLocation);
+
+  return newLocation;
+}
 
 async function main(cookies) {
   const { posts } = await graphiqlHelper(getUnmappedPosts(40));
@@ -18,6 +41,8 @@ async function main(cookies) {
     const responseFromETL = await getUserAndLocationAndImage(post, cookies);
 
     if (!responseFromETL) {
+      // todo: delete post
+      debug(`delete.post:${post.id}`);
       return null;
     }
 
@@ -37,39 +62,19 @@ async function main(cookies) {
     }
 
     if (user) {
-      newPost = {
-        ...newPost,
-        user,
-      };
+      newPost.user = user;
       await updateInstagramUser(user);
     }
 
     if (location) {
-      let newLocation = {
-        ...location,
-      };
-
-      const locationFromETL = await getGeoLocation(location, cookies);
-      if (locationFromETL) {
-        newLocation = {
-          ...newLocation,
-          ...locationFromETL,
-        };
-
-        await updateInstagramLocation(newLocation);
+      const newLocation = await getLocationFromAPIORETL(location, cookies);
+      if (newLocation.id) {
+        newPost.location = newLocation;
       }
-
-      newPost = {
-        ...newPost,
-        location: newLocation,
-      };
     }
 
     const meta = getMeta(post);
-    newPost = {
-      ...newPost,
-      meta,
-    };
+    newPost.meta = meta;
 
     await updateInstagramPost(newPost);
 

@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer');
 const config = require('../config');
 
 async function getBrowser() {
-  const opts = config.get('env') !== 'production' ? {} : {
+  const opts = config.get('env') === 'production' ? {} : {
     headless: true,
     executablePath: '/usr/bin/chromium-browser',
     args: [

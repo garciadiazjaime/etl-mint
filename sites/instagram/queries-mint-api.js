@@ -133,24 +133,22 @@ function getPostToPublish() {
   }`;
 }
 
-function getLocationsMappedByID(id) {
+function getLocationsByID(id) {
   return `{
-    locations(id:"${id}", state:"MAPPED") {
+    locations(id:"${id}") {
       id
       name
       slug
-      location {
+      gps {
         type
         coordinates
       }
       address {
-        _id
         street
         zipCode
         city
         country
       }
-      state
     }
   }`;
 }
@@ -158,7 +156,7 @@ function getLocationsMappedByID(id) {
 module.exports = {
   getPostID,
   getUnmappedPosts,
-  getLocationsMappedByID,
+  getLocationsByID,
   getPostsMeta,
   getPostToVerify,
   getPostToUpdateMedia,
