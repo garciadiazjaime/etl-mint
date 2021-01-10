@@ -69,8 +69,10 @@ async function main(cookies) {
 
     if (location) {
       const newLocation = await getLocationFromAPIORETL(location, cookies);
-      if (newLocation.id) {
+      if (newLocation) {
         newPost.location = newLocation;
+      } else {
+        debug(`location_unknown:${location.slug}`);
       }
     }
 
