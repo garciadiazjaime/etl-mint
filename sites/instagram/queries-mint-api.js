@@ -133,6 +133,15 @@ function getPostToPublish() {
   }`;
 }
 
+function getPostToLike() {
+  return `{
+    posts(first:1, state: "MAPPED", liked: null) {
+      id
+      permalink
+    }
+  }`;
+}
+
 function getLocationsByID(id) {
   return `{
     locations(id:"${id}") {
@@ -164,4 +173,5 @@ module.exports = {
   getPostsWithoutPhones,
   getPostsFromUserId,
   getPostToPublish,
+  getPostToLike,
 };

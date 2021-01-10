@@ -12,6 +12,7 @@ const instagramScheduler = require('./sites/instagram/scheduler');
 const workerLogin = require('./sites/instagram/worker/login');
 const instagramPostVerifyWorker = require('./sites/instagram/worker/post-verify');
 const instagramPostUpdateImageFromETLWorker = require('./sites/instagram/worker/post-update-image-from-etl');
+const likeInstagramPostWorker = require('./sites/instagram/worker/like-post');
 
 const gcenterWorker = require('./sites/gcenter/worker-ports');
 const gcGenerateImage = require('./sites/gcenter/image');
@@ -22,9 +23,11 @@ const netlify = require('./sites/netlify');
 
 async function instagramWorker() {
   const cookies = await workerLogin();
-  await instagramPostFromAPIWorker();
-  await instagramPostFromETLWorker(cookies);
-  await instagramPostUpdateImageFromETLWorker(cookies);
+  // await instagramPostFromAPIWorker();
+  // await instagramPostFromETLWorker(cookies);
+  // await instagramPostUpdateImageFromETLWorker(cookies);
+
+  await likeInstagramPostWorker(cookies);
 
   // await instagramPostVerifyWorker(cookies);
 }
@@ -72,7 +75,7 @@ function main() {
 
 if (process.argv[2]) {
   instagramWorker().then(() => {
-    process.exit(1);
+    process.exit(0);
   });
 } else {
   main();

@@ -177,7 +177,9 @@ function updateInstagramPost(post) {
         $user: UserInputType,
         $location: LocationInputType,
         $meta: MetaInputType,
-        $invalidImage: Boolean
+        $invalidImage: Boolean,
+
+        $liked: Boolean,
       ) {
       updateInstagramPost(
         id: $id,
@@ -195,7 +197,9 @@ function updateInstagramPost(post) {
         user: $user,
         location: $location,
         meta: $meta,
-        invalidImage: $invalidImage
+        invalidImage: $invalidImage,
+
+        liked: $liked,
       )
     }`,
     variables: post,
