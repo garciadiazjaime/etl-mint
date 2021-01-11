@@ -1,3 +1,5 @@
+const debug = require('debug')('app:login');
+
 const { getBrowser } = require('../../../utils/browser');
 const config = require('../../../config');
 
@@ -22,6 +24,7 @@ async function main() {
   await page.waitForNavigation();
 
   const cookies = await page.cookies();
+  debug(`cookies:${!!cookies}`);
 
   await browser.close();
 

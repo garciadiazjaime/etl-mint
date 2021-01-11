@@ -1,5 +1,6 @@
 const mapSeries = require('async/mapSeries');
 const cron = require('node-cron');
+const debug = require('debug')('app:main');
 
 const realState = require('./sites/realState');
 const { getRealStateSites } = require('./sites/realState');
@@ -32,21 +33,22 @@ async function instagramWorker() {
   // await instagramPostVerifyWorker(cookies);
 }
 
-function main() {
+async function main() {
+  const cookies = await workerLogin();
+
   const sites = getRealStateSites();
   cron.schedule('42 */12 * * *', async () => {
     await mapSeries(sites, realState);
   });
 
-  cron.schedule('17 */10 * * *', async () => {
+  cron.schedule('17 */8 * * *', async () => {
     await instagramPostFromAPIWorker();
   });
 
   cron.schedule('17 */6 * * *', async () => {
-    const cookies = await workerLogin();
-
     await instagramPostFromETLWorker(cookies);
     await instagramPostUpdateImageFromETLWorker(cookies);
+    await likeInstagramPostWorker(cookies);
   });
 
   cron.schedule('13 23 * * *', async () => {
@@ -78,5 +80,7 @@ if (process.argv[2]) {
     process.exit(0);
   });
 } else {
-  main();
+  main().then(() => {
+    debug('end');
+  });
 }
