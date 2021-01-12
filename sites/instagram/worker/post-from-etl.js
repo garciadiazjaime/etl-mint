@@ -34,6 +34,10 @@ async function getLocationFromAPIORETL(location, cookies) {
   return newLocation;
 }
 
+function isValidUser(username) {
+  return !['bajamarklaser'].includes(username);
+}
+
 async function main(cookies) {
   const { posts } = await graphiqlHelper(getUnmappedPosts(40));
   debug(`# unmapped posts: ${posts.length}, only processing 20`);
@@ -62,12 +66,16 @@ async function main(cookies) {
       };
     }
 
-    if (user) {
+    const validUser = isValidUser(user);
+    if (validUser) {
       newPost.user = user;
       await updateInstagramUser(user);
+    } else {
+      newPost.state = 'USER_BLOCKED';
+      debug(`invalid_user:${user}`);
     }
 
-    if (location) {
+    if (validUser && location) {
       const newLocation = await getLocationFromAPIORETL(location, cookies);
       if (newLocation) {
         newPost.location = newLocation;

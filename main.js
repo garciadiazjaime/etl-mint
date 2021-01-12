@@ -47,7 +47,10 @@ async function main() {
 
   cron.schedule('17 */6 * * *', async () => {
     await instagramPostFromETLWorker(cookies);
-    await instagramPostUpdateImageFromETLWorker(cookies);
+    // await instagramPostUpdateImageFromETLWorker(cookies);
+  });
+
+  cron.schedule('19 * * * *', async () => {
     await likeInstagramPostWorker(cookies);
   });
 
