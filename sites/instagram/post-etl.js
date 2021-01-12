@@ -1,3 +1,5 @@
+const debug = require('debug')('app:post-etl');
+
 const extract = require('../../utils/extract');
 const { waiter } = require('../../utils/fetch');
 const { getData } = require('./post-extract');
@@ -29,6 +31,11 @@ function getLocation(postLocation) {
 
 function transform(html) {
   const data = getData(html);
+
+  if (!data.shortcode_media) {
+    debug(data);
+    return null;
+  }
 
   const {
     location, owner, display_url,
@@ -73,6 +80,7 @@ async function getUserAndLocationAndImage(post, cookies) {
   const html = await getHTMLFromPost(post.permalink, source, cookies);
 
   if (html.includes('Page Not Found')) {
+    debug('not_found');
     return null;
   }
 

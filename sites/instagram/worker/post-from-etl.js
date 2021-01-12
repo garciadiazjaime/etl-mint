@@ -43,7 +43,7 @@ async function main(cookies) {
 
     if (!responseFromETL) {
       // todo: delete post
-      debug(`delete.post:${post.id}`);
+      debug(`post_null:${post.id}`);
       return null;
     }
 
