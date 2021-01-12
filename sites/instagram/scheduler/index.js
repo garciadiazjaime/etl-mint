@@ -69,15 +69,43 @@ function getMediaUrl(post) {
   return '';
 }
 
+const phrases = [
+  'Donde hay pasión, hay sazón',
+  'Que tu medicina sea tu alimento, y el alimento tu medicina',
+  'Una receta no tiene alma. Es el cocinero quien debe darle alma a la receta',
+  'Lo importante no es lo que se come, sino cómo se come',
+  'El secreto de ser un buen actor es el amor por la comida',
+  'El estómago abierto no tiene oídos',
+  'Una comida bien preparada tienes sabores delicados que hay que retener en la boca para apreciarlos',
+  'Lo único que me gusta más que hablar de comida es comer',
+  'Los mejores platos son muy simples',
+  'Los ingredientes no son sagrados. El arte de la cocina es sagrado',
+  'Comer es sensorial. Se trata de interpretar la información que tus sentidos te dan',
+  'Un cocinero se convierte en artista cuando tiene cosas que decir a través de sus plato, como un pintor en un cuadro',
+  'El silencio es el sonido de una buena comida',
+  'Las recetas no funcionan a menos que utilices tu corazón',
+  'No hay amor más sincero que el amor a la cocina',
+  'No soporto a la gente que no toma en serio la comida',
+  'Las penas con pan son menos',
+  'Las personas a quienes les encanta comer siempre son las mejores',
+  'La cocina es alquimia de amor',
+  'La historia de la gastronomía es la historia del mundo',
+];
+
 function getCaption(post) {
   const response = [];
   const { user } = post;
 
+  const index = Math.floor(Math.random() * phrases.length);
+  response.push(phrases[index]);
+
   if (user && user.username) {
-    response.push(`@${user.username}`);
+    response.push(`... 📷 @${user.username}`);
   }
 
-  return response.filter(item => item).join(' ');
+  response.push(' #feedmetj');
+
+  return response.filter(item => item).join('');
 }
 
 function getPost(posts) {
