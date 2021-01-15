@@ -12,7 +12,7 @@ const instagramPostWithoutPhone = require('./sites/instagram/worker/post-without
 const instagramScheduler = require('./sites/instagram/scheduler');
 const workerLogin = require('./sites/instagram/worker/login');
 const instagramPostVerifyWorker = require('./sites/instagram/worker/post-verify');
-const instagramPostUpdateImageFromETLWorker = require('./sites/instagram/worker/post-update-image-from-etl');
+const instagramUpdateImage = require('./sites/instagram/worker/update-image');
 const likeInstagramPostWorker = require('./sites/instagram/worker/like-post');
 
 const gcenterWorker = require('./sites/gcenter/worker-ports');
@@ -26,9 +26,9 @@ async function instagramWorker() {
   const cookies = await workerLogin();
   // await instagramPostFromAPIWorker();
   // await instagramPostFromETLWorker(cookies);
-  // await instagramPostUpdateImageFromETLWorker(cookies);
+  await instagramUpdateImage(cookies);
 
-  await likeInstagramPostWorker(cookies);
+  // await likeInstagramPostWorker(cookies);
 
   // await instagramPostVerifyWorker(cookies);
 }
@@ -47,7 +47,7 @@ async function main() {
 
   cron.schedule('17 */6 * * *', async () => {
     await instagramPostFromETLWorker(cookies);
-    // await instagramPostUpdateImageFromETLWorker(cookies);
+    // await instagramUpdateImage(cookies);
   });
 
   cron.schedule('19 * * * *', async () => {
@@ -56,6 +56,7 @@ async function main() {
 
   cron.schedule('13 23 * * *', async () => {
     await instagramScheduler();
+    await instagramUpdateImage(cookies);
     await netlify();
   });
 

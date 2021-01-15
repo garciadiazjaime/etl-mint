@@ -1,10 +1,10 @@
 const debug = require('debug')('app:post-update-image');
 const mapSeries = require('async/mapSeries');
 
-const { getPosts, updateInstagramPost } = require('../../../utils/mint-api');
-const { getPostToUpdateMedia } = require('../queries-mint-api');
+const { updateInstagramPost } = require('../../../utils/mint-api');
 const { getHTMLFromPost } = require('../post-etl');
 const { getData } = require('../post-extract');
+const { getRequest, getRequestPlain, waiter } = require('../../../utils/fetch');
 
 function transform(html) {
   const data = getData(html);
@@ -17,18 +17,37 @@ function transform(html) {
 }
 
 async function main(cookies) {
-  const query = getPostToUpdateMedia();
+  const profilesByCategory = await getRequest('https://www.feedmetj.com/data/homepage.json');
 
-  const posts = await getPosts(query);
-  debug(`outdated images: ${posts && posts.length}`);
+  const images = profilesByCategory.reduce((accu, item) => {
+    accu.push(...item.data);
 
-  if (!posts.length) {
+    return accu;
+  }, []).map(({ mediaUrl, id, permalink }) => ({ mediaUrl, id, permalink }));
+
+  debug(`images: ${images.length}`);
+
+  const imagesToUpdate = [];
+
+  await mapSeries(images, async (item) => {
+    await waiter();
+
+    const response = await getRequestPlain(item.mediaUrl);
+
+    if (response.status !== 200) {
+      imagesToUpdate.push(item);
+    }
+  });
+
+  debug(`to_update: ${imagesToUpdate.length}`);
+
+  if (!imagesToUpdate.length) {
     return null;
   }
 
   const source = 'instagram-post-update-image';
 
-  const responses = await mapSeries(posts, async (post) => {
+  const responses = await mapSeries(imagesToUpdate, async (post) => {
     const html = await getHTMLFromPost(post.permalink, source, cookies);
 
     if (html.includes('Page Not Found')) {
