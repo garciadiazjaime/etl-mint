@@ -24,9 +24,9 @@ const netlify = require('./sites/netlify');
 
 async function instagramWorker() {
   const cookies = await workerLogin();
-  // await instagramPostFromAPIWorker();
-  // await instagramPostFromETLWorker(cookies);
-  await instagramUpdateImage(cookies);
+  await instagramPostFromAPIWorker();
+  await instagramPostFromETLWorker(cookies);
+  // await instagramUpdateImage(cookies);
 
   // await likeInstagramPostWorker(cookies);
 
@@ -41,9 +41,9 @@ async function main() {
     await mapSeries(sites, realState);
   });
 
-  cron.schedule('17 */8 * * *', async () => {
-    await instagramPostFromAPIWorker();
-  });
+  // cron.schedule('17 */8 * * *', async () => {
+  //   await instagramPostFromAPIWorker();
+  // });
 
   cron.schedule('17 */6 * * *', async () => {
     await instagramPostFromETLWorker(cookies);
