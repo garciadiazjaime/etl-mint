@@ -23,23 +23,28 @@ async function main(cookies) {
     await page.setCookie(...cookies);
   }
 
-  debug(post.permalink);
-  await page.goto(post.permalink);
-
-  await page.waitForSelector('button svg[aria-label="Like"]', { timeout: 1000 * 3 });
-
-  await page.evaluate(() => document.querySelectorAll('button')[2].click());
-
-  await browser.close();
+  const response = await page.goto(post.permalink);
+  debug(post.permalink, response.headers().status);
 
   const postUpdated = {
     ...post,
-    liked: true,
   };
 
-  const response = await updateInstagramPost(postUpdated);
+  if (response.headers().status === '404') {
+    postUpdated.state = 'DELETED';
+  } else {
+    await page.waitForSelector('button svg[aria-label="Like"]', { timeout: 1000 * 3 });
 
-  debug(response);
+    await page.evaluate(() => document.querySelectorAll('button')[2].click());
+
+    postUpdated.liked = true;
+  }
+
+  await browser.close();
+
+  const updateResponse = await updateInstagramPost(postUpdated);
+
+  debug(updateResponse);
 
   return null;
 }
