@@ -40,9 +40,10 @@ function isValidUser(username) {
 
 async function main(cookies) {
   const { posts } = await graphiqlHelper(getUnmappedPosts(40));
-  debug(`# unmapped posts: ${posts.length}, only processing 20`);
+  const limit = 25;
+  debug(`# unmapped posts: ${posts.length}, only processing ${limit}`);
 
-  await mapSeries(posts.slice(0, 20), async (post) => {
+  await mapSeries(posts.slice(0, limit), async (post) => {
     const responseFromETL = await getUserAndLocationAndImage(post, cookies);
 
     let newPost = {
@@ -50,7 +51,6 @@ async function main(cookies) {
     };
 
     if (!responseFromETL) {
-      // todo: delete post
       debug(`post_null:${post.id}`);
 
       newPost.state = 'DELETED';
