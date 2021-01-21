@@ -45,18 +45,24 @@ async function main(cookies) {
   await mapSeries(posts.slice(0, 20), async (post) => {
     const responseFromETL = await getUserAndLocationAndImage(post, cookies);
 
+    let newPost = {
+      id: post.id,
+    };
+
     if (!responseFromETL) {
       // todo: delete post
       debug(`post_null:${post.id}`);
+
+      newPost.state = 'DELETED';
+
+      await updateInstagramPost(newPost);
+
       return null;
     }
 
     const { user, location, mediaUrl } = responseFromETL;
 
-    let newPost = {
-      id: post.id,
-      state: 'MAPPED',
-    };
+    newPost.state = 'MAPPED';
 
     if (post.mediaType === 'VIDEO' && mediaUrl) {
       newPost = {
