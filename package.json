@@ -25,6 +25,7 @@
     "encoding": "^0.1.13",
     "fb": "^2.0.0",
     "instagram-private-api": "^1.39.2",
+    "jsdom": "^16.4.0",
     "node-cron": "^2.0.3",
     "node-fetch": "^2.6.1",
     "punycode": "^2.1.1",

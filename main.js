@@ -6,6 +6,7 @@ const realState = require('./sites/realState');
 const { getRealStateSites } = require('./sites/realState');
 
 const instagramPostFromAPIWorker = require('./sites/instagram/worker/post-from-api');
+const getLatestPostsFromHashtag = require('./sites/instagram/worker/get-latest-posts-from-hashtag');
 const instagramPostFromETLWorker = require('./sites/instagram/worker/post-from-etl');
 const instagramPostWithoutLocation = require('./sites/instagram/worker/post-without-location');
 const instagramPostWithoutPhone = require('./sites/instagram/worker/post-without-phone');
@@ -24,8 +25,11 @@ const netlify = require('./sites/netlify');
 
 async function instagramWorker() {
   const cookies = await workerLogin();
-  await instagramPostFromAPIWorker();
-  await instagramPostFromETLWorker(cookies);
+
+  await getLatestPostsFromHashtag(cookies);
+
+  // await instagramPostFromAPIWorker();
+  // await instagramPostFromETLWorker(cookies);
   // await instagramUpdateImage(cookies);
 
   // await likeInstagramPostWorker(cookies);
@@ -46,6 +50,7 @@ async function main() {
   // });
 
   cron.schedule('17 */6 * * *', async () => {
+    await getLatestPostsFromHashtag(cookies);
     await instagramPostFromETLWorker(cookies);
     // await instagramUpdateImage(cookies);
   });
