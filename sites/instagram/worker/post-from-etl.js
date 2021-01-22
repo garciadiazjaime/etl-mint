@@ -40,7 +40,7 @@ function isValidUser(username) {
 
 async function main(cookies) {
   const { posts } = await graphiqlHelper(getUnmappedPosts(40));
-  const limit = 25;
+  const limit = 30;
   debug(`# unmapped posts: ${posts.length}, only processing ${limit}`);
 
   await mapSeries(posts.slice(0, limit), async (post) => {
