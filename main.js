@@ -49,11 +49,11 @@ async function main() {
   //   await instagramPostFromAPIWorker();
   // });
 
-  cron.schedule('17 */4 * * *', async () => {
-    await getLatestPostsFromHashtag(cookies);
-    await instagramPostFromETLWorker(cookies);
-    // await instagramUpdateImage(cookies);
-  });
+  // cron.schedule('17 */4 * * *', async () => {
+  //   await getLatestPostsFromHashtag(cookies);
+  //   await instagramPostFromETLWorker(cookies);
+  //   await instagramUpdateImage(cookies);
+  // });
 
   cron.schedule('19 * * * *', async () => {
     await likeInstagramPostWorker(cookies);
