@@ -1,3 +1,7 @@
+const express = require('express');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+
 const mapSeries = require('async/mapSeries');
 const cron = require('node-cron');
 const debug = require('debug')('app:main');
@@ -6,8 +10,8 @@ const realState = require('./sites/realState');
 const { getRealStateSites } = require('./sites/realState');
 
 const instagramScheduler = require('./sites/instagram/scheduler');
-const workerLogin = require('./sites/instagram/worker/login');
-const likeInstagramPostWorker = require('./sites/instagram/worker/like-post');
+const instagramLogin = require('./sites/instagram/login');
+const instagramLikePost = require('./sites/instagram/like-post');
 
 const gcenterWorker = require('./sites/gcenter/worker-ports');
 const gcGenerateImage = require('./sites/gcenter/image');
@@ -15,9 +19,25 @@ const gcTwitter = require('./sites/gcenter/twitter');
 const gcFacebook = require('./sites/gcenter/facebook');
 const netlify = require('./sites/netlify');
 
+const { openDB } = require('./utils/database');
+const config = require('./config');
 
-async function main() {
-  const cookies = await workerLogin();
+const PORT = config.get('port');
+
+const isProduction = config.get('env') === 'production';
+
+const app = express();
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(morgan('combined'));
+
+
+app.get('/', (req, res) => res.json({ msg: ':)' }));
+
+function setupCron(cookies) {
+  if (!isProduction) {
+    return debug('CRON_NOT_SETUP');
+  }
 
   const sites = getRealStateSites();
   cron.schedule('42 */12 * * *', async () => {
@@ -25,7 +45,7 @@ async function main() {
   });
 
   cron.schedule('19 * * * *', async () => {
-    await likeInstagramPostWorker(cookies);
+    await instagramLikePost(cookies);
   });
 
   cron.schedule('13 23 * * *', async () => {
@@ -47,6 +67,15 @@ async function main() {
   // });
 }
 
-main().then(() => {
-  debug('end');
+app.listen(PORT, async () => {
+  debug(`Listening on ${PORT}`);
+
+  await openDB();
+  debug('DB opened');
+
+  const cookies = isProduction ? await instagramLogin() : null;
+
+  await instagramLikePost(cookies);
+
+  setupCron(cookies);
 });

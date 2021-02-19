@@ -8,12 +8,25 @@ const config = convict({
     default: 'development',
     env: 'NODE_ENV',
   },
+  port: {
+    doc: 'The applicaton port environment.',
+    default: '3030',
+    env: 'PORT',
+  },
   api: {
     url: {
       doc: 'API URL',
       format: String,
       default: 'http://127.0.0.1:3030',
       env: 'API_URL',
+    },
+  },
+  db: {
+    url: {
+      doc: 'Database host name/IP',
+      format: '*',
+      default: 'mongodb://localhost:27017/rve',
+      env: 'DB_URL',
     },
   },
   sites: {
@@ -156,14 +169,6 @@ const config = convict({
   instagram: {
     token: {
       env: 'INSTAGRAM_TOKEN',
-      default: '',
-    },
-    hashtag: {
-      env: 'INSTAGRAM_HASHTAG_ID',
-      default: 'hashtag',
-    },
-    userId: {
-      env: 'INSTAGRAM_USER_ID',
       default: '',
     },
     username: {

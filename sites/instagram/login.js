@@ -1,7 +1,7 @@
 const debug = require('debug')('app:login');
 
-const { getBrowser } = require('../../../utils/browser');
-const config = require('../../../config');
+const { getBrowser } = require('../../utils/browser');
+const config = require('../../config');
 
 async function main() {
   const url = 'https://www.instagram.com/accounts/login';
