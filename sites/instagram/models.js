@@ -44,7 +44,9 @@ const PostSchema = new Schema({
   mediaType: String,
   source: String,
   accessibility: String,
+
   liked: Boolean,
+  published: Boolean,
 
   user: UserSchema,
   location: LocationSchema,

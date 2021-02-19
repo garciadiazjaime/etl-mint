@@ -1,4 +1,4 @@
-const debug = require('debug')('app:instagram:sche:indx');
+const debug = require('debug')('app:instagram_publish');
 const { promisify } = require('util');
 const { readFile, unlinkSync, createWriteStream } = require('fs');
 const fetch = require('node-fetch');
@@ -8,9 +8,9 @@ const streamPipeline = promisify(require('stream').pipeline);
 
 const readFilePromise = promisify(readFile);
 
-const { getPosts, createInstagramPost } = require('../../../utils/mint-api');
-const { getPostToPublish } = require('../queries-mint-api');
-const config = require('../../../config');
+const { Post } = require('./models');
+const config = require('../../config');
+
 
 const ig = new IgApiClient();
 const imageName = 'post.jpg';
@@ -57,18 +57,6 @@ async function postImage(post) {
   // });
 }
 
-function getMediaUrl(post) {
-  if (post.mediaUrl) {
-    return post.mediaUrl;
-  }
-
-  if (Array.isArray(post.children) && post.children.length) {
-    return post.children[0].media_url;
-  }
-
-  return '';
-}
-
 const phrases = [
   'Donde hay pasión, hay sazón.',
   'Que tu medicina sea tu alimento, y el alimento tu medicina.',
@@ -81,7 +69,7 @@ const phrases = [
   'Los mejores platos son muy simples.',
   'Los ingredientes no son sagrados. El arte de la cocina es sagrado.',
   'Comer es sensorial. Se trata de interpretar la información que tus sentidos te dan.',
-  'Un cocinero se convierte en artista cuando tiene cosas que decir a través de sus plato, como un pintor en un cuadro.',
+  'Un cocinero se convierte en artista cuando tiene cosas que decir a través de su plato, como un pintor en un cuadro.',
   'El silencio es el sonido de una buena comida.',
   'Las recetas no funcionan a menos que utilices tu corazón.',
   'No hay amor más sincero que el amor a la cocina.',
@@ -107,68 +95,36 @@ function getCaption(post) {
   const { user } = post;
 
   const index = Math.floor(Math.random() * phrases.length);
+
   response.push(phrases[index]);
-
-  if (user && user.username) {
-    response.push(`... 📷 @${user.username}`);
-  }
-
-  response.push(' #feedmetj');
+  response.push(`... 📷 @${user.username}`);
+  response.push(' #feedmetj #tijuanamakesmehungry #tijuanafood');
 
   return response.filter(item => item).join('');
 }
 
-function getPost(posts) {
-  if (!Array.isArray(posts) || !posts.length) {
-    return false;
-  }
-  const postRecord = posts[0];
-
-  const mediaUrl = getMediaUrl(postRecord);
-
-  if (!mediaUrl) {
-    return false;
-  }
-
-  const post = {
-    mediaUrl,
-    caption: getCaption(postRecord),
-  };
-
-  return post;
-}
-
-function updatePostState(post) {
-  const postUpdated = {
-    id: post.id,
-    published: true,
-  };
-
-
-  return createInstagramPost(postUpdated);
-}
-
 async function main() {
-  const query = getPostToPublish();
-  const data = await getPosts(query);
+  const post = await Post.findOne({
+    published: { $exists: 0 },
+    $or: [{ source: 'tijuanamakesmehungry' }, { source: 'tijuanafood' }],
+    mediaType: 'GraphImage',
+  }).sort({ createdAt: -1 });
 
-  const instagramPost = getPost(data);
-
-  if (!instagramPost) {
-    return debug('nothing to post');
-  }
+  const data = {
+    mediaUrl: post.mediaUrl,
+    caption: getCaption(post),
+  };
 
   await restoreSession();
-  debug(`caption: ${JSON.stringify(instagramPost.caption)}`);
+  await downloadImage(data);
+  await postImage(data);
 
-  await downloadImage(instagramPost);
-  debug('image downloaded');
+  debug(`publish:${post.id}`);
 
-  await postImage(instagramPost);
-  debug(`post published:${data[0].id}`);
+  post.published = true;
+  await post.save();
 
-  await updatePostState(data[0]);
-  debug(`post updated:${data[0].id}`);
+  debug(`updated  :${post.id}`);
 
   unlinkSync(imageName);
 

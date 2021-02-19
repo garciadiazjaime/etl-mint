@@ -9,7 +9,7 @@ const debug = require('debug')('app:main');
 const realState = require('./sites/realState');
 const { getRealStateSites } = require('./sites/realState');
 
-const instagramScheduler = require('./sites/instagram/scheduler');
+const instagramPublishPost = require('./sites/instagram/publish-post');
 const instagramLogin = require('./sites/instagram/login');
 const instagramLikePost = require('./sites/instagram/like-post');
 
@@ -49,7 +49,7 @@ function setupCron(cookies) {
   });
 
   cron.schedule('13 23 * * *', async () => {
-    await instagramScheduler();
+    await instagramPublishPost();
     await netlify();
   });
 
@@ -65,6 +65,8 @@ function setupCron(cookies) {
   // cron.schedule('*/30 * * * *', async () => {
   //   await gcenterWorker();
   // });
+
+  return debug('CRON_SETUP');
 }
 
 app.listen(PORT, async () => {
@@ -75,7 +77,9 @@ app.listen(PORT, async () => {
 
   const cookies = isProduction ? await instagramLogin() : null;
 
-  await instagramLikePost(cookies);
+  // await instagramLikePost(cookies);
+
+  // await instagramPublishPost();
 
   setupCron(cookies);
 });
