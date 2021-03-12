@@ -31,8 +31,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(morgan('combined'));
 
+app.use(express.static('public'));
 
 app.get('/', (req, res) => res.json({ msg: ':)' }));
+
+app.get('/like', (req, res) => res.json({ msg: ':)' }));
 
 function setupCron(cookies) {
   if (!isProduction) {
@@ -76,8 +79,9 @@ app.listen(PORT, async () => {
   debug('DB opened');
 
   const cookies = isProduction ? await instagramLogin() : null;
+  // const cookies = await instagramLogin();
 
-  // await instagramLikePost(cookies);
+  await instagramLikePost(cookies);
 
   // await instagramPublishPost();
 

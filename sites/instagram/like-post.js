@@ -3,6 +3,33 @@ const debug = require('debug')('app:like_post');
 const { getBrowser } = require('../../utils/browser');
 const { Post } = require('./models');
 
+const captions = [
+  'buena foto',
+  'muy bien',
+  'bien hecho',
+  'buen trabajo',
+  'excelente calidad',
+  'wow',
+  'justo',
+  'que bien',
+  'es todo',
+  'excelente contenido',
+  'muy buena',
+  'se ve muy bien',
+  'por excelencia',
+  'perfecto',
+  'sigan así',
+  'excelente',
+  'yumi',
+  'exquisito',
+  'bravo',
+  'provecho',
+  'vientos',
+  'algo bien',
+  'correcto',
+  'es correcto',
+];
+
 async function main(cookies) {
   const post = await Post.findOne({
     liked: { $exists: 0 },
@@ -11,6 +38,11 @@ async function main(cookies) {
 
   const browser = await getBrowser();
   const page = await browser.newPage();
+
+  // page.on('console', message => console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
+  //   .on('pageerror', ({ message }) => console.log(message))
+  //   .on('response', response => console.log(`${response.status()} ${response.url()}`))
+  //   .on('requestfailed', request => console.log(`${request.failure().errorText} ${request.url()}`));
 
   if (Array.isArray(cookies) && cookies.length) {
     await page.setCookie(...cookies);
@@ -22,8 +54,29 @@ async function main(cookies) {
   if (response.headers().status !== '404') {
     await page.waitForSelector('button svg[aria-label="Like"]', { timeout: 1000 * 3 });
 
-    await page.evaluate(() => document.querySelectorAll('button')[2].click());
+    const index = parseInt(Math.random() * captions.length, 10);
+
+    await page.evaluate((caption) => {
+      document.querySelector('button svg[aria-label="Emoji"]').parentNode.click();
+      document.querySelectorAll('button')[24].click();
+      document.querySelector('button svg[aria-label="Emoji"]').parentNode.click();
+
+      document.querySelector('button svg[aria-label="Like"]').parentNode.click();
+
+      const input = document.querySelector('textarea');
+      const lastValue = input.value;
+      input.value += ` ${caption}`;
+      const event = new Event('input', { bubbles: true });
+      event.simulated = true;
+      const tracker = input._valueTracker;
+      tracker.setValue(lastValue);
+      input.dispatchEvent(event);
+
+      document.querySelector('form [type="submit"]').click();
+    }, captions[index]);
   }
+
+  await page.screenshot({ path: './public/like.png' });
 
   post.liked = true;
 
