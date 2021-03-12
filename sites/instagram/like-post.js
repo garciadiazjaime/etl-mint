@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const debug = require('debug')('app:like_post');
 
 const { getBrowser } = require('../../utils/browser');
@@ -76,7 +78,11 @@ async function main(cookies) {
     }, captions[index]);
   }
 
-  await page.screenshot({ path: './public/like.png' });
+  const path = './public';
+  if (!fs.existsSync(path)) {
+    fs.mkdirSync(path);
+  }
+  await page.screenshot({ path: `${path}/like.png` });
 
   post.liked = true;
 
