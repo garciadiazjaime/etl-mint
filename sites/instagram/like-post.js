@@ -6,30 +6,36 @@ const { getBrowser } = require('../../utils/browser');
 const { Post } = require('./models');
 
 const captions = [
-  'buena foto',
-  'muy bien',
-  'bien hecho',
-  'buen trabajo',
-  'excelente calidad',
   'wow',
-  'justo',
-  'que bien',
-  'es todo',
-  'excelente contenido',
-  'muy buena',
-  'se ve muy bien',
-  'por excelencia',
-  'perfecto',
-  'sigan así',
-  'excelente',
   'yumi',
-  'exquisito',
+  'deli',
+  'justo',
   'bravo',
-  'provecho',
+  'delish',
   'vientos',
-  'algo bien',
+  'es todo',
   'correcto',
+  'provecho',
+  'perfecto',
+  'muy bien',
+  'que bien',
+  'que rico',
+  'sigan así',
+  'algo bien',
+  'exquisito',
+  'muy buena',
+  'excelente',
+  'buena foto',
+  'bien hecho',
+  'super bien',
   'es correcto',
+  'buen trabajo',
+  'buen servicio',
+  'por excelencia',
+  'que bien se ve',
+  'se ve muy bien',
+  'excelente calidad',
+  'excelente contenido',
 ];
 
 async function main(cookies) {
@@ -60,7 +66,7 @@ async function main(cookies) {
 
     await page.evaluate((caption) => {
       document.querySelector('button svg[aria-label="Emoji"]').parentNode.click();
-      document.querySelectorAll('button')[24].click();
+      document.querySelectorAll('._7UhW9.xLCgt.qyrsm._0PwGv.uL8Hv')[1].parentNode.nextSibling.click();
       document.querySelector('button svg[aria-label="Emoji"]').parentNode.click();
 
       document.querySelector('button svg[aria-label="Like"]').parentNode.click();
