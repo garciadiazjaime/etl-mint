@@ -81,7 +81,7 @@ app.listen(PORT, async () => {
   const cookies = isProduction ? await instagramLogin() : null;
   // const cookies = await instagramLogin();
 
-  // await instagramLikePost(cookies);
+  await instagramLikePost(cookies);
 
   // await instagramPublishPost();
 
