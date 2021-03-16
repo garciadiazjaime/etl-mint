@@ -35,8 +35,6 @@ app.use(express.static('public'));
 
 app.get('/', (req, res) => res.json({ msg: ':)' }));
 
-app.get('/like', (req, res) => res.json({ msg: ':)' }));
-
 function setupCron(cookies) {
   if (!isProduction) {
     return debug('CRON_NOT_SETUP');
@@ -79,7 +77,6 @@ app.listen(PORT, async () => {
   debug('DB opened');
 
   const cookies = isProduction ? await instagramLogin() : null;
-  // const cookies = await instagramLogin();
 
   await instagramLikePost(cookies);
 
