@@ -171,6 +171,10 @@ const config = convict({
       env: 'INSTAGRAM_TOKEN',
       default: '',
     },
+    id: {
+      env: 'INSTAGRAM_ID',
+      default: '',
+    },
     username: {
       env: 'INSTAGRAM_USERNAME',
       default: '',

@@ -13,6 +13,24 @@ const UserSchema = new mongoose.Schema({
   timestamps: true,
 });
 
+const FollowerSchema = new mongoose.Schema({
+  id: { type: String },
+  username: { type: String },
+  fullName: { type: String },
+  profilePicture: { type: String },
+}, {
+  timestamps: true,
+});
+
+const FollowingSchema = new mongoose.Schema({
+  id: { type: String },
+  username: { type: String },
+  fullName: { type: String },
+  profilePicture: { type: String },
+}, {
+  timestamps: true,
+});
+
 const LocationSchema = new mongoose.Schema({
   id: { type: String },
   name: { type: String },
@@ -57,9 +75,13 @@ const PostSchema = new Schema({
 const Post = mongoose.model('post', PostSchema);
 const Location = mongoose.model('location', LocationSchema);
 const User = mongoose.model('user', UserSchema);
+const Follower = mongoose.model('follower', FollowerSchema);
+const Following = mongoose.model('following', FollowingSchema);
 
 module.exports = {
   Post,
   Location,
   User,
+  Follower,
+  Following,
 };

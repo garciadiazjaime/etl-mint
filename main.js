@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const fs = require('fs');
 
 const mapSeries = require('async/mapSeries');
 const cron = require('node-cron');
@@ -12,6 +13,7 @@ const { getRealStateSites } = require('./sites/realState');
 const instagramPublishPost = require('./sites/instagram/publish-post');
 const instagramLogin = require('./sites/instagram/login');
 const instagramLikePost = require('./sites/instagram/like-post');
+const instagramFollow = require('./sites/instagram/follow');
 
 const gcenterWorker = require('./sites/gcenter/worker-ports');
 const gcGenerateImage = require('./sites/gcenter/image');
@@ -70,17 +72,27 @@ function setupCron(cookies) {
   return debug('CRON_SETUP');
 }
 
+function getLocalCookies() {
+  // const cookies = await instagramLogin();
+  // fs.writeFileSync('./cookies.json', JSON.stringify(cookies));
+  const cookies = require('./cookies.json');
+
+  return cookies;
+}
+
 app.listen(PORT, async () => {
   debug(`Listening on ${PORT}`);
 
   await openDB();
   debug('DB opened');
 
-  const cookies = isProduction ? await instagramLogin() : null;
+  const cookies = isProduction ? await instagramLogin() : getLocalCookies();
 
-  await instagramLikePost(cookies);
+  // await instagramLikePost(cookies);
 
   // await instagramPublishPost();
+
+  await instagramFollow();
 
   setupCron(cookies);
 });
