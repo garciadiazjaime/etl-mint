@@ -51,10 +51,12 @@ function setupCron(cookies) {
     await instagramLikeCommentFollow(cookies);
   });
 
+  cron.schedule('27 */6 * * *', async () => {
+    await instagramFollowUpdate();
+  });
+
   cron.schedule('13 23 * * *', async () => {
     await instagramPublishPost();
-
-    await instagramFollowUpdate();
 
     await netlify();
   });

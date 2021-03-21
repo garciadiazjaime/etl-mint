@@ -38,7 +38,7 @@ async function etlFollowing() {
 
   const results = await Promise.all(promises);
 
-  debug(`following: ${results.filter(item => !!item).length}/${results.length}`);
+  debug(`[following] new:${results.filter(item => !!item).length}, total:${results.length}`);
 }
 
 async function etlFollowers() {
@@ -63,7 +63,7 @@ async function etlFollowers() {
 
   const results = await Promise.all(promises);
 
-  debug(`follower: ${results.filter(item => !!item).length}/${results.length}`);
+  debug(`[followers] new:${results.filter(item => !!item).length}, total:${results.length}`);
 }
 
 async function removeFollowings() {
@@ -86,7 +86,7 @@ async function removeFollowings() {
     return accu;
   }, []);
 
-  debug(`followers:${followers.length}, following: ${followings.length}, to-remove: ${followingsToRemove.length}`);
+  debug(`followers:${followers.length}, following[-3days]: ${followings.length}, to-remove: ${followingsToRemove.length}`);
 
   const promises = followingsToRemove.map(async ([id, username]) => {
     debug(`removing:${username}`);
@@ -97,6 +97,7 @@ async function removeFollowings() {
   });
 
   await Promise.all(promises);
+  debug(`done: ${promises.length}`);
 }
 
 async function main() {
