@@ -75,7 +75,7 @@ async function removeFollowings() {
   }, {});
 
   const since = new Date();
-  since.setDate(since.getDate() - 3);
+  since.setDate(since.getDate() - 2);
 
   const followings = await Following.find({ createdAt: { $lt: since } });
   const followingsToRemove = followings.reduce((accu, item) => {
