@@ -64,7 +64,13 @@ async function likeAndCommentPost(page, post) {
   const index = parseInt(Math.random() * captions.length, 10);
 
   await page.evaluate((caption) => {
-    document.querySelector('button svg[aria-label="Emoji"]').parentNode.click();
+    const emojiButton = document.querySelector('button svg[aria-label="Emoji"]');
+
+    if (!emojiButton) {
+      return debug('EMOJI_NOT_FOUND');
+    }
+
+    emojiButton.parentNode.click();
     document.querySelectorAll('._7UhW9.xLCgt.qyrsm._0PwGv.uL8Hv')[1].parentNode.nextSibling.click();
     document.querySelector('button svg[aria-label="Emoji"]').parentNode.click();
 
@@ -80,13 +86,16 @@ async function likeAndCommentPost(page, post) {
     input.dispatchEvent(event);
 
     document.querySelector('form [type="submit"]').click();
+
+    return null;
   }, captions[index]);
 
   if (!fs.existsSync(path)) {
     fs.mkdirSync(path);
   }
 
-  return page.screenshot({ path: `${path}/like.png` });
+  // page.screenshot({ path: `${path}/like.png` });
+  return null;
 }
 
 async function followUsers(page, post) {
@@ -105,14 +114,15 @@ async function followUsers(page, post) {
   const usersTotal = await page.evaluate(() => document.querySelectorAll('.PZuss button').length);
   const users = Array.apply(null, Array(usersTotal)).map((x, i) => i);
 
-  await page.screenshot({ path: `${path}/follow_before.png` });
+  // await page.screenshot({ path: `${path}/follow_before.png` });
 
   await mapSeries(users, async (index) => {
     await page.evaluate(i => document.querySelectorAll('.PZuss button')[i].click(), index);
     await page.waitFor(1000);
   });
 
-  return page.screenshot({ path: `${path}/follow_after.png` });
+  // return page.screenshot({ path: `${path}/follow_after.png` });
+  return null;
 }
 
 async function main(cookies) {
