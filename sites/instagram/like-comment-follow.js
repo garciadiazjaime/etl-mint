@@ -110,7 +110,7 @@ async function followUsers(page, post) {
 
   await page.waitForSelector('section li a', { timeout: 1000 * 3 });
 
-  await page.evaluate(() => document.querySelectorAll('section li a')[0].click());
+  await page.evaluate(() => document.querySelectorAll('section li a')[0].click()); // open followers
   await page.waitForSelector('.PZuss button', { timeout: 1000 * 3 });
 
   const usersTotal = await page.evaluate(() => document.querySelectorAll('.PZuss button').length);
@@ -151,7 +151,7 @@ async function main(cookies) {
   post.liked = true;
   await post.save();
 
-  await followUsers(page, post);
+  // await followUsers(page, post);
 
   await browser.close();
 
