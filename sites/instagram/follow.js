@@ -86,7 +86,7 @@ async function removeFollowings() {
     return accu;
   }, []);
 
-  debug(`followers:${followers.length}, following[-3days]: ${followings.length}, to-remove: ${followingsToRemove.length}`);
+  debug(`followers:${followers.length}, following[-2days]: ${followings.length}, to-remove: ${followingsToRemove.length}`);
 
   const promises = followingsToRemove.map(async ([id, username]) => {
     debug(`removing:${username}`);
