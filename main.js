@@ -51,7 +51,7 @@ function setupCron(cookies) {
     await instagramLikeCommentFollow(cookies);
   });
 
-  cron.schedule('27 */6 * * *', async () => {
+  cron.schedule('27 */12 * * *', async () => {
     await instagramFollowUpdate();
   });
 
