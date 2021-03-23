@@ -70,23 +70,24 @@ async function likeAndCommentPost(page, post) {
       return debug('EMOJI_NOT_FOUND');
     }
 
-    emojiButton.parentNode.click(); // open emoji list
-    document.querySelectorAll('._7UhW9.xLCgt.qyrsm._0PwGv.uL8Hv')[1].parentNode.nextSibling.click(); // click first emoji
-    emojiButton.parentNode.click(); // close emoji list
-
     document.querySelector('button svg[aria-label="Like"]').parentNode.click(); // like post
 
-    // comment post
-    const input = document.querySelector('textarea');
-    const lastValue = input.value;
-    input.value += `  ${caption}`;
-    const event = new Event('input', { bubbles: true });
-    event.simulated = true;
-    const tracker = input._valueTracker;
-    tracker.setValue(lastValue);
-    input.dispatchEvent(event);
 
-    document.querySelector('form [type="submit"]').click();
+    // // comment post, first enable textarea then add caption
+    // emojiButton.parentNode.click(); // open emoji list
+    // document.querySelectorAll('._7UhW9.xLCgt.qyrsm._0PwGv.uL8Hv')[1].parentNode.nextSibling.click(); // click first emoji
+    // emojiButton.parentNode.click(); // close emoji list
+
+    // const input = document.querySelector('textarea');
+    // const lastValue = input.value;
+    // input.value += `  ${caption}`;
+    // const event = new Event('input', { bubbles: true });
+    // event.simulated = true;
+    // const tracker = input._valueTracker;
+    // tracker.setValue(lastValue);
+    // input.dispatchEvent(event);
+
+    // document.querySelector('form [type="submit"]').click();
 
     return null;
   }, captions[index]);
@@ -122,7 +123,9 @@ async function followUsers(page, post) {
     await page.waitFor(1000);
   });
 
-  return page.screenshot({ path: `${path}/follow_after.png` });
+  await page.screenshot({ path: `${path}/follow_after.png` });
+
+  return null;
 }
 
 async function main(cookies) {
