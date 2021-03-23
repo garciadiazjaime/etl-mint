@@ -56,7 +56,7 @@ function setupCron(cookies) {
   // });
 
   cron.schedule('13 23 * * *', async () => {
-    await instagramPublishPost();
+    // await instagramPublishPost();
 
     await netlify();
   });
@@ -95,7 +95,7 @@ app.listen(PORT, async () => {
 
   // await instagramLikeCommentFollow(cookies);
 
-  await instagramPublishPost();
+  // await instagramPublishPost();
 
   // await instagramFollowUpdate();
 

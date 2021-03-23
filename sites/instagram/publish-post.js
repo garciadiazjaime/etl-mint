@@ -45,6 +45,7 @@ async function postImage(post) {
   const imageUrl = 'post.jpg';
   const file = await readFilePromise(imageUrl);
   const { caption } = post;
+  debug(caption);
 
   await ig.publish.photo({
     file,
@@ -97,8 +98,8 @@ function getCaption(post) {
   const index = Math.floor(Math.random() * phrases.length);
 
   response.push(phrases[index]);
-  response.push(`... 📷 @${user.username}`);
-  response.push(' #feedmetj #tijuanamakesmehungry #tijuanafood');
+  response.push(` | 📷  @${user.username}`);
+  // response.push(' #feedmetj #tijuanamakesmehungry #tijuanafood');
 
   return response.filter(item => item).join('');
 }
