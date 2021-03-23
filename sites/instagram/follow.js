@@ -91,16 +91,11 @@ async function removeFollowings() {
   const promises = followingsToRemove.map(async ([id, username]) => {
     debug(`removing:${username}:${id}`);
 
-    try {
-      await ig.friendship.destroy(id);
-      await Following.remove({ id });
-    } catch (error) {
-      debug(error);
-    }
+    await ig.friendship.destroy(id);
+    await Following.remove({ id });
   });
 
   await Promise.all(promises);
-  debug(`done: ${promises.length}`);
 }
 
 async function main() {
