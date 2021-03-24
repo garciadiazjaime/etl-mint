@@ -37,7 +37,8 @@ app.use(express.static('public'));
 
 app.get('/', (req, res) => res.json({ msg: ':)' }));
 
-function setupCron(cookies) {
+// function setupCron(cookies) {
+function setupCron() {
   if (!isProduction) {
     return debug('CRON_NOT_SETUP');
   }
@@ -47,9 +48,9 @@ function setupCron(cookies) {
     await mapSeries(sites, realState);
   });
 
-  cron.schedule('19 * * * *', async () => {
-    await instagramLikeCommentFollow(cookies);
-  });
+  // cron.schedule('19 * * * *', async () => {
+  //   await instagramLikeCommentFollow(cookies);
+  // });
 
   // cron.schedule('27 */12 * * *', async () => {
   //   await instagramFollowUpdate();
@@ -91,13 +92,14 @@ app.listen(PORT, async () => {
   await openDB();
   debug('DB opened');
 
-  const cookies = isProduction ? await instagramLogin() : getLocalCookies();
+  // const cookies = isProduction ? await instagramLogin() : getLocalCookies();
 
-  await instagramLikeCommentFollow(cookies);
+  // await instagramLikeCommentFollow(cookies);
 
   // await instagramPublishPost();
 
   // await instagramFollowUpdate();
 
-  setupCron(cookies);
+  // setupCron(cookies);
+  setupCron();
 });
