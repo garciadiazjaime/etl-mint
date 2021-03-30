@@ -49,19 +49,23 @@ const captions = [
   'excelente contenido',
   'difícil ponerlo mejor',
 ];
+let captionIndex = 0;
 const path = './public';
 
 async function likeAndCommentPost(page, post) {
   const response = await page.goto(post.permalink);
   debug(`${response.headers().status}:${post.permalink}`);
 
-  if (response.headers().status === '404') {
+  if (response.headers().status !== '200') {
+    await page.screenshot({ path: `${path}/like-error.png` });
+
     return null;
   }
 
-  await page.waitForSelector('button svg[aria-label="Like"]', { timeout: 1000 * 3 });
+  await page.waitForSelector('button svg[aria-label="Comment"]', { timeout: 1000 * 3 });
 
-  const index = parseInt(Math.random() * captions.length, 10);
+  const index = captionIndex % captions.length;
+  captionIndex += 1;
 
   await page.evaluate((caption) => {
     const emojiButton = document.querySelector('button svg[aria-label="Emoji"]');
@@ -70,24 +74,24 @@ async function likeAndCommentPost(page, post) {
       return debug('EMOJI_NOT_FOUND');
     }
 
-    document.querySelector('button svg[aria-label="Like"]').parentNode.click(); // like post
+    // document.querySelector('button svg[aria-label="Like"]').parentNode.click(); // like post
 
 
-    // // comment post, first enable textarea then add caption
-    // emojiButton.parentNode.click(); // open emoji list
-    // document.querySelectorAll('._7UhW9.xLCgt.qyrsm._0PwGv.uL8Hv')[1].parentNode.nextSibling.click(); // click first emoji
-    // emojiButton.parentNode.click(); // close emoji list
+    // comment post, first enable textarea then add caption
+    emojiButton.parentNode.click(); // open emoji list
+    document.querySelectorAll('._7UhW9.xLCgt.qyrsm._0PwGv.uL8Hv')[1].parentNode.nextSibling.click(); // click first emoji
+    emojiButton.parentNode.click(); // close emoji list
 
-    // const input = document.querySelector('textarea');
-    // const lastValue = input.value;
-    // input.value += `  ${caption}`;
-    // const event = new Event('input', { bubbles: true });
-    // event.simulated = true;
-    // const tracker = input._valueTracker;
-    // tracker.setValue(lastValue);
-    // input.dispatchEvent(event);
+    const input = document.querySelector('textarea');
+    const lastValue = input.value;
+    input.value += `  ${caption}`;
+    const event = new Event('input', { bubbles: true });
+    event.simulated = true;
+    const tracker = input._valueTracker;
+    tracker.setValue(lastValue);
+    input.dispatchEvent(event);
 
-    // document.querySelector('form [type="submit"]').click();
+    document.querySelector('form [type="submit"]').click();
 
     return null;
   }, captions[index]);
@@ -103,8 +107,13 @@ async function likeAndCommentPost(page, post) {
 async function followUsers(page, post) {
   const userURL = `https://www.instagram.com/${post.user.username}/`;
   const response = await page.goto(userURL);
+
   debug(`${response.headers().status}:${userURL}`);
-  if (response.headers().status === '404') {
+
+
+  if (response.headers().status !== '200') {
+    await page.screenshot({ path: `${path}/follow-error.png` });
+
     return null;
   }
 
@@ -151,7 +160,7 @@ async function main(cookies) {
   post.liked = true;
   await post.save();
 
-  // await followUsers(page, post);
+  await followUsers(page, post);
 
   await browser.close();
 

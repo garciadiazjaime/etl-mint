@@ -37,8 +37,7 @@ app.use(express.static('public'));
 
 app.get('/', (req, res) => res.json({ msg: ':)' }));
 
-// function setupCron(cookies) {
-function setupCron() {
+function setupCron(cookies) {
   if (!isProduction) {
     return debug('CRON_NOT_SETUP');
   }
@@ -48,9 +47,9 @@ function setupCron() {
   //   await mapSeries(sites, realState);
   // });
 
-  // cron.schedule('19 * * * *', async () => {
-  //   await instagramLikeCommentFollow(cookies);
-  // });
+  cron.schedule('19 * * * *', async () => {
+    await instagramLikeCommentFollow(cookies);
+  });
 
   // cron.schedule('27 */12 * * *', async () => {
   //   await instagramFollowUpdate();
@@ -79,9 +78,9 @@ function setupCron() {
 }
 
 async function getLocalCookies() {
-  const cookies = await instagramLogin();
-  fs.writeFileSync('./cookies.json', JSON.stringify(cookies));
-  // const cookies = require('./cookies.json');
+  // const cookies = await instagramLogin();
+  // fs.writeFileSync('./cookies.json', JSON.stringify(cookies));
+  const cookies = require('./cookies.json');
 
   return cookies;
 }
@@ -92,14 +91,13 @@ app.listen(PORT, async () => {
   await openDB();
   debug('DB opened');
 
-  // const cookies = isProduction ? await instagramLogin() : getLocalCookies();
+  const cookies = isProduction ? await instagramLogin() : await getLocalCookies();
 
-  // await instagramLikeCommentFollow(cookies);
+  await instagramLikeCommentFollow(cookies);
 
-  await instagramPublishPost();
+  // await instagramPublishPost();
 
   // await instagramFollowUpdate();
 
-  // setupCron(cookies);
-  setupCron();
+  setupCron(cookies);
 });
