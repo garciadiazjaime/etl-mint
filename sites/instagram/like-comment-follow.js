@@ -49,7 +49,7 @@ const captions = [
   'excelente contenido',
   'difícil ponerlo mejor',
 ];
-let captionIndex = 0;
+let captionIndex = 6;
 const path = './public';
 
 async function likeAndCommentPost(page, post) {
@@ -65,6 +65,7 @@ async function likeAndCommentPost(page, post) {
   await page.waitForSelector('button svg[aria-label="Comment"]', { timeout: 1000 * 3 });
 
   const index = captionIndex % captions.length;
+  debug(`caption:${index}`);
   captionIndex += 1;
 
   await page.evaluate((caption) => {
