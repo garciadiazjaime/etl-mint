@@ -51,9 +51,9 @@ function setupCron(cookies) {
     await instagramLikeCommentFollow(cookies);
   });
 
-  // cron.schedule('27 */12 * * *', async () => {
-  //   await instagramFollowUpdate();
-  // });
+  cron.schedule('27 */12 * * *', async () => {
+    await instagramFollowUpdate();
+  });
 
   cron.schedule('13 23 * * *', async () => {
     await instagramPublishPost();
@@ -91,13 +91,14 @@ app.listen(PORT, async () => {
   await openDB();
   debug('DB opened');
 
-  const cookies = isProduction ? await instagramLogin() : await getLocalCookies();
-
-  await instagramLikeCommentFollow(cookies);
+  await instagramFollowUpdate();
 
   // await instagramPublishPost();
 
-  // await instagramFollowUpdate();
+
+  const cookies = isProduction ? await instagramLogin() : await getLocalCookies();
+
+  // await instagramLikeCommentFollow(cookies);
 
   setupCron(cookies);
 });

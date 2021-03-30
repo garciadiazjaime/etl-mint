@@ -18,6 +18,7 @@ const FollowerSchema = new mongoose.Schema({
   username: { type: String },
   fullName: { type: String },
   profilePicture: { type: String },
+  active: { type: Boolean, default: true },
 }, {
   timestamps: true,
 });
@@ -27,6 +28,7 @@ const FollowingSchema = new mongoose.Schema({
   username: { type: String },
   fullName: { type: String },
   profilePicture: { type: String },
+  active: { type: Boolean, default: true },
 }, {
   timestamps: true,
 });

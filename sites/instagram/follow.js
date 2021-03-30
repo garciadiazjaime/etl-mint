@@ -13,6 +13,7 @@ function getUser(item) {
     username: item.username,
     fullName: item.full_name,
     profilePicture: item.profile_pic_url,
+    active: true,
   };
 }
 
@@ -41,10 +42,20 @@ async function etlFollowing() {
   debug(`[following] new:${results.filter(item => !!item).length}, total:${results.length}`);
 }
 
+async function getFollowers(followers, response) {
+  const data = await followers.items();
+  response.push(...data);
+
+  if (followers.isMoreAvailable()) {
+    return getFollowers(followers, response);
+  }
+
+  return response;
+}
+
 async function etlFollowers() {
   const response = ig.feed.accountFollowers(config.get('instagram.id'));
-
-  const data = await response.items();
+  const data = await getFollowers(response, []);
 
   const promises = data.map(async (item) => {
     const result = await Follower.findOne({ id: item.pk });
@@ -54,7 +65,7 @@ async function etlFollowers() {
 
     const user = getUser(item);
 
-    await Follower.findOneAndUpdate({ id: user.id }, user, { // eslint-disable-line
+    await Follower.findOneAndUpdate({ id: user.id }, user, {
       upsert: true,
     });
 
@@ -67,7 +78,7 @@ async function etlFollowers() {
 }
 
 async function removeFollowings() {
-  const followers = await Follower.find();
+  const followers = await Follower.find({ active: true });
   const followersIDs = followers.reduce((accu, item) => {
     accu[item.id] = true;
 
@@ -77,7 +88,7 @@ async function removeFollowings() {
   const since = new Date();
   since.setDate(since.getDate() - 2);
 
-  const followings = await Following.find({ createdAt: { $lt: since } });
+  const followings = await Following.find({ active: true, createdAt: { $lt: since } });
   const followingsToRemove = followings.reduce((accu, item) => {
     if (!followersIDs[item.id]) {
       accu.push([item.id, item.username]);
@@ -86,13 +97,13 @@ async function removeFollowings() {
     return accu;
   }, []);
 
-  debug(`followers:${followers.length}, following[-2days]: ${followings.length}, to-remove: ${followingsToRemove.length}`);
+  debug(`followers:${followers.length}, following[-2days]: ${followings.length}, to-remove: ${followingsToRemove.length},50`);
 
-  const promises = followingsToRemove.map(async ([id, username]) => {
+  const promises = followingsToRemove.slice(0, 50).map(async ([id, username]) => {
     debug(`removing:${username}:${id}`);
 
     await ig.friendship.destroy(id);
-    await Following.remove({ id });
+    await Following.findOneAndUpdate({ id }, { active: false });
   });
 
   await Promise.all(promises);
