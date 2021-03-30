@@ -43,10 +43,10 @@ function setupCron() {
     return debug('CRON_NOT_SETUP');
   }
 
-  const sites = getRealStateSites();
-  cron.schedule('42 */12 * * *', async () => {
-    await mapSeries(sites, realState);
-  });
+  // const sites = getRealStateSites();
+  // cron.schedule('42 */12 * * *', async () => {
+  //   await mapSeries(sites, realState);
+  // });
 
   // cron.schedule('19 * * * *', async () => {
   //   await instagramLikeCommentFollow(cookies);
@@ -57,7 +57,7 @@ function setupCron() {
   // });
 
   cron.schedule('13 23 * * *', async () => {
-    // await instagramPublishPost();
+    await instagramPublishPost();
 
     await netlify();
   });
