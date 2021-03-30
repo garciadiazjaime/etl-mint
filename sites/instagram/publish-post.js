@@ -45,7 +45,6 @@ async function postImage(post) {
   const imageUrl = 'post.jpg';
   const file = await readFilePromise(imageUrl);
   const { caption } = post;
-  debug(caption);
 
   await ig.publish.photo({
     file,
@@ -90,16 +89,18 @@ const phrases = [
   'Si un día sientes un vacío... come es hambre.',
   'Si somos lo que comemos, entonces soy una: Delicia.',
 ];
+let phrasesIndex = 0;
 
 function getCaption(post) {
   const response = [];
   const { user } = post;
 
-  const index = Math.floor(Math.random() * phrases.length);
+  const index = phrasesIndex % phrases.length;
+  phrasesIndex += 1;
+  debug(`caption:${index}`);
 
   response.push(phrases[index]);
   response.push(` | 📷  @${user.username}`);
-  // response.push(' #feedmetj #tijuanamakesmehungry #tijuanafood');
 
   return response.filter(item => item).join('');
 }
@@ -125,7 +126,7 @@ async function main() {
   post.published = true;
   await post.save();
 
-  debug(`updated  :${post.id}`);
+  debug(`updated:${post.id}`);
 
   unlinkSync(imageName);
 

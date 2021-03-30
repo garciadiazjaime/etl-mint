@@ -96,7 +96,7 @@ app.listen(PORT, async () => {
 
   // await instagramLikeCommentFollow(cookies);
 
-  // await instagramPublishPost();
+  await instagramPublishPost();
 
   // await instagramFollowUpdate();
 
