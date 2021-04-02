@@ -1,3 +1,5 @@
+const mapSeries = require('async/mapSeries');
+
 const debug = require('debug')('app:instagram_follow');
 const { IgApiClient } = require('instagram-private-api');
 
@@ -97,16 +99,20 @@ async function removeFollowings() {
     return accu;
   }, []);
 
-  debug(`followers:${followers.length}, following[-2days]: ${followings.length}, to-remove: ${followingsToRemove.length},100`);
+  const limit = 6;
+  debug(`followers:${followers.length}, following[-2days]: ${followings.length}, to-remove: ${followingsToRemove.length},${limit}`);
 
-  const promises = followingsToRemove.slice(0, 100).map(async ([id, username]) => {
+  await mapSeries(followingsToRemove.slice(0, limit), async ([id, username]) => {
     debug(`removing:${username}:${id}`);
 
-    await ig.friendship.destroy(id);
-    await Following.findOneAndUpdate({ id }, { active: false });
+    try {
+      await ig.friendship.destroy(id);
+      await Following.findOneAndUpdate({ id }, { active: false });
+    } catch (error) {
+      debug(error);
+      await Following.remove({ id });
+    }
   });
-
-  await Promise.all(promises);
 }
 
 async function main() {
