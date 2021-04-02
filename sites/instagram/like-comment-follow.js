@@ -61,7 +61,7 @@ const captions = [
   'excelente contenido',
   'difícil ponerlo mejor',
 ];
-let captionIndex = 31;
+let captionIndex = 32;
 const path = './public';
 
 async function likeAndCommentPost(page, post) {

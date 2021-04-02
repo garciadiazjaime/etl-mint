@@ -99,7 +99,7 @@ async function removeFollowings() {
     return accu;
   }, []);
 
-  const limit = 6;
+  const limit = 60;
   debug(`followers:${followers.length}, following[-2days]: ${followings.length}, to-remove: ${followingsToRemove.length},${limit}`);
 
   await mapSeries(followingsToRemove.slice(0, limit), async ([id, username]) => {
