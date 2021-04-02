@@ -61,7 +61,7 @@ const captions = [
   'excelente contenido',
   'difícil ponerlo mejor',
 ];
-let captionIndex = 6;
+let captionIndex = 31;
 const path = './public';
 
 async function likeAndCommentPost(page, post) {
@@ -88,7 +88,6 @@ async function likeAndCommentPost(page, post) {
     }
 
     // document.querySelector('button svg[aria-label="Like"]').parentNode.click(); // like post
-
 
     // comment post, first enable textarea then add caption
     emojiButton.parentNode.click(); // open emoji list
@@ -144,6 +143,7 @@ async function followUsers(page, post) {
     await page.evaluate(i => document.querySelectorAll('.PZuss button')[i].click(), index);
     await page.waitFor(1000);
   });
+  debug(`follow:${usersTotal}`);
 
   await page.screenshot({ path: `${path}/follow_after.png` });
 
