@@ -74,7 +74,12 @@ async function likeAndCommentPost(page, post) {
     return null;
   }
 
-  await page.waitForSelector('button svg[aria-label="Comment"]', { timeout: 1000 * 3 });
+  try {
+    await page.waitForSelector('button svg[aria-label="Comment"]', { timeout: 1000 * 3 });
+  } catch (error) {
+    debug('NO_COMMENT');
+    return debug(error);
+  }
 
   const index = captionIndex % captions.length;
   debug(`caption:${index}`);
