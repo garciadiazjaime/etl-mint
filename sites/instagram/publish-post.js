@@ -97,7 +97,7 @@ const phrases = [
   'Una comida bien preparada tienes sabores delicados que hay que retener en la boca para apreciarlos.',
   'Un cocinero se convierte en artista cuando tiene cosas que decir a través de su plato, como un pintor en un cuadro.',
 ];
-let phrasesIndex = 3;
+let phrasesIndex = 5;
 
 function getCaption(post) {
   const response = [];

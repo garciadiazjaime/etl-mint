@@ -61,7 +61,7 @@ const captions = [
   'excelente contenido',
   'difícil ponerlo mejor',
 ];
-let captionIndex = 32;
+let captionIndex = 52;
 const path = './public';
 
 async function likeAndCommentPost(page, post) {
@@ -85,11 +85,11 @@ async function likeAndCommentPost(page, post) {
   debug(`caption:${index}`);
   captionIndex += 1;
 
-  await page.evaluate((caption) => {
+  const result = await page.evaluate((caption) => {
     const emojiButton = document.querySelector('button svg[aria-label="Emoji"]');
 
     if (!emojiButton) {
-      return debug('EMOJI_NOT_FOUND');
+      return 'EMOJI_NOT_FOUND';
     }
 
     // document.querySelector('button svg[aria-label="Like"]').parentNode.click(); // like post
@@ -112,6 +112,10 @@ async function likeAndCommentPost(page, post) {
 
     return null;
   }, captions[index]);
+
+  if (result) {
+    debug(result);
+  }
 
   if (!fs.existsSync(path)) {
     fs.mkdirSync(path);
