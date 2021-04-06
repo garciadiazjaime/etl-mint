@@ -4,6 +4,7 @@ const mapSeries = require('async/mapSeries');
 const debug = require('debug')('app:like_post');
 
 const { getBrowser } = require('../../utils/browser');
+const { sendEmail } = require('../../utils/email');
 const { Post } = require('./models');
 
 const captions = [
@@ -61,7 +62,7 @@ const captions = [
   'excelente contenido',
   'difícil ponerlo mejor',
 ];
-let captionIndex = 52;
+let captionIndex = 12;
 const path = './public';
 
 async function likeAndCommentPost(page, post) {
@@ -77,6 +78,7 @@ async function likeAndCommentPost(page, post) {
   try {
     await page.waitForSelector('button svg[aria-label="Comment"]', { timeout: 1000 * 3 });
   } catch (error) {
+    sendEmail(`NO_COMMENT:${post.permalink}`);
     debug('NO_COMMENT');
     return debug(error);
   }

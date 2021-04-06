@@ -64,7 +64,7 @@ const phrases = [
   'Donde hay pasión, hay sazón.',
   'Sonrie, esto te va a gustar.',
   'La cocina es alquimia de amor.',
-  'All you need is Love ( y comida)',
+  'All you need is Love (y comida)',
   'Barriga llena, corazón contento.',
   'Hoy me comeré la vida a mordiscos',
   'Los mejores platos son muy simples.',
@@ -97,7 +97,7 @@ const phrases = [
   'Una comida bien preparada tienes sabores delicados que hay que retener en la boca para apreciarlos.',
   'Un cocinero se convierte en artista cuando tiene cosas que decir a través de su plato, como un pintor en un cuadro.',
 ];
-let phrasesIndex = 5;
+let phrasesIndex = 6;
 
 function getCaption(post) {
   const response = [];

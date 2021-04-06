@@ -250,6 +250,11 @@ const config = convict({
       env: 'NETLIFY_HOOK',
     },
   },
+  sendgrid: {
+    doc: 'Email app',
+    default: '',
+    env: 'SENDGRID_API_KEY',
+  },
 });
 
 // Perform validation
