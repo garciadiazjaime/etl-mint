@@ -78,7 +78,7 @@ async function likeAndCommentPost(page, post) {
   try {
     await page.waitForSelector('button svg[aria-label="Comment"]', { timeout: 1000 * 3 });
   } catch (error) {
-    sendEmail(`NO_COMMENT:${post.permalink}`);
+    await sendEmail(`NO_COMMENT:${post.permalink}`);
     debug('NO_COMMENT');
     return debug(error);
   }
@@ -137,6 +137,8 @@ async function followUsers(page, post) {
   if (response.headers().status !== '200') {
     await page.screenshot({ path: `${path}/follow-error.png` });
 
+    await sendEmail(`follow-error:${userURL}`);
+
     return null;
   }
 
@@ -148,7 +150,7 @@ async function followUsers(page, post) {
   const usersTotal = await page.evaluate(() => document.querySelectorAll('.PZuss button').length);
   const users = Array.apply(null, Array(usersTotal)).map((x, i) => i);
 
-  await page.screenshot({ path: `${path}/follow_before.png` });
+  // await page.screenshot({ path: `${path}/follow_before.png` });
 
   await mapSeries(users, async (index) => {
     await page.evaluate(i => document.querySelectorAll('.PZuss button')[i].click(), index);
@@ -156,7 +158,7 @@ async function followUsers(page, post) {
   });
   debug(`follow:${usersTotal}`);
 
-  await page.screenshot({ path: `${path}/follow_after.png` });
+  // await page.screenshot({ path: `${path}/follow_after.png` });
 
   return null;
 }
@@ -179,7 +181,7 @@ async function main(cookies) {
     await page.setCookie(...cookies);
   }
 
-  await likeAndCommentPost(page, post);
+  // await likeAndCommentPost(page, post);
 
   post.liked = true;
   await post.save();
