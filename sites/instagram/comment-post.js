@@ -1,7 +1,6 @@
 const fs = require('fs');
-const mapSeries = require('async/mapSeries');
 
-const debug = require('debug')('app:like_post');
+const debug = require('debug')('app:comment_post');
 
 const { getBrowser } = require('../../utils/browser');
 const { sendEmail } = require('../../utils/email');
@@ -62,10 +61,10 @@ const captions = [
   'excelente contenido',
   'difícil ponerlo mejor',
 ];
-let captionIndex = 12;
+let captionIndex = 47;
 const path = './public';
 
-async function likeAndCommentPost(page, post) {
+async function commentPost(page, post) {
   const response = await page.goto(post.permalink);
   debug(`${response.headers().status}:${post.permalink}`);
 
@@ -94,8 +93,6 @@ async function likeAndCommentPost(page, post) {
       return 'EMOJI_NOT_FOUND';
     }
 
-    // document.querySelector('button svg[aria-label="Like"]').parentNode.click(); // like post
-
     // comment post, first enable textarea then add caption
     emojiButton.parentNode.click(); // open emoji list
     document.querySelectorAll('._7UhW9.xLCgt.qyrsm._0PwGv.uL8Hv')[1].parentNode.nextSibling.click(); // click first emoji
@@ -123,70 +120,27 @@ async function likeAndCommentPost(page, post) {
     fs.mkdirSync(path);
   }
 
-  // page.screenshot({ path: `${path}/like.png` });
-  return null;
-}
-
-async function followUsers(page, post) {
-  const userURL = `https://www.instagram.com/${post.user.username}/`;
-  const response = await page.goto(userURL);
-
-  debug(`${response.headers().status}:${userURL}`);
-
-
-  if (response.headers().status !== '200') {
-    await page.screenshot({ path: `${path}/follow-error.png` });
-
-    await sendEmail(`follow-error:${userURL}`);
-
-    return null;
-  }
-
-  await page.waitForSelector('section li a', { timeout: 1000 * 3 });
-
-  await page.evaluate(() => document.querySelectorAll('section li a')[0].click()); // open followers
-  await page.waitForSelector('.PZuss button', { timeout: 1000 * 3 });
-
-  const usersTotal = await page.evaluate(() => document.querySelectorAll('.PZuss button').length);
-  const users = Array.apply(null, Array(usersTotal)).map((x, i) => i);
-
-  // await page.screenshot({ path: `${path}/follow_before.png` });
-
-  await mapSeries(users, async (index) => {
-    await page.evaluate(i => document.querySelectorAll('.PZuss button')[i].click(), index);
-    await page.waitFor(1000);
-  });
-  debug(`follow:${usersTotal}`);
-
-  // await page.screenshot({ path: `${path}/follow_after.png` });
-
   return null;
 }
 
 async function main(cookies) {
   const post = await Post.findOne({
-    liked: { $exists: 0 },
+    commented: { $exists: 0 },
     $or: [{ source: 'tijuanamakesmehungry' }, { source: 'tijuanafood' }],
   }).sort({ createdAt: -1 });
 
   const browser = await getBrowser();
   const page = await browser.newPage();
 
-  // page.on('console', message => console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
-  //   .on('pageerror', ({ message }) => console.log(message))
-  //   .on('response', response => console.log(`${response.status()} ${response.url()}`))
-  //   .on('requestfailed', request => console.log(`${request.failure().errorText} ${request.url()}`));
-
   if (Array.isArray(cookies) && cookies.length) {
     await page.setCookie(...cookies);
   }
 
-  // await likeAndCommentPost(page, post);
+  await commentPost(page, post);
 
-  post.liked = true;
+  post.commented = true;
+
   await post.save();
-
-  await followUsers(page, post);
 
   await browser.close();
 

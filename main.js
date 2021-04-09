@@ -12,7 +12,8 @@ const { getRealStateSites } = require('./sites/realState');
 
 const instagramPublishPost = require('./sites/instagram/publish-post');
 const instagramLogin = require('./sites/instagram/login');
-const instagramLikeCommentFollow = require('./sites/instagram/like-comment-follow');
+const commentPost = require('./sites/instagram/comment-post');
+const followUsers = require('./sites/instagram/follow-users');
 const instagramFollowUpdate = require('./sites/instagram/follow');
 
 const gcenterWorker = require('./sites/gcenter/worker-ports');
@@ -47,8 +48,12 @@ function setupCron(cookies) {
   //   await mapSeries(sites, realState);
   // });
 
-  cron.schedule('19 * * * *', async () => {
-    await instagramLikeCommentFollow(cookies);
+  cron.schedule('19 */4 * * *', async () => {
+    await commentPost(cookies);
+  });
+
+  cron.schedule('21 * * * *', async () => {
+    await followUsers(cookies);
   });
 
   cron.schedule('27 */8 * * *', async () => {
@@ -97,7 +102,9 @@ app.listen(PORT, async () => {
 
   const cookies = isProduction ? await instagramLogin() : await getLocalCookies();
 
-  await instagramLikeCommentFollow(cookies);
+  await commentPost(cookies);
+
+  await followUsers(cookies);
 
   setupCron(cookies);
 });

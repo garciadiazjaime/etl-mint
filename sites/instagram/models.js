@@ -66,7 +66,9 @@ const PostSchema = new Schema({
   accessibility: String,
 
   liked: Boolean,
+  commented: Boolean,
   published: Boolean,
+  following: Boolean,
 
   user: UserSchema,
   location: LocationSchema,
