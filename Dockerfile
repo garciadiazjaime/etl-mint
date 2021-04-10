@@ -23,4 +23,6 @@ WORKDIR /usr/src/app
 
 ADD . /usr/src/app
 
+EXPOSE 3030
+
 CMD [ "yarn", "start" ]

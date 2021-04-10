@@ -61,7 +61,7 @@ const captions = [
   'excelente contenido',
   'difícil ponerlo mejor',
 ];
-let captionIndex = 47;
+let captionIndex = 3;
 const path = './public';
 
 async function commentPost(page, post) {

@@ -33,6 +33,8 @@ async function followUsers(page, post) {
     await page.waitFor(1000);
   });
 
+  await page.screenshot({ path: `${path}/following-after.png` });
+
   return debug(`follow:${usersTotal}`);
 }
 
