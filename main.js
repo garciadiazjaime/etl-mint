@@ -48,9 +48,9 @@ function setupCron(cookies) {
   //   await mapSeries(sites, realState);
   // });
 
-  cron.schedule('19 */4 * * *', async () => {
-    await commentPost(cookies);
-  });
+  // cron.schedule('19 */4 * * *', async () => {
+  //   await commentPost(cookies);
+  // });
 
   cron.schedule('21 * * * *', async () => {
     await followUsers(cookies);
@@ -61,7 +61,7 @@ function setupCron(cookies) {
   });
 
   cron.schedule('13 23 * * *', async () => {
-    await instagramPublishPost();
+    // await instagramPublishPost();
 
     await netlify();
   });
@@ -98,11 +98,11 @@ app.listen(PORT, async () => {
 
   await instagramFollowUpdate();
 
-  await instagramPublishPost();
+  // await instagramPublishPost();
 
   const cookies = isProduction ? await instagramLogin() : await getLocalCookies();
 
-  await commentPost(cookies);
+  // await commentPost(cookies);
 
   await followUsers(cookies);
 
