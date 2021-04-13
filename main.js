@@ -56,9 +56,9 @@ function setupCron(cookies) {
     await followUsers(cookies);
   });
 
-  cron.schedule('27 */8 * * *', async () => {
-    await instagramFollowUpdate();
-  });
+  // cron.schedule('27 */8 * * *', async () => {
+  //   await instagramFollowUpdate();
+  // });
 
   cron.schedule('13 23 * * *', async () => {
     // await instagramPublishPost();
@@ -96,7 +96,7 @@ app.listen(PORT, async () => {
   await openDB();
   debug('DB opened');
 
-  await instagramFollowUpdate();
+  // await instagramFollowUpdate();
 
   // await instagramPublishPost();
 
