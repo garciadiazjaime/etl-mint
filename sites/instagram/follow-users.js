@@ -28,14 +28,14 @@ async function followUsers(page, post) {
   const usersTotal = await page.evaluate(() => document.querySelectorAll('.PZuss button').length);
   const users = Array.apply(null, Array(usersTotal)).map((x, i) => i);
 
-  await mapSeries(users, async (index) => {
+  await mapSeries(users.slice(0, users.length / 2), async (index) => {
     await page.evaluate(i => document.querySelectorAll('.PZuss button')[i].click(), index);
     await page.waitFor(1000);
   });
 
   await page.screenshot({ path: `${path}/following-after.png` });
 
-  return debug(`follow:${usersTotal}`);
+  return debug(`follow:${usersTotal / 2}`);
 }
 
 async function main(cookies) {
