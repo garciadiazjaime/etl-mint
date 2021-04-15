@@ -28,6 +28,7 @@ const config = require('./config');
 const PORT = config.get('port');
 
 const isProduction = config.get('env') === 'production';
+const path = './public';
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -95,6 +96,10 @@ app.listen(PORT, async () => {
 
   await openDB();
   debug('DB opened');
+
+  if (!fs.existsSync(path)) {
+    fs.mkdirSync(path);
+  }
 
   await instagramFollowUpdate();
 
