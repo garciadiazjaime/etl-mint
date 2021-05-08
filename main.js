@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const request = require('request');
 
 const mapSeries = require('async/mapSeries');
 const cron = require('node-cron');
@@ -39,6 +40,16 @@ app.use(express.static('public'));
 
 app.get('/', (req, res) => res.json({ msg: ':)' }));
 
+app.get('/proxy', (req, res) => {
+  const { url } = req.query;
+  if (!url) {
+    return debug('EMPTY_URL');
+  }
+
+  debug(url);
+  request.get(url).pipe(res);
+});
+
 function setupCron(cookies) {
   if (!isProduction) {
     return debug('CRON_NOT_SETUP');
@@ -53,18 +64,18 @@ function setupCron(cookies) {
   //   await commentPost(cookies);
   // });
 
-  cron.schedule('43 * * * *', async () => {
-    await followUsers(cookies);
-  });
+  // cron.schedule('43 * * * *', async () => {
+  //   await followUsers(cookies);
+  // });
 
   // cron.schedule('27 */8 * * *', async () => {
   //   await instagramFollowUpdate();
   // });
 
-  cron.schedule('13 23 * * *', async () => {
-    // await instagramPublishPost();
+  cron.schedule('13 24 * * *', async () => {
+    await instagramPublishPost();
 
-    await netlify();
+    // await netlify();
   });
 
   // cron.schedule('42 13 * * *', async () => {
@@ -101,15 +112,15 @@ app.listen(PORT, async () => {
     fs.mkdirSync(path);
   }
 
-  await instagramFollowUpdate();
+  // await instagramFollowUpdate();
 
   // await instagramPublishPost();
 
-  const cookies = isProduction ? await instagramLogin() : await getLocalCookies();
+  // const cookies = isProduction ? await instagramLogin() : await getLocalCookies();
 
-  // await commentPost(cookies);
+  // // await commentPost(cookies);
 
-  await followUsers(cookies);
+  // // await followUsers(cookies);
 
-  setupCron(cookies);
+  // setupCron(cookies);
 });

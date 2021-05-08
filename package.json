@@ -4,6 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
+    "dev": "npx nodemon ./main",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./main",
     "lint": "npx eslint .",
@@ -28,6 +29,7 @@
     "express": "^4.17.1",
     "fb": "^2.0.0",
     "instagram-private-api": "^1.39.2",
+    "jimp": "^0.16.1",
     "jsdom": "^16.4.0",
     "mongoose": "^5.11.17",
     "morgan": "^1.10.0",
@@ -35,13 +37,14 @@
     "node-fetch": "^2.6.1",
     "punycode": "^2.1.1",
     "puppeteer": "^2.1.1",
-    "request": "^2.88.0",
+    "request": "^2.88.2",
     "twitter-lite": "^0.13.0",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.2.0",
-    "eslint-plugin-import": "^2.18.0"
+    "eslint-plugin-import": "^2.18.0",
+    "nodemon": "^2.0.7"
   }
 }
