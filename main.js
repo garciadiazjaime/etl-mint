@@ -64,19 +64,19 @@ function setupCron(cookies) {
   //   await commentPost(cookies);
   // });
 
-  // cron.schedule('43 * * * *', async () => {
-  //   await followUsers(cookies);
-  // });
+  cron.schedule('43 * * * *', async () => {
+    await followUsers(cookies);
+  });
 
   // cron.schedule('27 */8 * * *', async () => {
   //   await instagramFollowUpdate();
   // });
 
-  cron.schedule('13 24 * * *', async () => {
-    await instagramPublishPost();
+  // cron.schedule('13 24 * * *', async () => {
+  //   await instagramPublishPost();
 
-    // await netlify();
-  });
+  //   await netlify();
+  // });
 
   // cron.schedule('42 13 * * *', async () => {
   //   await gcGenerateImage();
@@ -116,11 +116,11 @@ app.listen(PORT, async () => {
 
   // await instagramPublishPost();
 
-  // const cookies = isProduction ? await instagramLogin() : await getLocalCookies();
+  const cookies = isProduction ? await instagramLogin() : await getLocalCookies();
 
-  // // await commentPost(cookies);
+  // await commentPost(cookies);
 
-  // // await followUsers(cookies);
+  await followUsers(cookies);
 
-  // setupCron(cookies);
+  setupCron(cookies);
 });
