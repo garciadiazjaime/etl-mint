@@ -64,7 +64,7 @@ function setupCron(cookies) {
   //   await commentPost(cookies);
   // });
 
-  cron.schedule('43 * * * *', async () => {
+  cron.schedule('17 * * * *', async () => {
     await followUsers(cookies);
   });
 
