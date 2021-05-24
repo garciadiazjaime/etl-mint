@@ -23,8 +23,8 @@ function addBorder(image, border, hexValue) {
 }
 
 const colors = {
-  image1: '#444743',
-  image2: '#ecedef',
+  image1: '#c08e60',
+  image2: '#fef5e6',
 };
 
 async function getComparedImage(image1, image2) {
