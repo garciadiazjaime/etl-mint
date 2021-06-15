@@ -25,18 +25,30 @@ async function followUsers(page, post) {
   await page.evaluate(() => document.querySelectorAll('section li a')[0].click()); // open followers
   await page.waitForSelector('.PZuss button', { timeout: 1000 * 3 });
 
+  await page.evaluate(() => {
+    document.querySelector('.isgrP').scrollTop = 300;
+  });
+
   const usersTotal = await page.evaluate(() => document.querySelectorAll('.PZuss button').length);
   const users = Array.apply(null, Array(usersTotal)).map((x, i) => i);
 
+  debug(`usersTotal:${usersTotal}`);
+
   await mapSeries(users, async (index) => {
-    await page.evaluate(i => document.querySelectorAll('.PZuss button')[i].click(), index);
-    await page.screenshot({ path: `${path}/following-after-${index}.png` });
+    await page.evaluate((i) => {
+      if (document.querySelectorAll('.PZuss button')[i] && document.querySelectorAll('.PZuss button')[i].classList.contains('y3zKF')) {
+        document.querySelectorAll('.PZuss button')[i].click();
+      }
+    }, index);
     await page.waitFor(1000);
+    await page.screenshot({ path: `${path}/following-after-${index}.png` });
   });
+
+  await page.waitFor(1000);
 
   await page.screenshot({ path: `${path}/following-after.png` });
 
-  return debug(`follow:${usersTotal}`);
+  debug('done-following');
 }
 
 async function main(cookies) {
