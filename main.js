@@ -29,7 +29,6 @@ const config = require('./config');
 const PORT = config.get('port');
 
 const isProduction = config.get('env') === 'production';
-const path = './public';
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -102,6 +101,7 @@ async function getLocalCookies() {
   return cookies;
 }
 
+const path = './public';
 app.listen(PORT, async () => {
   debug(`Listening on ${PORT}`);
 
