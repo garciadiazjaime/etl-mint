@@ -30,6 +30,7 @@ async function followUsers(page, post) {
 
   await mapSeries(users, async (index) => {
     await page.evaluate(i => document.querySelectorAll('.PZuss button')[i].click(), index);
+    await page.screenshot({ path: `${path}/following-after-${index}.png` });
     await page.waitFor(1000);
   });
 
