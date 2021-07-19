@@ -23,15 +23,15 @@ function addBorder(image, border, hexValue) {
 }
 
 const colors = {
-  image1: '#ccc4cc',
-  image2: '#262a39',
+  image1: '#FFF',
+  image2: '#000',
 };
 
 async function getComparedImage(image1, image2) {
   const height = image1.getHeight();
   const width = image1.getWidth();
 
-  const border = 20;
+  const border = 0;
 
   const hexValue1 = Jimp.cssColorToHex(colors.image1);
   addBorder(image1, border, hexValue1);
