@@ -52,10 +52,48 @@ async function followUsers(page, post) {
 }
 
 async function main(cookies) {
-  const post = await Post.findOne({
-    following: { $exists: 0 },
-    $or: [{ source: 'tijuanamakesmehungry' }, { source: 'tijuanafood' }],
-  }).sort({ createdAt: -1 });
+  const post = await Post.aggregate([
+    {
+      $match: {
+        following: { $exists: 0 },
+        $or: [
+          {
+            source: 'tijuanamakesmehungry',
+          },
+          {
+            source: 'tijuanafood',
+          },
+        ],
+        mediaType: {
+          $nin: ['GraphVideo', 'GraphSidecar'],
+        },
+        $or: [
+          {
+            labels: {
+              $elemMatch: {
+                name: 'Food',
+              },
+            },
+          },
+          {
+            labels: {
+              $elemMatch: {
+                name: 'Beverage',
+              },
+            },
+          },
+        ],
+      },
+    },
+    {
+      $sort: {
+        createdAt: -1,
+      },
+    },
+    {
+      $limit: 1,
+    },
+  ]);
 
   const browser = await getBrowser();
   const page = await browser.newPage();
