@@ -5,6 +5,7 @@ const { IgApiClient } = require('instagram-private-api');
 
 const { Following, Follower } = require('./models');
 const { restoreSession } = require('./support');
+const { restoreFollowers } = require('./restore-followers');
 const config = require('../../config');
 
 const ig = new IgApiClient();
@@ -15,7 +16,6 @@ function getUser(item) {
     username: item.username,
     fullName: item.full_name,
     profilePicture: item.profile_pic_url,
-    active: true,
   };
 }
 
@@ -44,40 +44,6 @@ async function etlFollowing() {
   debug(`[following] new:${results.filter(item => !!item).length}, total:${results.length}`);
 }
 
-async function getFollowers(followers, response) {
-  const data = await followers.items();
-  response.push(...data);
-
-  if (followers.isMoreAvailable()) {
-    return getFollowers(followers, response);
-  }
-
-  return response;
-}
-
-async function etlFollowers() {
-  const response = ig.feed.accountFollowers(config.get('instagram.id'));
-  const data = await getFollowers(response, []);
-
-  const promises = data.map(async (item) => {
-    const result = await Follower.findOne({ id: item.pk });
-    if (result) {
-      return false;
-    }
-
-    const user = getUser(item);
-
-    await Follower.findOneAndUpdate({ id: user.id }, user, {
-      upsert: true,
-    });
-
-    return true;
-  });
-
-  const results = await Promise.all(promises);
-
-  debug(`[followers] new:${results.filter(item => !!item).length}, total:${results.length}`);
-}
 
 async function removeFollowings() {
   const followers = await Follower.find({ active: true });
@@ -116,13 +82,14 @@ async function removeFollowings() {
 }
 
 async function main() {
+  debug('restoring session');
   await restoreSession(ig);
 
-  await etlFollowing();
+  // await etlFollowing();
 
-  await etlFollowers();
+  await restoreFollowers(ig);
 
-  await removeFollowings();
+  // await removeFollowings();
 }
 
 if (require.main === module) {
