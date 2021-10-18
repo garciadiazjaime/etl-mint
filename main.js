@@ -15,7 +15,6 @@ const instagramPublishPost = require('./sites/instagram/publish-post');
 const instagramLogin = require('./sites/instagram/login');
 const commentPost = require('./sites/instagram/comment-post');
 const followUsers = require('./sites/instagram/follow-users');
-const instagramFollowUpdate = require('./sites/instagram/follow');
 
 const gcenterWorker = require('./sites/gcenter/worker-ports');
 const gcGenerateImage = require('./sites/gcenter/image');
@@ -67,10 +66,6 @@ function setupCron(cookies) {
     await followUsers(cookies);
   });
 
-  cron.schedule('20 4 1 * *', async () => {
-    await instagramFollowUpdate();
-  });
-
   // cron.schedule('13 24 * * *', async () => {
   //   await instagramPublishPost();
 
@@ -111,8 +106,6 @@ app.listen(PORT, async () => {
   if (!fs.existsSync(path)) {
     fs.mkdirSync(path);
   }
-
-  // await instagramFollowUpdate();
 
   // await instagramPublishPost();
 

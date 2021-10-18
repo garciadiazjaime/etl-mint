@@ -20,6 +20,15 @@ async function followUsers(page, post) {
     return sendEmail(`follow-error:${userURL}`);
   }
 
+  const html = await page.content();
+  if (html.includes('This Account is Private')) {
+    debug(`account_private:${post.user.username}`);
+
+    await page.screenshot({ path: `${path}/following-error.png` });
+
+    return null;
+  }
+
   await page.waitForSelector('section li a', { timeout: 1000 * 3 });
 
   await page.evaluate(() => document.querySelectorAll('section li a')[0].click()); // open followers
@@ -49,6 +58,8 @@ async function followUsers(page, post) {
   await page.screenshot({ path: `${path}/following-after.png` });
 
   debug('done-following');
+
+  return null;
 }
 
 async function main(cookies) {
