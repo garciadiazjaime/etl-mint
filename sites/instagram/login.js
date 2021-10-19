@@ -4,7 +4,7 @@ const { getBrowser } = require('../../utils/browser');
 const config = require('../../config');
 
 async function main() {
-  let url = 'https://www.instagram.com/accounts/login/';
+  const url = 'https://www.instagram.com/accounts/login/';
   debug(url);
 
   const browser = await getBrowser();
@@ -17,26 +17,26 @@ async function main() {
     waitUntil: 'networkidle0',
   });
 
-  let html = await page.content();
+  const html = await page.content();
 
   await page.screenshot({ path: './public/login-01.png' });
 
   debug(html.slice(0, 500));
 
-  if (html.includes('not-logged-in')) {
-    url = 'https://www.instagram.com/';
+  // if (html.includes('not-logged-in')) {
+  //   url = 'https://www.instagram.com/';
 
-    debug(url);
+  //   debug(url);
 
-    await page.goto(url, {
-      waitUntil: 'networkidle0',
-    });
+  //   await page.goto(url, {
+  //     waitUntil: 'networkidle0',
+  //   });
 
-    html = await page.content();
-    debug(html.slice(0, 500));
+  //   html = await page.content();
+  //   debug(html.slice(0, 500));
 
-    await page.screenshot({ path: './public/login-02.png' });
-  }
+  //   await page.screenshot({ path: './public/login-02.png' });
+  // }
 
 
   await page.waitForSelector('form', { timeout: 1000 * 3 });
