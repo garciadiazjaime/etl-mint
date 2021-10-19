@@ -13,24 +13,29 @@ async function main() {
   const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4152.0 Safari/537.36';
   await page.setUserAgent(userAgent);
 
-  await page.goto(url);
+  await page.goto(url, {
+    waitUntil: 'networkidle0',
+  });
 
-  const html = await page.content();
+  let html = await page.content();
+
   await page.screenshot({ path: './public/login-01.png' });
 
-  debug(html);
-  if (html.includes('Please wait a few minutes before you try again')) {
-    debug('ERROR');
+  debug(html.slice(0, 500));
 
-    await page.screenshot({ path: './public/login-02.png' });
-
+  if (html.includes('not-logged-in')) {
     url = 'https://www.instagram.com/';
 
     debug(url);
 
-    await page.goto(url);
+    await page.goto(url, {
+      waitUntil: 'networkidle0',
+    });
 
-    await page.screenshot({ path: './public/login-03.png' });
+    html = await page.content();
+    debug(html.slice(0, 500));
+
+    await page.screenshot({ path: './public/login-02.png' });
   }
 
 
