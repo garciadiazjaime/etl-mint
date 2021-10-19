@@ -4,7 +4,7 @@ const { getBrowser } = require('../../utils/browser');
 const config = require('../../config');
 
 async function main() {
-  const url = 'https://www.instagram.com/accounts/login';
+  const url = 'https://www.instagram.com/accounts/login/';
 
   const browser = await getBrowser();
 
@@ -12,7 +12,11 @@ async function main() {
   const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4152.0 Safari/537.36';
   await page.setUserAgent(userAgent);
 
-  await page.goto(url);
+  try {
+    await page.goto(url);
+  } catch (err) {
+    return debug(err.message);
+  }
 
   await page.waitForSelector('form', { timeout: 1000 * 3 });
 
