@@ -25,6 +25,8 @@ const netlify = require('./sites/netlify');
 const { openDB } = require('./utils/database');
 const config = require('./config');
 
+const APP_URL = config.get('app.url');
+
 const PORT = config.get('port');
 
 const isProduction = config.get('env') === 'production';
@@ -85,6 +87,10 @@ function setupCron(cookies) {
   //   await gcenterWorker();
   // });
 
+  cron.schedule('*/10 * * * *', async () => {
+    await fetch(APP_URL);
+  });
+
   return debug('CRON_SETUP');
 }
 
@@ -114,6 +120,8 @@ app.listen(PORT, async () => {
   // await commentPost(cookies);
 
   await followUsers(cookies);
+
+  await fetch(APP_URL);
 
   setupCron(cookies);
 });
