@@ -23,28 +23,14 @@ async function main() {
 
   debug(html.slice(0, 500));
 
-  // if (html.includes('not-logged-in')) {
-  //   url = 'https://www.instagram.com/';
-
-  //   debug(url);
-
-  //   await page.goto(url, {
-  //     waitUntil: 'networkidle0',
-  //   });
-
-  //   html = await page.content();
-  //   debug(html.slice(0, 500));
-
-  //   await page.screenshot({ path: './public/login-02.png' });
-  // }
-
-
   await page.waitForSelector('form', { timeout: 1000 * 3 });
 
   await page.type('input[name="username"]', config.get('instagram.username'));
   await page.type('input[name="password"]', config.get('instagram.password'));
 
   await page.click('button[type="submit"]');
+
+  await page.screenshot({ path: './public/login-02.png' });
 
   await page.waitForNavigation();
 
