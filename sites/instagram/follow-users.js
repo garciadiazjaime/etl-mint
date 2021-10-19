@@ -113,6 +113,11 @@ async function main(cookies) {
     await page.setCookie(...cookies);
   }
 
+  if (!post) {
+    debug('POST_ERROR', post);
+    await page.screenshot({ path: `${path}/followuser-01.png` });
+  }
+
   await followUsers(page, post);
 
   post.following = true;
