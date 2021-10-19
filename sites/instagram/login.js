@@ -14,6 +14,7 @@ async function main() {
 
   try {
     await page.goto(url);
+    await page.screenshot({ path: './public/login.png' });
   } catch (err) {
     return debug(err.message);
   }
