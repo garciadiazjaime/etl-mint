@@ -1,11 +1,8 @@
 const puppeteer = require('puppeteer');
 
-const config = require('../config');
-
 async function getBrowser() {
-  const opts = config.get('env') !== 'production' ? {} : {
+  const opts = {
     headless: true,
-    executablePath: '/usr/bin/chromium-browser',
     args: [
       '--no-sandbox',
       '--disable-gpu',
