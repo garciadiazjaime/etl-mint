@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const request = require('request');
+const fetch = require('node-fetch');
 
 const mapSeries = require('async/mapSeries');
 const cron = require('node-cron');
@@ -64,9 +65,9 @@ function setupCron(cookies) {
   //   await commentPost(cookies);
   // });
 
-  cron.schedule('17 */3 * * *', async () => {
-    await followUsers(cookies);
-  });
+  // cron.schedule('17 */3 * * *', async () => {
+  //   await followUsers(cookies);
+  // });
 
   // cron.schedule('13 24 * * *', async () => {
   //   await instagramPublishPost();
@@ -115,11 +116,11 @@ app.listen(PORT, async () => {
 
   // await instagramPublishPost();
 
-  const cookies = isProduction ? await instagramLogin() : await getLocalCookies();
+  const cookies = {}; // isProduction ? await instagramLogin() : await getLocalCookies();
 
   // await commentPost(cookies);
 
-  await followUsers(cookies);
+  // await followUsers(cookies);
 
   await fetch(APP_URL);
 
