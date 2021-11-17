@@ -116,7 +116,7 @@ app.listen(PORT, async () => {
 
   // await instagramPublishPost();
 
-  const cookies = {}; // isProduction ? await instagramLogin() : await getLocalCookies();
+  const cookies = isProduction ? await instagramLogin() : await getLocalCookies();
 
   // await commentPost(cookies);
 
