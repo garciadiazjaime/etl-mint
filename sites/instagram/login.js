@@ -4,7 +4,8 @@ const { getBrowser } = require('../../utils/browser');
 const config = require('../../config');
 
 async function main() {
-  const url = 'https://www.instagram.com/accounts/login';
+  let url = 'https://www.instagram.com/accounts/login/';
+  debug(url);
 
   const browser = await getBrowser();
 
@@ -12,7 +13,25 @@ async function main() {
   const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4152.0 Safari/537.36';
   await page.setUserAgent(userAgent);
 
-  await page.goto(url);
+  try {
+    await page.goto(url, {
+      waitUntil: 'networkidle0',
+    });
+  } catch (err) {
+    await page.screenshot({ path: './public/login-00.png' });
+    debug(err);
+    url = 'https://www.instagram.com/';
+    debug(url);
+    await page.goto(url, {
+      waitUntil: 'networkidle0',
+    });
+  }
+
+  const html = await page.content();
+
+  await page.screenshot({ path: './public/login-01.png' });
+
+  debug(html.slice(0, 500));
 
   await page.waitForSelector('form', { timeout: 1000 * 3 });
 
@@ -20,6 +39,8 @@ async function main() {
   await page.type('input[name="password"]', config.get('instagram.password'));
 
   await page.click('button[type="submit"]');
+
+  await page.screenshot({ path: './public/login-02.png' });
 
   await page.waitForNavigation();
 

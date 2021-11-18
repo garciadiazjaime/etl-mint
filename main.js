@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const request = require('request');
+const fetch = require('node-fetch');
 
 const mapSeries = require('async/mapSeries');
 const cron = require('node-cron');
@@ -15,7 +16,6 @@ const instagramPublishPost = require('./sites/instagram/publish-post');
 const instagramLogin = require('./sites/instagram/login');
 const commentPost = require('./sites/instagram/comment-post');
 const followUsers = require('./sites/instagram/follow-users');
-const instagramFollowUpdate = require('./sites/instagram/follow');
 
 const gcenterWorker = require('./sites/gcenter/worker-ports');
 const gcGenerateImage = require('./sites/gcenter/image');
@@ -25,6 +25,8 @@ const netlify = require('./sites/netlify');
 
 const { openDB } = require('./utils/database');
 const config = require('./config');
+
+const APP_URL = config.get('app.url');
 
 const PORT = config.get('port');
 
@@ -63,13 +65,9 @@ function setupCron(cookies) {
   //   await commentPost(cookies);
   // });
 
-  cron.schedule('17 */3 * * *', async () => {
-    await followUsers(cookies);
-  });
-
-  cron.schedule('20 4 1 * *', async () => {
-    await instagramFollowUpdate();
-  });
+  // cron.schedule('17 */3 * * *', async () => {
+  //   await followUsers(cookies);
+  // });
 
   // cron.schedule('13 24 * * *', async () => {
   //   await instagramPublishPost();
@@ -89,6 +87,10 @@ function setupCron(cookies) {
   // cron.schedule('*/30 * * * *', async () => {
   //   await gcenterWorker();
   // });
+
+  cron.schedule('*/10 * * * *', async () => {
+    await fetch(APP_URL);
+  });
 
   return debug('CRON_SETUP');
 }
@@ -112,15 +114,15 @@ app.listen(PORT, async () => {
     fs.mkdirSync(path);
   }
 
-  // await instagramFollowUpdate();
-
   // await instagramPublishPost();
 
   const cookies = isProduction ? await instagramLogin() : await getLocalCookies();
 
   // await commentPost(cookies);
 
-  await followUsers(cookies);
+  // await followUsers(cookies);
+
+  await fetch(APP_URL);
 
   setupCron(cookies);
 });
