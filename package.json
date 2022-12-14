@@ -27,7 +27,7 @@
     "d3-node": "^2.2.2",
     "debug": "^4.1.1",
     "encoding": "^0.1.13",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "fb": "^2.0.0",
     "instagram-private-api": "^1.39.2",
     "jimp": "^0.16.1",
